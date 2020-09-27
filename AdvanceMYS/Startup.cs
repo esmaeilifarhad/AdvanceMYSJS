@@ -27,6 +27,12 @@ namespace AdvanceMYS
             services.AddControllersWithViews();
             services.AddDbContext<Models.Domain._5069_ManageYourSelfContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MYS_Connection")));
             services.AddRazorPages().AddRazorRuntimeCompilation();
+           Models.Connection.Connection._ConnectionString = Configuration.GetConnectionString("MYS_Connection");
+            //for return json
+            services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

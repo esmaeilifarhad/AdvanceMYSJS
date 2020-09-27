@@ -1,5 +1,24 @@
 ﻿//************************************Task*****************************************************
 
+$(document).ready(function () {
+    debugger
+    $.ajax(
+        {
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            url: "/Task/listtask",
+            // data: JSON.stringify({ DateEnd: DateEnd, CatId: CatId }),
+            success: function (result) {
+               debugger
+            },
+            error: function (error) {
+                // alert(result.message);
+                // alert(result.result)
+                console.log(error.responseText);
+            }
+        });
+});
 //--Execute All List when click Tab
 $("ul li a[href='#menuTiming']").on("click", function () {
 
