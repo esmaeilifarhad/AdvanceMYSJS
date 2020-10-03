@@ -3,7 +3,9 @@ function calDayOfWeek(date) {
     /*
     str.substr(1, 4);
     */
-
+    if (date == undefined) {
+        return "undefined"
+    }
     date = date.toString()
 
     var mounth = ""
@@ -123,11 +125,13 @@ Pass you dates to this function like this:  showDays('1/1/2014','12/25/2014')
 //980809|13980809  =>1398/08/09  input parameter
 function foramtDate(str) {
     
-    str = str.toString()
+   
 
     if (str == undefined) {
         return "undefined"
     }
+
+    str = str.toString()
 
     if (str.length == 6) {
         return "13" + str.slice(0, 2) + "/" + str.slice(2, 4) + "/" + str.slice(4, 6)
@@ -259,8 +263,9 @@ function removeLastChar(str) {
 function removeCountChar(str, n) {
     return str.slice(0, -n)
 }
+//اختلاف بین دو تاریخ
 function numberDaysTwoDate(firstDate, secondDate) {
-
+    
     var firstDate = moment(firstDate, 'jYYYY/jM/jD ').format('M/D/YYYY')//'1/1/2014'
     var secondDate = moment(secondDate, 'jYYYY/jM/jD ').format('M/D/YYYY')//'1/1/2014'
 
@@ -429,6 +434,16 @@ function SelectDate(n) {
             m.add(n, 'day')
     var newDate = m.format('jYYYY/jM/jD')
     return newDate
+}
+//CloseModals
+function closeCalendar1() {
+    $("#Calendar1").modal("toggle")
+}
+function closeCalendar2() {
+    $("#Calendar2").modal("toggle")
+}
+function closeModal() {
+    $("#MasterModal").modal("toggle")
 }
 
 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\f.esmaeili\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj": {}
+    "D:\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\f.esmaeili\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj": {
+    "D:\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\f.esmaeili\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj",
+        "projectUniqueName": "D:\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj",
         "projectName": "AdvanceMYS",
-        "projectPath": "C:\\Users\\f.esmaeili\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj",
+        "projectPath": "D:\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj",
         "packagesPath": "C:\\Users\\f.esmaeili\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\f.esmaeili\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\obj\\",
+        "outputPath": "D:\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -68,6 +68,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[5.0.0-rc.1.20451.13, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[3.1.4, )"
             }
           },
           "imports": [
@@ -88,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

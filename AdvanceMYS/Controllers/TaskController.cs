@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using AdvanceMYS.Models.Domain;
+using AdvanceMYS.Models.Utility;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -13,14 +15,18 @@ namespace AdvanceMYS.Controllers
 {
     public class TaskController : Controller
     {
-        Models.Domain._5069_ManageYourSelfContext db = new Models.Domain._5069_ManageYourSelfContext();
+        //Models.Domain._5069_ManageYourSelfContext db = new Models.Domain._5069_ManageYourSelfContext();
 
-
+        private readonly _5069_ManageYourSelfContext _db;
+        public TaskController(_5069_ManageYourSelfContext db)
+        {
+            _db = db;
+        }
 
 
         public IActionResult Index()
         {
-            var res = db.Tasks.ToList();
+            var res = _db.Tasks.ToList();
             return Json(res);
         }
         public ActionResult ListTaskGeneral()
@@ -117,9 +123,44 @@ namespace AdvanceMYS.Controllers
         }
         public ActionResult ListTask()
         {
-            var res = db.Tasks.Where(q => q.IsCheck == false).Include(q => q.Cat).Include(q => q.Timings).ThenInclude(q => q.ManageTime).ToList();
+            var res = _db.Tasks.Where(q => q.IsCheck == false).
+                Include(q => q.Cat).Include(q => q.Timings).
+                ThenInclude(q => q.ManageTime).OrderBy(q => q.DateEnd).
+                ThenBy(q => q.Olaviat).ThenBy(q => q.Timings.SingleOrDefault().ManageTimeId).ToList();
             return Json(res);
         }
+        [HttpPost]
+        public IActionResult ListTaskMonth(string xxx)
+        {
+            var res = _db.Tasks.Where(q => q.IsCheck == false && q.DateEnd.Substring(0,6) == xxx).
+               Include(q => q.Cat).Include(q => q.Timings).
+               ThenInclude(q => q.ManageTime).OrderBy(q => q.DateEnd).
+               ThenBy(q => q.Olaviat).ThenBy(q => q.Timings.SingleOrDefault().ManageTimeId).ToList();
+            return Json(res);
+        }
+        //انتقال تسک ها ی گذشته به تاریخ امروز
+        public IActionResult UpdateToToday() {
+            string today =Utility.shamsi_date().ConvertDateToSqlFormat();
+            string query = @"
+    update  Task
+  set DateEnd=@today
+  where DateEnd<@today and IsCheck=0
+";
+            var count = 0;
+            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
+            {
 
+               count = DB.Execute(query, new { today = today });
+            }
+            return Json(count);
+
+        }
+        public IActionResult EditTask(int TaskId)
+        {
+            Models.ViewModels.Task.vmTask T = new Models.ViewModels.Task.vmTask();
+            T.lstCat = _db.Cats.Where(q => q.Code == 2).OrderBy(q=>q.Order).ToList();
+           T.Task= _db.Tasks.Include(q=>q.Cat).Include(q=>q.Timings).ThenInclude(q=>q.ManageTime).SingleOrDefault(q => q.TaskId == TaskId);
+            return Json(T);
+        }
     }
 }

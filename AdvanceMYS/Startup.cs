@@ -25,9 +25,24 @@ namespace AdvanceMYS
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<Models.Domain._5069_ManageYourSelfContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MYS_Connection")));
+            string IpAddress= Models.Utility.Utility.GetIPAddress();
+            if (IpAddress == "172.31.195.125")
+            {
+                services.AddDbContext<Models.Domain._5069_ManageYourSelfContext>(options =>
+        options.UseSqlServer(
+            Configuration.GetConnectionString("MYS_ConnectionJob")));
+                Models.Connection.Connection._ConnectionString = Configuration.GetConnectionString("MYS_ConnectionJob");
+            }
+            else
+            {
+                services.AddDbContext<Models.Domain._5069_ManageYourSelfContext>(options =>
+            options.UseSqlServer(
+                Configuration.GetConnectionString("MYS_Connection")));
+                Models.Connection.Connection._ConnectionString = Configuration.GetConnectionString("MYS_Connection");
+            }
+        
             services.AddRazorPages().AddRazorRuntimeCompilation();
-           Models.Connection.Connection._ConnectionString = Configuration.GetConnectionString("MYS_Connection");
+           
             //for return json
             services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -59,7 +74,7 @@ namespace AdvanceMYS
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=manageyourself}/{action=Index}/{id?}");
             });
         }
     }
