@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-
-#nullable disable
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AdvanceMYS.Models.Domain
 {
-    public partial class Taghvim
+    public class Taghvim
     {
-        public string DayDate { get; set; }
-        public int? IsHolyDay { get; set; }
-        public int RoozHafte { get; set; }
-        public string ChandShanbeh { get; set; }
-        public int? HafteChandom { get; set; }
+        [Key]
+        public int TaghvimId { get; set; }
+        public bool IsHolyDay { get; set; }
+        public string Date { get; set; }
+        public string Dsc { get; set; }
+
     }
 }

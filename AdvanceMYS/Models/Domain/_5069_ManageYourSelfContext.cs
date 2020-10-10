@@ -17,32 +17,27 @@ namespace AdvanceMYS.Models.Domain
         {
         }
 
-        public virtual DbSet<BackMasterDatum> BackMasterData { get; set; }
-        public virtual DbSet<BaseDaramadDatum> BaseDaramadData { get; set; }
+        //public virtual DbSet<BackMasterDatum> BackMasterData { get; set; }
+     
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<Cat> Cats { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<ContentTbl> ContentTbls { get; set; }
-        public virtual DbSet<Daramad> Daramads { get; set; }
-        public virtual DbSet<DataCard> DataCards { get; set; }
         public virtual DbSet<DaysExercise> DaysExercises { get; set; }
         public virtual DbSet<DicTbl> DicTbls { get; set; }
-        public virtual DbSet<DicTblLog> DicTblLogs { get; set; }
+      
         public virtual DbSet<ExampleTbl> ExampleTbls { get; set; }
-        public virtual DbSet<ExampleTblBackup980122> ExampleTblBackup980122s { get; set; }
-        public virtual DbSet<HolyDay> HolyDays { get; set; }
+  
         public virtual DbSet<Iodayly> Iodaylies { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<KarKard> KarKards { get; set; }
-        public virtual DbSet<Kharj> Kharjs { get; set; }
-        public virtual DbSet<KharjType> KharjTypes { get; set; }
+      
         public virtual DbSet<LogTbl> LogTbls { get; set; }
         public virtual DbSet<ManageTime> ManageTimes { get; set; }
         public virtual DbSet<MasterDatum> MasterData { get; set; }
-        public virtual DbSet<Mazaya> Mazayas { get; set; }
+      
         public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<Menuha> Menuhas { get; set; }
-        public virtual DbSet<MojoodyBank> MojoodyBanks { get; set; }
         public virtual DbSet<MvchomeHeaderThree> MvchomeHeaderThrees { get; set; }
         public virtual DbSet<Namad> Namads { get; set; }
         public virtual DbSet<NamadDetail> NamadDetails { get; set; }
@@ -53,18 +48,17 @@ namespace AdvanceMYS.Models.Domain
         public virtual DbSet<RoutineJob> RoutineJobs { get; set; }
         public virtual DbSet<RoutineJobHa> RoutineJobHas { get; set; }
         public virtual DbSet<Setting> Settings { get; set; }
-        public virtual DbSet<Seyed> Seyeds { get; set; }
+        public virtual DbSet<Taghvim> Taghvim { get; set; }
+
         public virtual DbSet<ShowLastPercantageJob> ShowLastPercantageJobs { get; set; }
         public virtual DbSet<ShowSumLastPercantage> ShowSumLastPercantages { get; set; }
         public virtual DbSet<SliderPhoto> SliderPhotos { get; set; }
         public virtual DbSet<Sport> Sports { get; set; }
-        public virtual DbSet<StoreHoghogh> StoreHoghoghs { get; set; }
-        public virtual DbSet<Taghvim> Taghvims { get; set; }
+      
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<TaskImage> TaskImages { get; set; }
         public virtual DbSet<Timing> Timings { get; set; }
         public virtual DbSet<TitleTbl> TitleTbls { get; set; }
-        public virtual DbSet<TypeHazineh> TypeHazinehs { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
 
@@ -79,28 +73,9 @@ namespace AdvanceMYS.Models.Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BackMasterDatum>(entity =>
-            {
-                entity.HasNoKey();
+           
 
-                entity.ToTable("back_MasterData", "5069_Esmaeili");
-
-                entity.Property(e => e.MasterDataId).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.PersonelName).HasMaxLength(250);
-
-                entity.Property(e => e.WeightDate).HasMaxLength(6);
-            });
-
-            modelBuilder.Entity<BaseDaramadDatum>(entity =>
-            {
-                entity.HasKey(e => e.BaseDaramadDataId)
-                    .HasName("PK_Run");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(250);
-            });
+          
 
             modelBuilder.Entity<Book>(entity =>
             {
@@ -139,9 +114,16 @@ namespace AdvanceMYS.Models.Domain
                     .HasMaxLength(250);
             });
 
+            modelBuilder.Entity<Taghvim>(entity =>
+            {
+                entity.ToTable("Taghvim", "5069_Esmaeili");
+
+      
+            });
+
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.ToTable("Category");
+                entity.ToTable("Category", "5069_Esmaeili");
 
                 entity.Property(e => e.CategoryName)
                     .IsRequired()
@@ -171,49 +153,13 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_ContentTbl_TitleTbl");
             });
 
-            modelBuilder.Entity<Daramad>(entity =>
-            {
-                entity.ToTable("Daramad");
+        
 
-                entity.Property(e => e.DaramadOrhazineh).HasColumnName("DaramadORHazineh");
-
-                entity.Property(e => e.Date)
-                    .IsRequired()
-                    .HasMaxLength(10);
-
-                entity.Property(e => e.Description).HasMaxLength(250);
-
-                entity.HasOne(d => d.MojoodyBank)
-                    .WithMany(p => p.Daramads)
-                    .HasForeignKey(d => d.MojoodyBankId)
-                    .HasConstraintName("FK_Daramad_MojoodyBank");
-
-                entity.HasOne(d => d.TypeHazineh)
-                    .WithMany(p => p.Daramads)
-                    .HasForeignKey(d => d.TypeHazinehId)
-                    .HasConstraintName("FK_Daramad_TypeHazineh");
-            });
-
-            modelBuilder.Entity<DataCard>(entity =>
-            {
-                entity.ToTable("DataCard");
-
-                entity.HasIndex(e => new { e.Personelid, e.DateCard }, "IX_DataCard");
-
-                entity.Property(e => e.DateCard)
-                    .IsRequired()
-                    .HasMaxLength(8)
-                    .IsUnicode(false)
-                    .IsFixedLength(true);
-
-                entity.Property(e => e.I).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Personelid).HasColumnName("personelid");
-            });
+          
 
             modelBuilder.Entity<DaysExercise>(entity =>
             {
-                entity.ToTable("DaysExercise");
+                entity.ToTable("DaysExercise", "5069_Esmaeili");
 
                 entity.Property(e => e.DateExercise).HasMaxLength(10);
 
@@ -228,7 +174,7 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<DicTbl>(entity =>
             {
-                entity.ToTable("dic_tbl");
+                entity.ToTable("dic_tbl", "5069_Esmaeili");
 
                 entity.HasIndex(e => new { e.Eng, e.UserId }, "IX_dic_tbl")
                     .IsUnique();
@@ -285,62 +231,11 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_dic_tbl_Users");
             });
 
-            modelBuilder.Entity<DicTblLog>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("dic_tbl_LOG");
-
-                entity.Property(e => e.DateRefresh)
-                    .HasMaxLength(50)
-                    .HasColumnName("date_refresh");
-
-                entity.Property(e => e.DateS)
-                    .HasMaxLength(50)
-                    .HasColumnName("date_s");
-
-                entity.Property(e => e.Eng)
-                    .HasMaxLength(255)
-                    .HasColumnName("eng");
-
-                entity.Property(e => e.HostNameTrgLog)
-                    .HasMaxLength(255)
-                    .HasColumnName("HostName_TrgLog");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.IdMonth).HasColumnName("id_month");
-
-                entity.Property(e => e.Level).HasColumnName("level");
-
-                entity.Property(e => e.LogStatusTrgLog)
-                    .HasMaxLength(255)
-                    .HasColumnName("LogStatus_TrgLog");
-
-                entity.Property(e => e.LoginNameTrgLog)
-                    .HasMaxLength(255)
-                    .HasColumnName("LoginName_TrgLog");
-
-                entity.Property(e => e.MinuteWord).HasColumnName("minuteWord");
-
-                entity.Property(e => e.Per)
-                    .HasMaxLength(255)
-                    .HasColumnName("per");
-
-                entity.Property(e => e.Time)
-                    .HasMaxLength(50)
-                    .HasColumnName("time");
-
-                entity.Property(e => e.TimeDateTrgLog)
-                    .HasMaxLength(255)
-                    .HasColumnName("TimeDate_TrgLog");
-
-                entity.Property(e => e.Timeword).HasColumnName("timeword");
-            });
+           
 
             modelBuilder.Entity<ExampleTbl>(entity =>
             {
-                entity.ToTable("example_tbl");
+                entity.ToTable("example_tbl", "5069_Esmaeili");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -356,37 +251,14 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_example_tbl_dic_tbl");
             });
 
-            modelBuilder.Entity<ExampleTblBackup980122>(entity =>
-            {
-                entity.HasNoKey();
+          
 
-                entity.ToTable("example_tbl_backup_980122", "5069_Esmaeili");
-
-                entity.Property(e => e.Example)
-                    .IsRequired()
-                    .HasColumnName("example");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
-
-                entity.Property(e => e.IdDicTbl).HasColumnName("id_dic_tbl");
-            });
-
-            modelBuilder.Entity<HolyDay>(entity =>
-            {
-                entity.ToTable("HolyDay");
-
-                entity.Property(e => e.HolyDayRooz)
-                    .IsRequired()
-                    .HasMaxLength(6);
-            });
-
+          
             modelBuilder.Entity<Iodayly>(entity =>
             {
                 entity.HasKey(e => e.Ioid);
 
-                entity.ToTable("IODayly");
+                entity.ToTable("IODayly", "5069_Esmaeili");
 
                 entity.HasIndex(e => new { e.DayDate, e.Iotype }, "IX_IODayly")
                     .IsUnique();
@@ -406,7 +278,7 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<Job>(entity =>
             {
-                entity.ToTable("Job");
+                entity.ToTable("Job", "5069_Esmaeili");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -421,7 +293,7 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<KarKard>(entity =>
             {
-                entity.ToTable("KarKard");
+                entity.ToTable("KarKard", "5069_Esmaeili");
 
                 entity.Property(e => e.DayDate)
                     .IsRequired()
@@ -438,37 +310,7 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_KarKard_Job");
             });
 
-            modelBuilder.Entity<Kharj>(entity =>
-            {
-                entity.ToTable("Kharj");
-
-                entity.Property(e => e.DateKharj).HasMaxLength(8);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(250);
-
-                entity.HasOne(d => d.KharjType)
-                    .WithMany(p => p.Kharjs)
-                    .HasForeignKey(d => d.KharjTypeId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_Kharj_KharjType");
-            });
-
-            modelBuilder.Entity<KharjType>(entity =>
-            {
-                entity.ToTable("KharjType");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.KharjTypes)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_KharjType_Users");
-            });
+         
 
             modelBuilder.Entity<LogTbl>(entity =>
             {
@@ -500,6 +342,7 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<MasterDatum>(entity =>
             {
+                entity.ToTable("MasterDatum", "5069_Esmaeili");
                 entity.HasKey(e => e.MasterDataId)
                     .HasName("PK_Weight");
 
@@ -508,20 +351,11 @@ namespace AdvanceMYS.Models.Domain
                 entity.Property(e => e.WeightDate).HasMaxLength(6);
             });
 
-            modelBuilder.Entity<Mazaya>(entity =>
-            {
-                entity.ToTable("Mazaya", "5069_Esmaeili");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.MazayaName)
-                    .IsRequired()
-                    .HasMaxLength(250);
-            });
+          
 
             modelBuilder.Entity<Menu>(entity =>
             {
-                entity.ToTable("Menu");
+                entity.ToTable("Menu", "5069_Esmaeili");
 
                 entity.Property(e => e.Action).HasMaxLength(50);
 
@@ -536,25 +370,18 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<Menuha>(entity =>
             {
-                entity.ToTable("Menuha");
+                entity.ToTable("Menuha", "5069_Esmaeili");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
             });
 
-            modelBuilder.Entity<MojoodyBank>(entity =>
-            {
-                entity.ToTable("MojoodyBank");
-
-                entity.Property(e => e.MojoodyName).HasMaxLength(50);
-
-                entity.Property(e => e.Rial).HasComputedColumnSql("([dbo].[fn_CurrentCount_UNReal]([MojoodyBankId]))", false);
-            });
+          
 
             modelBuilder.Entity<MvchomeHeaderThree>(entity =>
             {
-                entity.ToTable("MVCHomeHeaderThree");
+                entity.ToTable("MVCHomeHeaderThree", "5069_Esmaeili");
 
                 entity.Property(e => e.MvchomeHeaderThreeId).HasColumnName("MVCHomeHeaderThreeId");
 
@@ -604,7 +431,7 @@ namespace AdvanceMYS.Models.Domain
             {
                 entity.HasKey(e => e.PercentId);
 
-                entity.ToTable("PercentJob");
+                entity.ToTable("PercentJob", "5069_Esmaeili");
 
                 entity.Property(e => e.Date)
                     .IsRequired()
@@ -619,6 +446,7 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<Player>(entity =>
             {
+                entity.ToTable("Player", "5069_Esmaeili");
                 entity.HasKey(e => e.PlayersId);
 
                 entity.Property(e => e.Name)
@@ -629,7 +457,7 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<PlayerScore>(entity =>
             {
-                entity.ToTable("PlayerScore");
+                entity.ToTable("PlayerScore", "5069_Esmaeili");
 
                 entity.HasOne(d => d.Player)
                     .WithMany(p => p.PlayerScores)
@@ -644,7 +472,7 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<Role>(entity =>
             {
-                entity.ToTable("Role");
+                entity.ToTable("Role", "5069_Esmaeili");
 
                 entity.Property(e => e.RoleName)
                     .IsRequired()
@@ -690,7 +518,7 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<Setting>(entity =>
             {
-                entity.ToTable("Setting");
+                entity.ToTable("Setting", "5069_Esmaeili");
 
                 entity.Property(e => e.Description).HasMaxLength(250);
 
@@ -707,16 +535,7 @@ namespace AdvanceMYS.Models.Domain
                 entity.Property(e => e.Value).HasMaxLength(250);
             });
 
-            modelBuilder.Entity<Seyed>(entity =>
-            {
-                entity.ToTable("Seyed", "5069_Esmaeili");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(250)
-                    .HasColumnName("name");
-            });
+           
 
             modelBuilder.Entity<ShowLastPercantageJob>(entity =>
             {
@@ -740,7 +559,7 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<SliderPhoto>(entity =>
             {
-                entity.ToTable("SliderPhoto");
+                entity.ToTable("SliderPhoto", "5069_Esmaeili");
 
                 entity.Property(e => e.Header).HasMaxLength(250);
 
@@ -767,35 +586,13 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_Sport_Cat");
             });
 
-            modelBuilder.Entity<StoreHoghogh>(entity =>
-            {
-                entity.ToTable("StoreHoghogh", "5069_Esmaeili");
+           
 
-                entity.Property(e => e.MazRyialMah)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Shdate).HasColumnName("SHdate");
-            });
-
-            modelBuilder.Entity<Taghvim>(entity =>
-            {
-                entity.HasKey(e => e.DayDate);
-
-                entity.ToTable("Taghvim");
-
-                entity.Property(e => e.DayDate).HasMaxLength(10);
-
-                entity.Property(e => e.ChandShanbeh)
-                    .HasMaxLength(15)
-                    .HasComputedColumnSql("([dbo].[fn_ChandShanbe]([RoozHafte]))", false);
-
-                entity.Property(e => e.IsHolyDay).HasComputedColumnSql("([dbo].[fn_HolyDay]([DayDate]))", false);
-            });
+           
 
             modelBuilder.Entity<Task>(entity =>
             {
-                entity.ToTable("Task");
+                entity.ToTable("Task", "5069_Esmaeili");
 
                 entity.Property(e => e.DateEnd)
                     .IsRequired()
@@ -867,18 +664,12 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_TitleTbl_Book");
             });
 
-            modelBuilder.Entity<TypeHazineh>(entity =>
-            {
-                entity.ToTable("TypeHazineh");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("name");
-            });
+          
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.ToTable("User","5069_Esmaeili");
+
                 entity.HasIndex(e => e.UserName, "IX_Users")
                     .IsUnique();
 
@@ -906,7 +697,7 @@ namespace AdvanceMYS.Models.Domain
 
             modelBuilder.Entity<UserRole>(entity =>
             {
-                entity.ToTable("UserRole");
+                entity.ToTable("UserRole", "5069_Esmaeili");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.UserRoles)

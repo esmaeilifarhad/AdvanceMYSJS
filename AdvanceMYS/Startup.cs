@@ -24,8 +24,17 @@ namespace AdvanceMYS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("CookieAuth").
+                AddCookie("CookieAuth",confg=> 
+                {
+                    confg.Cookie.Name = "MYS.Cookie";
+                    confg.LoginPath = "/Account/Authenticate";
+                    confg.AccessDeniedPath = "/Account/AccessDeny";
+                });
             services.AddControllersWithViews();
+
             string IpAddress= Models.Utility.Utility.GetIPAddress();
+            //192.168.1.105    home
             if (IpAddress == "172.31.195.125")
             {
                 services.AddDbContext<Models.Domain._5069_ManageYourSelfContext>(options =>
@@ -40,7 +49,7 @@ namespace AdvanceMYS
                 Configuration.GetConnectionString("MYS_Connection")));
                 Models.Connection.Connection._ConnectionString = Configuration.GetConnectionString("MYS_Connection");
             }
-        
+
             services.AddRazorPages().AddRazorRuntimeCompilation();
            
             //for return json
@@ -67,8 +76,15 @@ namespace AdvanceMYS
             app.UseStaticFiles();
 
             app.UseRouting();
+            //it must before UseRouting
 
+            //who are u?
+            app.UseAuthentication();
+
+            //are u allowed?
             app.UseAuthorization();
+
+        
 
             app.UseEndpoints(endpoints =>
             {

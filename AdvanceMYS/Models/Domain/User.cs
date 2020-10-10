@@ -12,7 +12,7 @@ namespace AdvanceMYS.Models.Domain
             Books = new HashSet<Book>();
             Categories = new HashSet<Category>();
             DicTbls = new HashSet<DicTbl>();
-            KharjTypes = new HashSet<KharjType>();
+           
             PlayerScores = new HashSet<PlayerScore>();
             RoutineJobs = new HashSet<RoutineJob>();
             Tasks = new HashSet<Task>();
@@ -29,7 +29,7 @@ namespace AdvanceMYS.Models.Domain
         public virtual ICollection<Book> Books { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<DicTbl> DicTbls { get; set; }
-        public virtual ICollection<KharjType> KharjTypes { get; set; }
+       
         public virtual ICollection<PlayerScore> PlayerScores { get; set; }
         public virtual ICollection<RoutineJob> RoutineJobs { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }

@@ -1260,7 +1260,6 @@ D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\bin\Debug\netcorea
 D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
 D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.csprojAssemblyReference.cache
 D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.AssemblyInfoInputs.cache
 D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.AssemblyInfo.cs
 D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.csproj.CoreCompileInputs.cache
@@ -1288,3 +1287,4 @@ D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\obj\Debug\netcorea
 D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.dll
 D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.pdb
 D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.genruntimeconfig.cache
+D:\OneDrive\project\AdvanceMYS\13990704\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.csprojAssemblyReference.cache

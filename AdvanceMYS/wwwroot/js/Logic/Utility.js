@@ -285,6 +285,13 @@ function todayShamsy() {
 
     const m = moment();
     var today = moment().format('jYYYY/jM/jD');//Today
+
+    var todayarray = today.split("/")
+    mounth = (parseInt(todayarray[1]) <= 9) ? "0" + parseInt(todayarray[1]) : parseInt(todayarray[1])
+    rooz = (parseInt(todayarray[2]) <= 9) ? "0" + parseInt(todayarray[2]) : parseInt(todayarray[2])
+    year = todayarray[0].substring(2, 4)
+    today = "13" + year + "/" + mounth + "/" + rooz
+
     return today;
 }
 function todayShamsy8char() {
@@ -300,7 +307,7 @@ function todayShamsy8char() {
     return today
 }
 function NewOldDate(str) {
-    
+    debugger
     const m = moment();
     switch (str) {
         case 1://فردا
@@ -309,7 +316,7 @@ function NewOldDate(str) {
             newDate = convertDateToslashless(newDate)
             return newDate
             break;
-        case 0101://اول ماه بعد
+        case '0101'://اول ماه بعد
 
             var month = m.jMonth() + 1
             var day = m.jDate()
@@ -325,7 +332,7 @@ function NewOldDate(str) {
             }
 
             break;
-        case 00://شنبه هفته بعد
+        case '00'://شنبه هفته بعد
  
             var dayOfWeek = calDayOfWeeknumber(todayShamsy8char())
             dayOfWeek=7 - dayOfWeek
@@ -334,7 +341,7 @@ function NewOldDate(str) {
             newDate = convertDateToslashless(newDate)
             return newDate
             break;
-        case 07://جمعه
+        case '07'://جمعه
             
             var dayOfWeek = calDayOfWeeknumber(todayShamsy8char())
             dayOfWeek = 6 - dayOfWeek
@@ -343,7 +350,7 @@ function NewOldDate(str) {
             newDate = convertDateToslashless(newDate)
             return newDate
             break;
-        case 30://ماه بعد
+        case '30'://ماه بعد
             
             var isKabise = IsKabise(todayShamsy8char())
             var month = m.jMonth() + 1
@@ -359,6 +366,12 @@ function NewOldDate(str) {
             if (month == 12 && isKabise == false) {
                 m.add(29, 'day')
             }
+            var newDate = m.format('jYYYY/jM/jD')
+            newDate = convertDateToslashless(newDate)
+            return newDate
+            break;
+        default:
+            m.add(str, 'day')
             var newDate = m.format('jYYYY/jM/jD')
             newDate = convertDateToslashless(newDate)
             return newDate
@@ -392,12 +405,13 @@ function changeInputToThreeDigit(thiss) {
  Math.round(2.4) = 2
   Math.round(2.5) = 3
 */
-function showAlert(message) {
+//نمایش پیغام
+function showAlert(message,timer) {
     const Toast = Swal.mixin({
         toast: true,
         // position: 'top-end',
         showConfirmButton: false,
-        timer: 2000,
+        timer: timer,
         timerProgressBar: true,
         onOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer)

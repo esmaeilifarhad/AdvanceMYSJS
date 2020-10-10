@@ -24,5 +24,27 @@ namespace AdvanceMYS.Controllers
             var res = _db.Cats.SingleOrDefault(q => q.CatId == CatId);
             return Json(res);
         }
+        public IActionResult CreateUpdateCat(Models.Domain.Cat Cat) {
+            //create
+            if (Cat.CatId == 0)
+            {
+                _db.Cats.Add(Cat);
+                _db.SaveChanges();
+                return Json(true);
+            }
+            //update
+            else
+            {
+            var  oldCat=  _db.Cats.SingleOrDefault(q => q.CatId == Cat.CatId);
+                oldCat.Code = Cat.Code;
+                oldCat.Dsc = Cat.Dsc;
+                oldCat.Order = Cat.Order;
+                oldCat.Title = Cat.Title;
+               var count= _db.SaveChanges();
+                return Json(count);
+            }
+            
+           
+        }
     }
 }
