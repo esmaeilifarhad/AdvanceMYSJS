@@ -1,14 +1,4 @@
-﻿//$(document).ready(function(){
-//    GetData()
-//})
-//------Update Post
-//$("#MasterModal .btnSave").on("click", function () {
-//    var NameOperator = $("#MasterModal .BodyModal div").attr("Name");
-//    if (NameOperator == "UpdateSport")
-//        UpdateSportPost();
-//});
-
-async function ListSportFilter(CatId) {
+﻿async function ListSportFilter(CatId) {
 
     var obj = {}
     obj.url = "/Sport/ListSportFilter"
@@ -25,15 +15,15 @@ async function ListSportFilter(CatId) {
 
 
 }
-$("body").on("click", ".SaveNewSport", function () {
-    SaveNewSport();
-});
+//$("body").on("click", ".SaveNewSport", function () {
+//    SaveNewSport();
+//});
 async function SaveNewSport(CatId) {
 
     $.LoadingOverlay("show");
     var Date = $("input[name='DateEnd']").val();
     Date = convertDateToslashless(Date)
-    var Tedad = $(".saveData input[name='Tedad']").val();
+    var Tedad = $("input[name='Tedad']").val();
 
     var obj = {}
     obj.url = "/Sport/CreateNewSport"
@@ -66,7 +56,7 @@ function showListSportFilter(resListSportFilter, CatId) {
         if (oldDate == "") {
             showRateTaskDays += "<tr>"
             showRateTaskDays += "<td>" + resListSportFilter[index].title + "</td>" +
-                "<td>" + foramtDate(resListSportFilter[index].date) + "   " + calDayOfWeek(resListSportFilter[index].date) + "</td>" +
+                "<td>" + formatDate(resListSportFilter[index].date) + "   " + calDayOfWeek(resListSportFilter[index].date) + "</td>" +
 
                 "<td class='tedad' onclick='DeleteSport({Date:" + resListSportFilter[index].date + ",Title:\"" + resListSportFilter[index].title + "\",SportId:" + resListSportFilter[index].sportId + ",CatId:" + resListSportFilter[index].catId + ",Tedad:" + resListSportFilter[index].tedad + "})'>" + resListSportFilter[index].tedad + "</td>"
 
@@ -74,7 +64,7 @@ function showListSportFilter(resListSportFilter, CatId) {
         if (resListSportFilter[index].date != oldDate && oldDate != "") {
             showRateTaskDays += "</tr><tr>"
             showRateTaskDays += "<td>" + resListSportFilter[index].title + "</td>" +
-                "<td>" + foramtDate(resListSportFilter[index].date) + "   " + calDayOfWeek(resListSportFilter[index].date) + "</td>" +
+                "<td>" + formatDate(resListSportFilter[index].date) + "   " + calDayOfWeek(resListSportFilter[index].date) + "</td>" +
                 "<td class='tedad' onclick='DeleteSport({Date:" + resListSportFilter[index].date + ",Title:\"" + resListSportFilter[index].title + "\",SportId:" + resListSportFilter[index].sportId + ",CatId:" + resListSportFilter[index].catId + ",Tedad:" + resListSportFilter[index].tedad + "})'>" + resListSportFilter[index].tedad + "</td>"
         }
         if (resListSportFilter[index].date == oldDate && oldDate != "") {
@@ -205,7 +195,7 @@ function DeleteSport(objData) {
 
     var table = "<table class='table-bordered table-striped'>" +
         "<tr><td>عنوان</td><td>" + objData.Title + "</td></tr>" +
-        "<tr><td>تاریخ</td><td>" + foramtDate(objData.Date) + "</td></tr>" +
+        "<tr><td>تاریخ</td><td>" + formatDate(objData.Date) + "</td></tr>" +
         "<tr><td>تعداد</td><td>" + objData.Tedad + "</td></tr>" +
         "</table > "
     var modal_footer = "<table><tr>" +
@@ -231,7 +221,7 @@ function DeleteSport(objData) {
 }
 async function DeleteSportPost(objData) {
 
-    //var res = confirm("آیا حذف انجام شود؟" + "\n" + objData.Title + "\n تاریخ : " + foramtDate(objData.Date) + "\n تعداد : " + objData.Tedad);
+    //var res = confirm("آیا حذف انجام شود؟" + "\n" + objData.Title + "\n تاریخ : " + formatDate(objData.Date) + "\n تعداد : " + objData.Tedad);
 
     //if (res == true) {
     $.LoadingOverlay("show");
@@ -312,9 +302,9 @@ function ColorAvgMax(CatId) {
         $(this).append("<td class='sum' style='font-size:13px;background-color:yellow'>" + sum + "</td>")
     })
 
-    $(".ListSportChk .saveData").empty();
+    $(".ListSportChk").empty();
 
-    var table = "<table style='background-image: linear-gradient(to top, #17a2b8, transparent);' class='table-bordered saveData'>" +
+    var table = "<table class='table table-responsive table-bordered' style='font-size:12px;background-image: linear-gradient(to top, #17a2b8, transparent);'>" +
         "<tr style='text-align:center'><td style='color:blue'>بهترین</td><td>میانگین</td><td>بدترین</td></tr>" +
         "<tr style='text-align:center'><td>" + MaxNum + "</td><td>" + (AvgNum / CountNum).toFixed(1) + "</td><td>" + MinNum + "</td></tr>" +
 

@@ -57,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5 smokyText" style=" background-image: linear-gradient(to right, red, yellow);padding:40px;text-align:center">اسماعیلی</div>
+                <div class="col-md-5 smokyText" style="overflow:hidden; background-image: linear-gradient(to right, red, yellow);padding:10px;height:110px;text-align:center">اسماعیلی</div>
                 <div class="col-md-3">
 
                     @if (User.Identity.IsAuthenticated == true)
@@ -250,7 +250,7 @@
     <script src="~/js/Utility/moment.min.js"></script>
     <script src="~/js/Utility/moment-jalaali.js"></script>
     <script src="~/js/Logic/Utility.js"></script>
-
+    <script src="~/js/Utility/Speech.js"></script>
     @*---------------------------------------------Logic--------------------------------*@
     <script src="~/js/Logic/Services.js"></script>
     <script src="~/js/Logic/Task.js"></script>
@@ -261,7 +261,7 @@
     <script src="~/js/Logic/Sport.js"></script>
     <script src="~/js/Logic/Book.js"></script>
     <script src="~/js/Logic/Category.js"></script>
-
+    <script src="~/js/Logic/Dictionary.js"></script>
 
     @RenderSection("Scripts", required: false)
 

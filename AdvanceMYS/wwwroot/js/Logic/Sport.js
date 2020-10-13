@@ -56,7 +56,7 @@ function showListSportFilter(resListSportFilter, CatId) {
         if (oldDate == "") {
             showRateTaskDays += "<tr>"
             showRateTaskDays += "<td>" + resListSportFilter[index].title + "</td>" +
-                "<td>" + foramtDate(resListSportFilter[index].date) + "   " + calDayOfWeek(resListSportFilter[index].date) + "</td>" +
+                "<td>" + formatDate(resListSportFilter[index].date) + "   " + calDayOfWeek(resListSportFilter[index].date) + "</td>" +
 
                 "<td class='tedad' onclick='DeleteSport({Date:" + resListSportFilter[index].date + ",Title:\"" + resListSportFilter[index].title + "\",SportId:" + resListSportFilter[index].sportId + ",CatId:" + resListSportFilter[index].catId + ",Tedad:" + resListSportFilter[index].tedad + "})'>" + resListSportFilter[index].tedad + "</td>"
 
@@ -64,7 +64,7 @@ function showListSportFilter(resListSportFilter, CatId) {
         if (resListSportFilter[index].date != oldDate && oldDate != "") {
             showRateTaskDays += "</tr><tr>"
             showRateTaskDays += "<td>" + resListSportFilter[index].title + "</td>" +
-                "<td>" + foramtDate(resListSportFilter[index].date) + "   " + calDayOfWeek(resListSportFilter[index].date) + "</td>" +
+                "<td>" + formatDate(resListSportFilter[index].date) + "   " + calDayOfWeek(resListSportFilter[index].date) + "</td>" +
                 "<td class='tedad' onclick='DeleteSport({Date:" + resListSportFilter[index].date + ",Title:\"" + resListSportFilter[index].title + "\",SportId:" + resListSportFilter[index].sportId + ",CatId:" + resListSportFilter[index].catId + ",Tedad:" + resListSportFilter[index].tedad + "})'>" + resListSportFilter[index].tedad + "</td>"
         }
         if (resListSportFilter[index].date == oldDate && oldDate != "") {
@@ -195,7 +195,7 @@ function DeleteSport(objData) {
 
     var table = "<table class='table-bordered table-striped'>" +
         "<tr><td>عنوان</td><td>" + objData.Title + "</td></tr>" +
-        "<tr><td>تاریخ</td><td>" + foramtDate(objData.Date) + "</td></tr>" +
+        "<tr><td>تاریخ</td><td>" + formatDate(objData.Date) + "</td></tr>" +
         "<tr><td>تعداد</td><td>" + objData.Tedad + "</td></tr>" +
         "</table > "
     var modal_footer = "<table><tr>" +
@@ -221,7 +221,7 @@ function DeleteSport(objData) {
 }
 async function DeleteSportPost(objData) {
 
-    //var res = confirm("آیا حذف انجام شود؟" + "\n" + objData.Title + "\n تاریخ : " + foramtDate(objData.Date) + "\n تعداد : " + objData.Tedad);
+    //var res = confirm("آیا حذف انجام شود؟" + "\n" + objData.Title + "\n تاریخ : " + formatDate(objData.Date) + "\n تعداد : " + objData.Tedad);
 
     //if (res == true) {
     $.LoadingOverlay("show");

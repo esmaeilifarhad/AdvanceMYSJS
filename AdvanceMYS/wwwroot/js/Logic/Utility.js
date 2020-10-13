@@ -123,7 +123,7 @@ Pass you dates to this function like this:  showDays('1/1/2014','12/25/2014')
 
 }
 //980809|13980809  =>1398/08/09  input parameter
-function foramtDate(str) {
+function formatDate(str) {
     
    
 
@@ -307,7 +307,7 @@ function todayShamsy8char() {
     return today
 }
 function NewOldDate(str) {
-    debugger
+    
     const m = moment();
     switch (str) {
         case 1://فردا

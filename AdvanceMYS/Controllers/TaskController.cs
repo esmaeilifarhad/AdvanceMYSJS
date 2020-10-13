@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AdvanceMYS.Models.CRUDRepo;
 using AdvanceMYS.Models.Domain;
 using AdvanceMYS.Models.Utility;
+using ClosedXML.Excel;
 using Dapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +16,8 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using OfficeOpenXml;
+using OfficeOpenXml.Core.ExcelPackage;
 
 namespace AdvanceMYS.Controllers
 {
@@ -597,6 +601,66 @@ order by DateEnd desc
         {
 
             return Json(_db.Tasks.Include(q => q.Cat).Include(q => q.Timings).ThenInclude(q => q.ManageTime).Where(q => q.DateEnd == date).ToList());
+        }
+
+       
+        public IActionResult ExcelCreate(string DateStart,string DateEnd,int[] rdbSport) {
+            DateEnd = DateEnd.ConvertDateToSqlFormat();
+            DateStart = DateStart.ConvertDateToSqlFormat();
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("فرهاد اسماعیلی");
+                worksheet.RightToLeft = true;
+
+                worksheet.Cell(1, 1).Value = "نام";
+                worksheet.Cell(1, 2).Value = "فرهاد";
+                worksheet.Cell(1, 3).Value = "نام خانوادگی";
+                worksheet.Cell(1, 4).Value = "اسماعیلی";
+
+
+                var currentRow = 3;
+
+                worksheet.Column(3).Width = 200;
+                worksheet.Column(2).Width = 10;
+                worksheet.Column(1).Width = 20;
+                worksheet.Range(1,1,1,4).Style.Fill.BackgroundColor = XLColor.Yellow;
+                worksheet.Cell(currentRow, 1).Value = "DateEnd";
+                worksheet.Cell(currentRow, 2).Value = "Category";
+                worksheet.Cell(currentRow, 3).Value = "عنوان";
+                worksheet.Cell(currentRow, 4).Value = "زمان";
+
+                var lstTask = _db.Tasks.Include(q=>q.Cat).Where(q => (q.DateEnd.CompareTo(DateStart) >= 0 && q.DateEnd.CompareTo(DateEnd) <= 0)  && rdbSport.Contains((int)q.CatId)).ToList();
+
+                foreach (var user in lstTask)
+                {
+                    currentRow++;
+                    worksheet.Cell(currentRow, 1).Value = user.DateEnd.ConvertDateToDateFormat();
+                    worksheet.Cell(currentRow, 2).Value = user.Cat.Title;
+                    worksheet.Cell(currentRow, 3).Value = user.Name;
+                    worksheet.Cell(currentRow, 4).Value = 1;
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    return File(
+                        content,
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        "users.xlsx");
+
+
+
+
+
+                }
+            }
+        }
+        public IActionResult ListTaskTomarow(string date)
+        {
+            var res = _db.Tasks.Include(q=>q.Cat).Where(q => q.DateEnd == date).OrderBy(q=>q.Olaviat).ToList();
+            return Json(res);
         }
     }
 

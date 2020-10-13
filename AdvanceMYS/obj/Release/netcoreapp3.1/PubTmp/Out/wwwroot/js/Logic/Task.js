@@ -3,16 +3,28 @@
 async function TabShowListTask() {
 
     ListTask();
+    $(".ListTask").append(" <input type='text' placeholder='جستجو' onKeyup='ListTask(this)'/>")
 }
-async function ListTask() {
+async function ListTask(stringSerach) {
 
+    if (stringSerach != undefined) {
+
+        if (stringSerach.value.length > 2)
+            stringSerach = stringSerach.value
+        else if (stringSerach.value.length == 0) {
+            stringSerach = "";
+        }
+        else {
+            stringSerach = "";
+            return
+        }
+    }
     $.LoadingOverlay("show");
     var obj = {}
     obj.url = "/Task/ListTask"
     obj.dataType = "json"
     obj.type = "post"
-
-
+    obj.data = { stringSerach: stringSerach }
     var results = await Promise.all([
         service(obj)
     ]);
@@ -22,15 +34,19 @@ async function ListTask() {
     $.LoadingOverlay("hide");
 
 }
+//نمایش لیست وظایف اصلی
 function ShowListTask(ListTaskAnjamnashode) {
 
     // console.log(ListTaskAnjamnashode)
     var table = "<input style='cursor:pointer' type='button' value='انجام' onclick='changeToAnjamShode()'/><input style='cursor:pointer' type = 'button' value = 'حذف' onclick = 'RemoveAllTask()' />" +
+        " <button type='button' style='float:left;' class='btn btn-info' onclick='CreateExcel()'>Create Excel</button>" +
+        " <button type='button' /*class='btn btn-info'*/ onclick='transferDate(0)'>امروز</button>" +
         " <button type='button' /*class='btn btn-info'*/ onclick='transferDate(1)'>+1</button>" +
-        " <button type='button' /*class='btn btn-warning'*/ onclick='transferDate(07)'>جمعه</button>" +
-        " <button type='button' /*class='btn btn-danger'*/ onclick='transferDate(00)'>شنبه</button>" +
-        " <button type='button' /*class='btn btn-success'*/ onclick='transferDate(0101)'>01/01</button>" +
-        " <button type='button' /*class='btn btn-info'*/ onclick='transferDate(30)'>30</button>" +
+        " <button type='button' /*class='btn btn-warning'*/ onclick='transferDate(\"" + '07' + "\")'>جمعه</button>" +
+        " <button type='button' /*class='btn btn-danger'*/ onclick='transferDate(\"" + '00' + "\")'>شنبه</button>" +
+        " <button type='button' /*class='btn btn-success'*/ onclick='transferDate(\"" + '0101' + "\")'>01/01</button>" +
+        " <button type='button' /*class='btn btn-info'*/ onclick='transferDate(\"" + '30' + "\")'>30</button>" +
+      
 
         "<table id='tblListTaskDateToDate' class='table-bordered table-responsive table-striped' " +
         " style='direction: rtl; text-align: center;font-size:11px'>" +
@@ -63,8 +79,8 @@ function ShowListTask(ListTaskAnjamnashode) {
             "<td><input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='TaskDownLevel(" + ListTaskAnjamnashode[index].taskId + ")'  Data_id='@item.TaskId'/></td>" +
             "<td>" + ListTaskAnjamnashode[index].cat.title + "</td>" +
             "<td style='text-align: right!important;'>" + ListTaskAnjamnashode[index].name + "</td>" +
-            "<td>" + foramtDate(ListTaskAnjamnashode[index].dateStart) + "<br/>" + calDayOfWeek(ListTaskAnjamnashode[index].dateStart) + "</td>" +
-            "<td>" + foramtDate(ListTaskAnjamnashode[index].dateEnd) + "<br/>" + calDayOfWeek(ListTaskAnjamnashode[index].dateEnd) + "</td>" +
+            "<td>" + formatDate(ListTaskAnjamnashode[index].dateStart) + "<br/>" + calDayOfWeek(ListTaskAnjamnashode[index].dateStart) + "</td>" +
+            "<td>" + formatDate(ListTaskAnjamnashode[index].dateEnd) + "<br/>" + calDayOfWeek(ListTaskAnjamnashode[index].dateEnd) + "</td>" +
             "<td>" + ListTaskAnjamnashode[index].darsadPishraft + "</td>" +
             "<td>" + numberDaysTwoDate(ListTaskAnjamnashode[index].dateStart, todayShamsy()) + "</td>" +
             "<td>" + numberDaysTwoDate(ListTaskAnjamnashode[index].dateEnd, todayShamsy()) + "</td>" +
@@ -84,6 +100,111 @@ function ShowListTask(ListTaskAnjamnashode) {
     $.LoadingOverlay("hide");
 }
 
+async function CreateExcel() {
+    var Code = 2
+    var obj = {}
+    obj.url = "/Cat/ListCat"
+    obj.dataType = "json"
+    obj.type = "POST"
+    obj.data = { Code: Code }
+
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var catData = results[0]
+
+    var modal_footer = "<table><tr>" +
+        "<td><input type='submit' class='btn btn-success' value='ایجاد اکسل' /> | " +
+        "<input type='button'  class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +
+        "</tr>"
+    modal_footer += "</table>"
+
+
+    var modal_header = "<span>ایجاد فایل اکسل</span>"
+
+
+    var table = "<form action='/Task/ExcelCreate' method='post'>"
+    table += "تاریخ شروع<input type='text' placeholde='تاریخ شروع' name='DateStart'   autocomplete='off'  >"
+    table += "تاریخ پایان<input type='text' placeholde='تاریخ پایان' name='DateEnd'   autocomplete='off'  >"
+
+    var countCol = 3
+
+    table += "<div style='font-size:11px'>" +
+        "<table class='table-responsive table-bordered'>"
+    for (let index = 0; index < catData.length; index++) {
+
+        if (index % countCol == 0) {
+            table += "<tr><td><input  type='checkbox' value=" + catData[index].catId + " name='rdbSport'></td><td>" + catData[index].title + "</td></td>"
+        }
+        else {
+            table += "<td><input   type='checkbox' value=" + catData[index].catId + " name='rdbSport'></td><td>" + catData[index].title + "</td></td>"
+        }
+
+        if (index % countCol == (countCol - 1)) {
+            table += "</tr>"
+        }
+    }
+    table += "</table></div>"
+
+    table += " <input type='submit' class='btn btn-success' value='ایجاد اکسل' />"
+    table += "</form > "
+
+
+    $("#MasterModal .modal-header").empty();
+    $("#MasterModal .modal-header").append(modal_header);
+
+
+    $("#MasterModal .modal-footer").empty();
+    $("#MasterModal .modal-footer").append(modal_footer);
+
+    $("#MasterModal .BodyModal").empty();
+    $("#MasterModal .BodyModal").append(table);
+
+    $("#MasterModal").modal();
+
+
+    $("input[name='DateStart']").persianDatepicker({
+        formatDate: "YYYY/0M/0D"
+    });
+
+    $("input[name='DateEnd']").persianDatepicker({
+        formatDate: "YYYY/0M/0D"
+    });
+
+}
+//انتقال به فردا
+async function transferDate(str) {
+
+    $.LoadingOverlay("show");
+    var obj = {}
+    var count = $("#tblListTaskDateToDate tr td .AnjamShode").length
+    var i = 0;
+    $("#tblListTaskDateToDate tr td .AnjamShode").each(async function () {
+        i += 1;
+        if ($(this).is(':checked')) {
+
+            obj.DateEnd = NewOldDate(str)
+            obj.TaskId = $(this).attr("Data_id")
+
+            var x = await UpdateTask2(obj)
+
+        }
+        else {
+            // unchecked
+
+        }
+
+        if (count == i) {
+            ListTask();
+
+            $.LoadingOverlay("hide");
+            // resolve("finish")
+        }
+
+    })
+
+}
+
 async function UpdateToToday() {
 
     $.LoadingOverlay("show");
@@ -96,8 +217,8 @@ async function UpdateToToday() {
         service(obj)
     ]);
     var ListObj = results[0]
-    showAlert("تعداد تسک هایی که به امروز انتقال یافت" + ListObj,2000)
-   // alert(ListObj)
+    showAlert("تعداد تسک هایی که به امروز انتقال یافت" + ListObj, 2000)
+    // alert(ListObj)
     $.LoadingOverlay("hide");
     Refresh()
 }
@@ -161,8 +282,8 @@ async function EditTask(TaskId) {
 
 
     var table = "<div class='form-group'>" +
-        "تاریخ شروع<input type='text' placeholde='تاریخ شروع' name='DateStart' class='PersianDatePickerDateStart' value=" + foramtDate(oldTask.task.dateStart) + " autocomplete='off'  >" +
-        "تاریخ پایان<input type='text' placeholde='تاریخ پایان' name='DateEnd' class='PersianDatePickerDateEnd' value=" + foramtDate(oldTask.task.dateEnd) + " autocomplete='off'  >" +
+        "تاریخ شروع<input type='text' placeholde='تاریخ شروع' name='DateStart' class='PersianDatePickerDateStart' value=" + formatDate(oldTask.task.dateStart) + " autocomplete='off'  >" +
+        "تاریخ پایان<input type='text' placeholde='تاریخ پایان' name='DateEnd' class='PersianDatePickerDateEnd' value=" + formatDate(oldTask.task.dateEnd) + " autocomplete='off'  >" +
         "</br><textarea placehoder='توضیحات' name='Name' class='form-control'  rows='6'>" + oldTask.task.name + "</textarea>" +
         " <br/> نوع <select class='MYSelect'>"
 
@@ -254,23 +375,23 @@ async function EditTask(TaskId) {
 }
 async function CreateTask() {
     $.LoadingOverlay("show");
-    
+
     var obj = {}
     obj.url = "/Task/CreateTask"
     obj.dataType = "json"
     obj.type = "post"
-   // objEditTask.data = { TaskId: TaskId }
+    // objEditTask.data = { TaskId: TaskId }
 
     var results = await Promise.all([
         service(obj)
     ]);
     var res = results[0]
-    
+
     $.LoadingOverlay("hide");
     return res
 }
 async function CreateTaskPost() {
-    
+
     var CatId = $("#MasterModal  .MYSelect option:selected").val();
     var ManageTimeId = $("#MasterModal  .MYSelectTiming option:selected").val();
     var IsTime = $("input[name='IsTime']").prop('checked')
@@ -312,7 +433,7 @@ async function CreateTaskPost() {
     obj.dataType = "json"
     obj.type = "post"
     obj.data = {
-      
+
         DateStart: DateStart,
         DateEnd: DateEnd,
         IsActive: IsActive,
@@ -334,12 +455,12 @@ async function CreateTaskPost() {
 }
 async function CreateTaskShow(CatId) {
     var oldTask = await CreateTask()
-    
+
 
 
     var table = "<div class='form-group'>" +
-        "تاریخ شروع<input type='text' placeholde='تاریخ شروع' name='DateStart' class='PersianDatePickerDateStart' value=" + todayShamsy()+"  autocomplete='off'  >" +
-        "تاریخ پایان<input type='text' placeholde='تاریخ پایان' name='DateEnd' class='PersianDatePickerDateEnd' value=" + todayShamsy() +" autocomplete='off'  >" +
+        "تاریخ شروع<input type='text' placeholde='تاریخ شروع' name='DateStart' class='PersianDatePickerDateStart' value=" + todayShamsy() + "  autocomplete='off'  >" +
+        "تاریخ پایان<input type='text' placeholde='تاریخ پایان' name='DateEnd' class='PersianDatePickerDateEnd' value=" + todayShamsy() + " autocomplete='off'  >" +
         "</br><textarea placehoder='توضیحات' name='Name' class='form-control'  rows='6'></textarea>" +
         " <br/> نوع <select class='MYSelect'>"
 
@@ -368,7 +489,7 @@ async function CreateTaskShow(CatId) {
 
 
     table += "<table>" +
-        "<tr><td>درصد پیشرفت</td><td><input type='number' name='DarsadPishraft'  value=" +0 + " min='0' max='100' autocomplete='off'  ></td></tr>" +
+        "<tr><td>درصد پیشرفت</td><td><input type='number' name='DarsadPishraft'  value=" + 0 + " min='0' max='100' autocomplete='off'  ></td></tr>" +
         "<tr><td>اولویت</td><td><input type='number' name='Olaviat'   value=" + 1 + " min='0' max='5' autocomplete='off'  ></td></tr>" +
         "<tr><td>Rate</td><td><input type='number' name='Rate'   value=" + 1 + "  min='0' max='5' autocomplete='off'  ></td></tr>"
 
@@ -376,11 +497,11 @@ async function CreateTaskShow(CatId) {
 
 
 
-  
-        table += "<tr><td>فعال</td><td><input name='TaskIsActive' type='checkbox' /></td></tr>"
 
-        table += "<tr><td>انجام</td><td><input name='TaskIsCheck' type='checkbox' /></td></tr>"
-    
+    table += "<tr><td>فعال</td><td><input name='TaskIsActive' type='checkbox' /></td></tr>"
+
+    table += "<tr><td>انجام</td><td><input name='TaskIsCheck' type='checkbox' /></td></tr>"
+
 
 
     table += "</table></div >"
@@ -634,7 +755,7 @@ async function Calender(status) {
 
 //نمایش تقویم تسک ها 
 async function CalenderListTagh(status) {
-    
+
     var today = todayShamsy()
     var splitdate = today.split('/');
     var year = ""
@@ -657,12 +778,12 @@ async function CalenderListTagh(status) {
     obj.url = "/Taghvim/Index"
     obj.dataType = "json"
     obj.type = "post"
-   
+
     var results = await Promise.all([
         service(obj)
     ]);
     var ListObj = results[0]
-    
+
     //-------------
 
     var lastMonth = 0
@@ -682,8 +803,8 @@ async function CalenderListTagh(status) {
 
     var dayWeek = ["شنبه", "یکشنبه", "دوشنبه", "سه شنبه", "چهار شنبه", "پنج شنبه", "جمعه"]
 
-   
-   var table = "<table><tr><th>ماه</th><th>سال</th><th></th></tr><tr><td><select onchange='CalenderListTagh(true)' id='month'>"
+
+    var table = "<table><tr><th>ماه</th><th>سال</th><th></th></tr><tr><td><select onchange='CalenderListTagh(true)' id='month'>"
     for (var i = 1; i <= 12; i++) {
         if (i == month) {
             table += "<option selected value=" + i + "  >" + i + "</option>"
@@ -707,7 +828,7 @@ async function CalenderListTagh(status) {
     table += "</select></td><td><span style = 'cursor:pointer;background-color: green;border-radius: 10px;padding: 5px;color: black;' onclick = 'CalenderListTagh(false)' > امروز</span ></td></tr></table>"
     //---------------------
 
-     table += "<table class='table table-responsive' style='text-align: center;'>"
+    table += "<table class='table table-responsive' style='text-align: center;'>"
     table += "<tr><th>شنبه</th><th>یکشنبه</th><th>دوشنبه</th><th>سه شنبه</th><th>چهارشنبه</th><th>پنجشنبه</th><th>جمعه</th></tr>"
 
 
@@ -717,12 +838,12 @@ async function CalenderListTagh(status) {
         for (var i = 0; i < 7; i++) {
             var dateSelect = year + "" + (month < 10 ? "0" + month : month) + (k < 10 ? "0" + k : k)
 
-           var IsInTaghvim= ListObj.filter(function (x) {
-                return x.date==dateSelect
-           })
-            var style=""
+            var IsInTaghvim = ListObj.filter(function (x) {
+                return x.date == dateSelect
+            })
+            var style = ""
             if (IsInTaghvim.length > 0) {
-                
+
                 if (IsInTaghvim[0].isHolyDay == true) {
                     style = "color:red";
                 }
@@ -733,20 +854,20 @@ async function CalenderListTagh(status) {
             }
             table += "<td onclick='GetDateEvent(" + dateSelect + ")'>"
             if (calDayOfWeeknumber(dateSelect) == i) {
-               
+
                 //امروز را سبز رنگ نمایش دهد
                 if (k == parseInt(splitdate[2]) && month == parseInt(splitdate[1]) && year == parseInt(splitdate[0])) {
-                    table += "<span style='color: white;background-color: green;padding: 3px;border-radius: 10px;;cursor:pointer" + style+"'>" + k + "</span>"
+                    table += "<span style='color: white;background-color: green;padding: 3px;border-radius: 10px;;cursor:pointer" + style + "'>" + k + "</span>"
                 }
                 else {
                     //جمعه قرمز
                     if (i == 6) {
-                        table += "<span style='color:red;cursor:pointer'> " + k + "</span>" 
+                        table += "<span style='color:red;cursor:pointer'> " + k + "</span>"
                     }
                     else {
-                        table += "<span style='" + style +";cursor:pointer'>" + k + "</span>" 
+                        table += "<span style='" + style + ";cursor:pointer'>" + k + "</span>"
                     }
-                  
+
                 }
 
                 k += 1
@@ -757,7 +878,7 @@ async function CalenderListTagh(status) {
     }
     table += "</table>"
 
-   
+
 
 
 
@@ -787,7 +908,7 @@ async function GetTimingTask(TaskId) {
 }
 async function TimingTask(TaskId) {
     var res = await GetTimingTask(TaskId)
-    
+
     var table = "<div class='form-group'>" +
         "توضیحات<textarea disabled name='Name' class='form-control'  rows='6'>" + res.task.name + "</textarea>" +
         "</br><select class='MYSelectTiming'>"
@@ -859,13 +980,19 @@ async function ListTimingForListTask() {
         "<th>انجام</th>" +
         "</tr>"
     for (var i = 0; i < ListTaskAnjamnashode.length; i++) {
-
-        if (currentHour == ListTaskAnjamnashode[i].Value && todayShamsy8char() == ListTaskAnjamnashode[i].DateEnd) {
-            table += "<tr style='color: white; background-color: #981313;'>"
+        
+        if (currentHour == ListTaskAnjamnashode[i].value && todayShamsy8char() == ListTaskAnjamnashode[i].dateEnd) {
+            table += "<tr style='color: white; background-color: green;'>"
 
         }
+        else if (currentHour > ListTaskAnjamnashode[i].value && todayShamsy8char() == ListTaskAnjamnashode[i].dateEnd) {
+            table += "<tr style='color: white; background-color: red;'>"
+        }
+        else if (currentHour > ListTaskAnjamnashode[i].value && todayShamsy8char() == ListTaskAnjamnashode[i].dateEnd) {
+            table += "<tr style='color: white; background-color: orange;'>"
+        }
         else {
-            if (todayShamsy8char() != ListTaskAnjamnashode[i].DateEnd)
+            if (todayShamsy8char() != ListTaskAnjamnashode[i].dateEnd)
                 table += "<tr style='color: #4873d4;'>"
             else
                 table += "<tr>"
@@ -877,7 +1004,7 @@ async function ListTimingForListTask() {
             "<td style='white-space: nowrap;'>" + ListTaskAnjamnashode[i].olaviat + "</td>" +
             "<td style='text-align:right'>" + ListTaskAnjamnashode[i].name.substring(0, 40) + " ... </td>" +
             "<td>" + ListTaskAnjamnashode[i].rate + "</td>" +
-            "<td>" + foramtDate(ListTaskAnjamnashode[i].dateEnd) + "<br/>" + calDayOfWeek(ListTaskAnjamnashode[i].dateEnd) + "</td>" +
+            "<td>" + formatDate(ListTaskAnjamnashode[i].dateEnd) + "<br/>" + calDayOfWeek(ListTaskAnjamnashode[i].dateEnd) + "</td>" +
             "<td style='white-space: nowrap;'>" + ListTaskAnjamnashode[i].label + "</td>" +
             "<td><span class='fa fa-calendar pointer' onclick='TimingTask(" + ListTaskAnjamnashode[i].taskId + ")'></span></td>" +
             "<td><span class='fa fa-remove pointer' onclick='removeTimeTask(" + ListTaskAnjamnashode[i].taskId + ")'></span></td>" +
@@ -895,6 +1022,45 @@ async function ListTimingForListTask() {
     $.LoadingOverlay("hide");
 }
 
+async function ListTaskTomarow(date) {
+    
+    var obj = {}
+    obj.url = "/Task/ListTaskTomarow"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = { date: date }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    
+    var table = "<table class='table' style='font-size:10px'>"
+    for (var i = 0; i < ListObj.length; i++) {
+        if (ListObj[i].olaviat == 1) {
+            table += "<tr style='color:red'>"
+        }
+       else  if (ListObj[i].olaviat == 5) {
+            table += "<tr style='color:green'>"
+        }
+        else {
+            table += "<tr>"
+        }
+       
+        table +=
+            "<td>" + ListObj[i].olaviat + "</td>" +
+            "<td>" + ListObj[i].cat.title + "</td>" +
+        "<td>" + ListObj[i].name + "</td>" +
+        "<td><span class='fa fa-edit pointer'  onclick='EditTask( " + ListObj[i].taskId +")' style ='display: inline;' ></span></td>" 
+          
+            
+
+        table += "</tr>"
+    }
+    table += "</table>"
+    $(".ListTaskTomarow").empty()
+    $(".ListTaskTomarow").append(table)
+
+}
 async function UpdateTiming(taskId) {
 
     var ManageTimeId = $("#MasterModal  .MYSelectTiming option:selected").val();
@@ -927,7 +1093,7 @@ async function removeTimeTask(taskId) {
         service(obj)
     ]);
     var ListObj = results[0]
-    showAlert("حذف شد" , 1000)
+    showAlert("حذف شد", 1000)
     $.LoadingOverlay("hide");
     Refresh()
 
@@ -935,9 +1101,10 @@ async function removeTimeTask(taskId) {
 
 
 async function UpdateTask2(obj) {
-    
+
     var TaskId = obj.TaskId
-    var IsCheck=obj.IsCheck
+    var IsCheck = obj.IsCheck
+    var DateEnd = obj.DateEnd
     $.LoadingOverlay("show");
     var obj = {}
     obj.url = "/Task/UpdateTask"
@@ -946,7 +1113,8 @@ async function UpdateTask2(obj) {
     obj.data = {
         TaskId: TaskId,
         IsCheck: IsCheck,
-       
+        DateEnd: DateEnd
+
     }
     var results = await Promise.all([
         service(obj)
@@ -958,7 +1126,7 @@ async function UpdateTask2(obj) {
 
 
 async function ListTaskAnjamShode(date) {
-    
+
     var SeletedDate = date
     $.LoadingOverlay("show");
 
@@ -970,7 +1138,7 @@ async function ListTaskAnjamShode(date) {
     }
     //if (date != undefined) {
     //    today = date
-    //    $(".PersianDatePickerEditTaskS").val(foramtDate(date))
+    //    $(".PersianDatePickerEditTaskS").val(formatDate(date))
     //}
 
 
@@ -984,13 +1152,13 @@ async function ListTaskAnjamShode(date) {
     ]);
     var result = results[0]
 
-    
+
 
 
 
     if (result.lstvmTask.length > 0) {
         var table = "<span class='smoke'  style='color:black'>" + calDayOfWeek(result.lstvmTask[0].dateEnd) + "    </span>" +
-            "<span class='smoke' style='color:black'>" + foramtDate(result.lstvmTask[0].dateEnd) + "</span>" +
+            "<span class='smoke' style='color:black'>" + formatDate(result.lstvmTask[0].dateEnd) + "</span>" +
             "<table class='table table-bordered' style='position: relative;z-index: 15;font-size: 9px;text-align: center;color:white;background-image: linear-gradient(to left, #405dc5, #010b17);'>"
         table += "<tr>" +
             "<th>ردیف</th>" +
@@ -1024,11 +1192,11 @@ async function ListTaskAnjamShode(date) {
     for (let index = 0; index < result.lstvmTask2.length; index++) {
 
         if (index % 5 == 0) {
-            showRateTaskDays += "<tr><td><span style='cursor:pointer' onclick='ListTaskAnjamShode(" + result.lstvmTask2[index].dateEnd + ")'>" + foramtDate(result.lstvmTask2[index].dateEnd) + " : </span><span>" + result.lstvmTask2[index].rate + "</span></td>"
+            showRateTaskDays += "<tr><td><span style='cursor:pointer' onclick='ListTaskAnjamShode(" + result.lstvmTask2[index].dateEnd + ")'>" + formatDate(result.lstvmTask2[index].dateEnd) + " : </span><span>" + result.lstvmTask2[index].rate + "</span></td>"
         }
         else {
 
-            showRateTaskDays += "<td><span style='cursor:pointer' onclick='ListTaskAnjamShode(" + result.lstvmTask2[index].dateEnd + ")'>" + foramtDate(result.lstvmTask2[index].dateEnd) + " : </span><span>" + result.lstvmTask2[index].rate + "</span></td>"
+            showRateTaskDays += "<td><span style='cursor:pointer' onclick='ListTaskAnjamShode(" + result.lstvmTask2[index].dateEnd + ")'>" + formatDate(result.lstvmTask2[index].dateEnd) + " : </span><span>" + result.lstvmTask2[index].rate + "</span></td>"
         }
         if (index % 5 == 4) {
             showRateTaskDays += "</tr>"
@@ -1043,7 +1211,94 @@ async function ListTaskAnjamShode(date) {
 
     $.LoadingOverlay("hide");
 }
+async function RemoveAllTask() {
 
+    var arrayTaskId = []
+
+    var objData = {}
+    var count = $("#tblListTaskDateToDate tr td .AnjamShode").length
+    var countChecked = $("#tblListTaskDateToDate tr td .AnjamShode").filter(':checked').length
+    if (countChecked == 0) {
+        alert("لطفا یک مورد را انتخاب نمایید")
+        return
+    }
+    var i = 0;
+    $("#tblListTaskDateToDate tr td .AnjamShode").each(async function () {
+        i += 1;
+        if ($(this).is(':checked')) {
+            // checked
+            //  obj.IsCheck = true
+            objData.TaskId = $(this).attr("Data_id")
+            arrayTaskId.push(objData.TaskId)
+
+            // var x = await UpdateTask2(obj)
+
+        }
+        else {
+            // unchecked
+
+        }
+
+        if (count == i) {
+            $.LoadingOverlay("show");
+
+            var obj = {}
+            obj.url = "/Task/RemoveAllTask"
+            obj.dataType = "json"
+            obj.type = "post"
+            obj.data = { TasKIds: arrayTaskId }
+            var results = await Promise.all([
+                service(obj)
+            ]);
+            var ListObj = results[0]
+            showAlert("تعداد " + ListObj + " رکورد حذف گردید", 2000)
+
+            // ListTaskDateToDate()
+            //  ShowStDateEndDate()
+            Refresh()
+            // ListTask("anjamnashode");
+            $.LoadingOverlay("hide");
+            // resolve("finish")
+        }
+
+    })
+
+}
+//کلیک بر روی دکمه انجام
+async function changeToAnjamShode() {
+
+    $.LoadingOverlay("show");
+    var obj = {}
+    var count = $("#tblListTaskDateToDate tr td .AnjamShode").length
+    var i = 0;
+    $("#tblListTaskDateToDate tr td .AnjamShode").each(async function () {
+        i += 1;
+        if ($(this).is(':checked')) {
+            // checked
+            obj.IsCheck = true
+            obj.TaskId = $(this).attr("Data_id")
+
+            var x = await UpdateTask2(obj)
+
+        }
+        else {
+            // unchecked
+
+        }
+
+        if (count == i) {
+
+            ListTask("anjamnashode");
+
+
+
+            $.LoadingOverlay("hide");
+            // resolve("finish")
+        }
+
+    })
+
+}
 async function GetDateEvent(date) {
 
     var obj = {}
@@ -1064,11 +1319,11 @@ async function GetDateEvent(date) {
     ]);
     var result = results[0]
     var result2 = results[1]
-    
+
 
     var table = ""
 
-    
+
     if (result != null) {
         table += "<p  style='color:white;background-image: linear-gradient(45deg, #6be8a9, rgba(0,0,0,.9));text-align: center;font-weight: bold;font-size: 20px;'>تقویم</p>"
         table += "<p>" + result.dsc + "</p>"
@@ -1084,7 +1339,7 @@ async function GetDateEvent(date) {
                 var style = "'background-color:#2b91ce42;'"
 
             table += "<tr style=" + style + ">"
-            table += "<td>" + result2[i].cat.title + "</td><td>" + result2[i].name + "</td><td><span class='fa fa-edit pointer' onclick='EditTask(" + result2[i].taskId+")' style='display: inline;'></span></td>"
+            table += "<td><span  style='writing-mode: vertical-rl;'>" + result2[i].cat.title + "</span></td><td style='white-space: break-spaces;'>" + result2[i].name + "</td><td><span class='fa fa-edit pointer' onclick='EditTask(" + result2[i].taskId + ")' style='display: inline;'></span></td>"
             table += "</tr>"
         }
         table += "</table>"

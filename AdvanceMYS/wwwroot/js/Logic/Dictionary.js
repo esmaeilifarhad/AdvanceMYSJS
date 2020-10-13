@@ -1,1124 +1,146 @@
-﻿//************************************Dictionary*****************************************************
-var _wordId=0
-//-------------execute List When Click on Tab
-function MenuDicBaMesalPro(){
-    ListDictionaryHamrahBaExamplePro();
-    ShowLevel();
-}
+﻿async function ListLevel() {
+    $.LoadingOverlay("show");
+    var obj = {}
+    obj.url = "/Dictionary/ListLevel"
+    obj.dataType = "json"
+    obj.type = "post"
+    //obj.data = {
+    //    TaskId: TaskId,
+    //    IsCheck: IsCheck,
+    //    DateEnd: DateEnd
 
-$("ul li a[href='#MenuDicBaMesalProUnSuccess']").on("click", function () {
-    ListDictionaryHamrahBaExampleProUnSuccess();
-    ShowLevel();
-});
-$("ul li a[href='#MenuDicPersianToEnglish']").on("click", function () {
-    ListPersianToEnglish();
-    ShowLevel();
-});
-$("ul li a[href='#home']").on("click", function () {
-    ListDictionary();
-});
-$("ul li a[href='#MenuDicNRecords']").on("click", function () {
-    //<a class="nav-link" data-toggle="tab" href="#MenuDicNRecords">ده تا</a>
-    ShouldExecute();
-});
-$("ul li a[href='#MenuDicRandomWord']").on("click", function () {
-    RandomWord();
-    RandomWord_HardWord();
-    RandomWord_HardWordExample();
-});
-//-------------------------------------
-//Save new Example
-$("#ModalNewExample .btnSave").on("click", function () {
-    var Example = $("#ModalNewExample textarea").val();
-    var wordId = $("#ModalNewExample .modal-body textarea").attr("wordid");
-    CreateNewExamplePost(wordId, Example);
-});
-function CreateNewExamplePost(wordId, Example) {
-    $.ajax({
-        type: 'POST',
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        url: "/Dictionary/CreateExample",
-        data: JSON.stringify({ id_dic_tbl: wordId, example: Example }),
-        success: function (result) {
-            if (result == true) {
-                //ListDictionaryHamrahBaExamplePro();
-                RefreshListWithCheckedCheckbox();
-            }
-            else {
-                alert("خطا در ثبت")
-            }
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-//------Up Level
-$("Body").on("click", ".LevelEngUp", function () {
-    var Wordid = $(this).attr("data_id");
-    LevelChangeUp(Wordid);
-    $(this).parent().parent().css({ "display": "none" });
-    //alert(Wordid);
-    $("table tr .Examplecls").each(function () {
-        var i = $(this).attr("data_id");
-        if (i == Wordid)
-            $(this).css({ "display": "none" });
-    });
-});
-//------Down Level
-$("Body").on("click", ".LevelEngDown", function () {
-    // alert(1);
-    var Wordid = $(this).attr("data_id");
-    LevelChangeDown(Wordid);
-    $(this).parent().parent().css({ "display": "none" });
-    //alert(Wordid);
-    $("table tr .Examplecls").each(function () {
-        var i = $(this).attr("data_id");
-        if (i == Wordid)
-            $(this).css({ "display": "none" });
-    });
-});
-
-//------CreateWord
-$(".MyDictionary input[name='CreateWord']").on("click", function () {
-    ShowCreateWord();
-});
-function ShowCreateWord() {
-    var urll = "/Dictionary/CreateWord";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (result) {
-            // var obj = data;
-            //var obj = JSON.parse(data);
-            $(".BodyModal").html(result);
-            $("#MasterModal").modal();
-        }
-    })
-}
-//------SearchWord
-$(".MyDictionary input[name='SerchWordList']").on("click", function () {
-    SearchWordList();
-});
-function SearchWordList() {
-    var urll = "/Dictionary/SearchWordList";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (result) {
-            // var obj = data;
-            //var obj = JSON.parse(data);
-            $(".BodyModal").html(result);
-            $("#MasterModal").modal();
-        }
-    })
-}
-//---------------SearchInDatabse
-$("#SeachInDB").blur(function () {
-    var str = $(this).val();
-    ListDictionaryHamrahBaExamplePro(str);
-});
-function ListDictionaryHamrahBaExamplePro(str) {
-    if (str == null) {
-        str = "";
-    }
-    var urll = "/Dictionary/ListWordExampleDiv?str=" + str;
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-
-            $("#DicBaMesalPro").html(data);
-            DateRefreshShow()
-        },
-        error: function (error) {
-            alert('Dictionary/ListWordExampleDiv' + error);
-        }
-    })
-}
-//---------------SearchInExamples
-$("#SeachInExample").blur(function () {
-    
-    var str = $(this).val();
-    SearchInExamples(str);
-    speakText();
-});
-
-function SearchInExamples(str) {
-    if (str == null) {
-        str = "";
-    }
-    var urll = "/Dictionary/SearchWordInExamples?str=" + str;
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-
-            $("#DicBaMesalPro").html(data);
-            //CheckedInput();
-            //RefreshListWithCheckedCheckbox();
-        },
-        error: function (error) {
-            alert('Dictionary/SearchWordInExamples' + error);
-        }
-    })
-}
-//---------------SpeechText
-$("#SpeechText").keyup(function () {
-    var str = $(this).val();
-    speakText(str);
-});
-
-
-$(".MyDictionary  td").dblclick(function () {
-    var str = $(this).text();
-    //speakText(str);
-    TestSound(str);
-});
-
-function speakText(str) {
-    $.ajax(
-       {
-           type: 'Post',
-           contentType: "application/json;charset=utf-8",
-           dataType: "json",
-           url: "/Dictionary/TTS?str=" + str,
-           success: function (result) {
-
-           },
-           error: function (error) {
-               console.log(error)
-               // alert(error.message);
-           }
-       });
-}
-
-function MakeSound(thiss) {
-    // 
-    
-    var str = $(thiss).parent().text();
-    // var str = $(thiss).text();
-    // speakText(str);
-    TestSound(str);
-    
-    // TestSound(str)
-}
-function MakeSound2(thiss) {
-    // 
-
-    // var str = $(thiss).parent().text();
-    var str = $(thiss).text();
-    // speakText(str);
-    TestSound(str);
-
-    // TestSound(str)
-}
-function MakeSoundStr(txt) {
-   
-    TestSound(txt);
-}
-
-function MakeSoundExample(thiss) {
-     
-    //  console.log(thiss)
-    // var str = $(thiss).parent().text();
-    var str = ($(thiss).parent().parent().find(".ExampleSound")).text()
-     
-    //var str = $(thiss).text();
-    // speakText(str);
-    TestSound(str);
-
-    // TestSound(str)
-}
-
-function TestSound(str)
-{
-    
-    var x = varx = $("Body input[name='SpeedSpeach']").val();
-    var y = varx = $("Body input[name='SoundSpeach']").val();
-
-    text = str;
-    var msg = new SpeechSynthesisUtterance();
-    var voices = window.speechSynthesis.getVoices();
-    // msg.voice = voices[$('#voices').val()];
-    msg.rate = x/10;// $('#rate').val() / 10;
-    msg.pitch = y/10;//$('#pitch').val();
-    msg.text = text;
-
-    msg.onend = function (e) {
-        console.log('Finished in ' + event.elapsedTime + ' seconds.');
-    };
-
-    speechSynthesis.speak(msg);
-
-}
-//----------ListDictionary
-$("input[name='ListDictionary']").on("click", function () {
-    ListDictionary();
-});
-//------------Remove Word
-$("body .MyDictionary").on("click", ".RemoveWord", function () {
-    var WordId = $(this).attr("data_id");
-    var result = confirm("آیا حذف انجام شود");
-    if (result) {
-        RemoveWord(WordId);
-        // ListDictionary();
-    }
-});
-//------------Archive Word
-$("body .MyDictionary").on("click", ".ArchieveWord", function () {
-    var WordId = $(this).attr("data_id");
-    //if (confirm('Are you sure you want to save this thing into the database?')) {
-    //    // Save it!
-    //} else {
-    //    // Do nothing!
     //}
-    var result = confirm("آیا آرشیو انجام شود");
-    if (result) {
-        ArchieveWord(WordId,true);
-        // ListDictionary();
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+
+    $.LoadingOverlay("hide");
+    return ListObj
+}
+async function showLevel(level) {
+
+    var ListObj = await ListLevel()
+
+
+    //check mobile or web
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+        var table = "<table style='background-image: linear-gradient(to bottom, #5c9fe8, transparent);' class='table table-responsive'>"
+        // alert("mobile")
     }
     else {
-        ArchieveWord(WordId,false);
+        var table = "<table  class='table' style='background-image: linear-gradient(to bottom, #5c9fe8, transparent);'>"
+        // alert("web")
     }
 
-});
-//------------Edit Word
-$("body .MyDictionary").on("click", ".EditWord ", function () {
-    var WordId = $(this).attr("data_id");
-    EditWord(WordId);
-});
-//------------Remove Example
-$("body").on("click", ".RemoveExampleEng", function () {
+    table += "<tr style='white-space: pre-wrap;'>"
+    for (var i = 1; i <= 10; i++) {
+        var res = ListObj.find(x =>
+            x.nameLevel == i.toString())
 
-    var r = confirm("آیا حذف انجام شود ؟!");
-    if (r == true) {
-        var ExampleId = $(this).attr("ExampleId");
-        RemoveExamplePost(ExampleId);
-    } else {
-       
+        table += "<td><input " + (level == i ? 'checked' : '') + " onclick='showListWordLevel(" + i + ")' name='rdbLevel' type='radio' value='" + i + "' />  سطح : " + (res == undefined ? i : res.nameLevel) + " تعداد : " + (res == undefined ? 0 : res.countLevel) + "</td>"
     }
+    table += "</tr>"
 
-   
-});
-//------------Remove Example fa-trash show modal
-$("body .MyDictionary").on("click", ".fa-trash", function () {
-    var WordId = $(this).attr("data_id");
-    RemoveExample(WordId);
-});
-//-----------RemoveExample Post
-$("#MasterModal").on("click", "table[nametbl='RemoveExample'] td .fa-eraser", function () {
-    var ExampleId = $(this).attr("Example_id");
-    RemoveExamplePost(ExampleId);
-});
-//---------------Ajax Show Example     
-//$("#DivDictionary").on("click", ".btnExa", function () {
-   
-//    var _eng = $(this).closest("tr")   // Finds the closest row <tr>
-//                 .find(".eng")     // Gets a descendent with class="nr"
-//                 .text();
-//    var _per = $(this).closest("tr")   // Finds the closest row <tr>
-//                 .find(".per")     // Gets a descendent with class="nr"
-//                 .text();
-//    $("#HeaderExample").html("<span>" + _eng + "</span><span class='TranslateWord' style='display:none'>" + _per + "</span>");
-//    var _idd = $(this).attr("data_id");
-//    ShowExampleRefresh(_idd);
-//});
-//Create New Example   #DicBaMesalPro
-$("Body").on("click", ".btnExa", function () {
-    var WordId = $(this).attr("data_id");
-    CreateNewExample(WordId)
-});
-//نمایش معنی لغت
-$("#HeaderExample").on("click", "span", function () {
-    $("span").css({ "display": "inline" });
-});
-//----New Example
-$("#myModalExa").on("click", ".NewExample", function () {
-    var WordId = $("#myModalExa #EditHolder").attr("WordId");
-    CreateNewExample(WordId);
-});
-//----Edit Example
-$("Body").on("click", ".ShowEditExample", function () {
-    var ExampleId = $(this).attr("ExampleId");
-    // alert(ExampleId);
-    EditExample(ExampleId);
-});
-//-----------#DicBaMesalPro
-$("Body").on("click", "table tr td", function () {
-    $(this).find('span').css({ "display": "inline" });
-});
-//--------------------#DicBaMesalPro
-$("Body").on("click", "table tr td .ShowExample", function () {
-    var data_id = $(this).attr("data_id");
-    $(".Examplecls").each(function () {
-        var i = $(this).attr("data_id");
-        if (data_id == i)
-            $(this).removeAttr("style");
-        $(this).css({ "white-space": "pre-line","direction":"ltr" });
+    $(".showLevel").empty()
+    $(".showLevel").append(table)
 
-    });
-});
-$("#DicBaMesal").on("click", ".PageNumberi", function () {
-    var PageNumber = $(this).attr("PageNumber");
-    ListDictionaryHamrahBaExample(PageNumber);
-});
-$("#myModalExa").on("click", ".fa-remove", function () {
+}
+async function ListWordLevel(level) {
 
-    var ExampleId = $(this).attr("ExampleId");
-    var WordId = $(this).attr("WordId");
-    RemoveExa(ExampleId, WordId)
-});
-//---------------------Next Random Word
-$(".btnNextRandomWord").on("click", function () {
-    RandomWord();
-});
-//------------------ checked checkbox  
-$("#MenuDicBaMesalPro .chkLevel").on("click", "input", function () {
-    var MyArray = [];
-    var lvl = '';
-    $("#MenuDicBaMesalPro .chkLevel input:checked").each(function () {
-        //  console.log($(this).val())
-        lvl += $(this).val() + ",";
-       
-    });
-    MyArray.push(lvl);
-    ListWordExampleDivChk(MyArray);
-});
-//-------------------
-function RefreshListWithCheckedCheckbox()
-{
-    var MyArray = [];
-    var lvl = '';
-    $("#MenuDicBaMesalPro .chkLevel input:checked").each(function () {
-        lvl += $(this).val() + ",";
-    });
-    MyArray.push(lvl);
-   
-    ListWordExampleDivChk(MyArray);
-    ListDictionaryHamrahBaExampleProUnSuccess();
-    ListPersianToEnglish();
-   
-}
-//-----------------
-//Remove Example
-function MainDictionary()
-{
-    var urll = "/Dictionary/MainDictionary";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        //dataType: "html",
-        url: urll,
-        success: function (data) {
-            //$("#LessMoroor").html(data)
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function RemoveExa(ExampleId, WordId) {
-    // alert(ExampleId)
-    var urll = "/Dictionary/DeleteExample?ExampleId=" + ExampleId;
-    $.ajax({
-        type: "Post",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        url: urll,
-        success: function (data) {
-            var obj = JSON.parse(data);
-            if (obj == true) {
-                alert("حذف با موفقیت انجام شد");
+    var obj = {}
+    obj.url = "/Dictionary/ListWordLevel"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        level: level,
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    return ListObj
 
-                ShowExampleRefresh(WordId);
-                ListDictionary();
-            }
+}
+async function showListWordLevel(level) {
 
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function ShowExampleRefresh(WordId) {
-    // var _idd = $(this).attr("data_id");
-    var urll = "/Dictionary/ListExample?id=" + WordId;
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        url: urll,
-        success: function (data) {
-            if (data != "[]") {
-                var obj = JSON.parse(data);
-                // $("#HeaderExample").text(obj[0].Word)
-                var HtmlTbl = '<Table style="direction: ltr;">'
-                HtmlTbl += '<tr style="border-style: ridge;">'
-                HtmlTbl += '<th style="direction: ltr;text-align: left; Padding:10px; border-style: solid;">مثال</th>'
-                HtmlTbl += '<th style="direction: ltr;text-align: left; Padding:10px; border-style: solid;">حذف</th>'
-                HtmlTbl += '</tr>'
-                for (var i = 0; i < obj.lstExample.length; i++) {
-                    HtmlTbl += '<tr style="border-style: ridge;">'
-                    HtmlTbl += '<td style="Padding:10px; border-style: solid;text-align: left;" Example-Id="' + obj.lstExample[i].id + '">'
-                    HtmlTbl += obj.lstExample[i].example
-                    HtmlTbl += '</td>'
-                    HtmlTbl += '<td style="text-align:center;"><span  class="fa fa-remove" style="color:red" ExampleId=' + obj.lstExample[i].id + ' WordId=' + WordId + '></span></td>'
-                    HtmlTbl += '</tr>'
-                }
-                HtmlTbl += '</Table>'
-                $("#EditHolder").html(HtmlTbl);
-                $("#myModalExa #EditHolder").attr("WordId", WordId);
-                $("#myModalExa").modal();
-            }
-            else {
+    var ListObj = await ListWordLevel(level)
+    var styleWord = ""
+    var table = "<input onclick='CreateUpdateWord()' type='button' class='btn btn-warning' value='جدید' />"
+    //check mobile or web
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        table += "<table style='/*display: inline-table;*/' class='table table-striped table-responsive'>"
+        // alert("mobile")
+    }
+    else {
+        table += "<table  class='table table-striped'>"
+        // alert("web")
+    }
+    // header th table
+    table += "<tr><th>english</th><th>Persian</th><th>up</th><th>down</th><th>ویرایش</th><th>مثال</th><th>تعداد بار</th><th>نرخ</th><th>تعداد روز</th><th>DateRefresh</th><th>روز هفته</th><th>ترجمه</th><th>مثال جدید</th><th>حذف</th></tr>"
+    for (var i = 0; i < ListObj.length; i++) {
+        if (i % 2 == 0)
+            styleWord = 'color:red;background-image: linear-gradient(45deg, black, transparent);'
+        table += "<tr style='" + styleWord + "'>"
+        table += "<td onclick='makeSound(\"" + ListObj[i].eng + "\")'>" + ListObj[i].eng + "</td>" +
+            "<td onclick='ShowAndHiddenPersian(" + ListObj[i].id + ",\"" + ListObj[i].eng + "\")'><span hidden class='per_" + ListObj[i].id + "' style='white-space: nowrap;'>" + ListObj[i].per + "</span></td>" +
 
-                $("#EditHolder").html("<p>مثالی وجود ندارد</p>");
-                $("#myModalExa #EditHolder").attr("WordId", WordId)
-                $("#myModalExa").modal();
-            }
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function ListExampleWord(WordId) {
-    return new Promise(resolve => {
-        var urll = "/Dictionary/ListExample?id=" + WordId;
-        $.ajax({
-            type: "Get",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            url: urll,
-            success: function (data) {
-                resolve(JSON.parse(data))
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        })
-    })
-}
-function EditWord(WordId) {
-    var Word=""
-    var urll = "/Dictionary/EditWord?WordId=" + WordId;
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (result) {
-            // var obj = data;
-            //var obj = JSON.parse(data);
-            $(".BodyModal").html(result);
-            $("#MasterModal").modal();
 
-        }
-    })
-}
-function EditExample(ExampleId,wordId) {
-    
-    _wordId=wordId
-    var Word = ""
-    var urll = "/Dictionary/EditExample?ExampleId=" + ExampleId;
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (result) {
-            $(".BodyModal").html(result);
-            $("#MasterModal").modal();
-
-        }
-    })
-}
-function RemoveExample(WordId) {
-    var Word = ""
-    var urll = "/Dictionary/RemoveExample?WordId=" + WordId;
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (result) {
-            // var obj = data;
-            //var obj = JSON.parse(data);
-            $(".BodyModal").html(result);
-            $("#MasterModal").modal();
-
-        }
-    })
-}
-function RemoveExamplePost(ExampleId) {
-    var urll = "/Dictionary/RemoveExamplePost?ExampleId=" + ExampleId;
-    $.ajax({
-        type: "post",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        url: urll,
-        success: function (result) {
-            alert(result);
-            // $('#MasterModal').modal('toggle');
-            RefreshListWithCheckedCheckbox();
-        },
-        error(result) {
-            alert(result);
-        }
-    })
-}
-function LevelChangeDown(wordId) {
-    return new Promise(resolve => {
-        var urll = "/Dictionary/LevelChangeDown?WordId=" + wordId
-        $.ajax({
-            type: 'POST',
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            url: urll,
-            success: function (res) {
-                RefreshListWithCheckedCheckbox();
-                ShouldExecute();
-                resolve(res)
-            },
-            error: function (res) {
-            }
-        })
-    })
-}
-function LevelChangeUp(wordId) {
-    var urll = "/Dictionary/LevelChangeUp?WordId=" + wordId
-    $.ajax({
-        type: 'POST',
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        url: urll,
-        success: function (res) {
-            RefreshListWithCheckedCheckbox();
-            ShouldExecute();
            
-        },
-        error: function (res) {
-        }
-    })
-}
-function ShowLevel() {
-    var urll = "/Dictionary/ShowLevel";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            $("#ShowLevel").html(data);
-            $(".ColShowLevel").html(data);
-            //$("#MenuDicRandomWord #ShowLevel br").remove()
-            //$("#MenuDicRandomWord #ShowLevel div").remove()
-            //$("#MenuDicRandomWord #ShowLevel").append(data)
+            "<td><input type='button' style='background-color:red' value='غلط' onclick='levelUpDown({status:false,wordId:" + ListObj[i].id + "})'/></td>" +
+            "<td><input type='button' style='background-color:green' value='درست' onclick='levelUpDown({status:true,wordId:" + ListObj[i].id + "})'/></td>"+
+        "<td><input type='button'  value='ویرایش' onclick='CreateUpdateWord(" + ListObj[i].id + ")'/></td>" 
 
-            //$("#ShowLevel").html(data);
-            
-            GetlLevelByJqueryAndAppend();
-        },
-        error: function (error) {
-            console.log("ShowLevel : ");
-            console.log( error);
-        }
-    })
-}
-function BadGheleghtarinWord() {
-    var urll = "/Dictionary/BadGheleghtarinWord";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            $("#BadGheleghtarinWord").html(data)
-            //var obj = JSON.parse(data);
-            //var obj = data;
-            // $("#HazineMohem").html(data);
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function LessMoroor() {
-    var urll = "/Dictionary/LessMoroor";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            $("#LessMoroor").html(data)
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function Top10LastMoroor() {
-    var urll = "/Dictionary/Top10LastMoroor";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            $("#Top10LastMoroor").html(data)
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function Top10MaxGroupBy() {
-   
-    var urll = "/Dictionary/Top10MaxGroupBy";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            $("#Top10MaxGroupBy").html(data)
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function RandomWord() {
-
-    var urll = "/Dictionary/RandomWord";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            $(".DicRandomWord").html(data)
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function RandomWord_HardWord() {
-    var urll = "/Dictionary/RandomWord_HardWord";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            $(".DicRandomWord_HardWord").html(data)
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function RandomWord_HardWordExample() {
-    var urll = "/Dictionary/RandomWord_HardWordExample";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            $(".DicRandomWord_HardWordExample").html(data)
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function RandomWordWithSound() {
-    ClearExamplesTable()
-    var res= $("input[name='TestCorretWord']:checked").val()
-
-    var request = { str: res }
-    $.ajax(
-      {
-          type: 'Post',
-          contentType: "application/json;charset=utf-8",
-          url: "/Dictionary/RandomWordWithSound",
-          dataType: "html",
-          data: JSON.stringify(request),
-          success: function (result) {
-              
-              $("#RandomWordWithSound table").remove()
-              $("#RandomWordWithSound").append(result)
-              
-              
-          },
-          error: function (error) {
-              console.log(error)
-          }
-      });
-    
-}
-
-function CreateWord() {
-    var eng = $("#MasterModal .table input[name='DicEng']").val()
-    var per = $("#MasterModal .table input[name='DicFar']").val()
-    var Phonetic = $("#MasterModal .table input[name='DicPho']").val()
-    $.ajax(
-       {
-           type: 'Post',
-           contentType: "application/json;charset=utf-8",
-           dataType: "json",
-           url: "/Dictionary/CreateWord",
-
-
-           data: '{"eng": "' + eng + '", "per" : "' + per + '","Phonetic":"' + Phonetic + '"}',
-
-           //data: {
-           //    eng: $(".table input[name='DicEng']").val(),
-           //    per: $(".table input[name='DicFar']").val(),
-           //    Phonetic: $(".table input[name='DicPho']").val()
-           //},
-           success: function (result) {
-               if (result == true) {
-                   $("#ShowMessage").text('ثبت شد');
-                   //ListDictionary();
-                   // ShouldExecute();
-               }
-               else {
-                   $("#ShowMessage").text('خطا در ثبت');
-               }
-           },
-           error: function (error) {
-               console.log(error)
-           }
-       });
-}
-function UpdateWord() {
-    var eng = $("#MasterModal table input[name='eng']").val()
-    var per = $("#MasterModal table textarea[name='per']").val()
-
-    //var DateStart = $("#MasterModal table input[name='DateStart']").val()
-    //var IsActive = $("input[name='TaskIsActive']").prop('checked')
-    //var IsCheck = $("input[name='TaskIsCheck']").prop('checked')
-    var Word_id = $("#MasterModal table").attr("Word_id")
-
-    $.ajax(
-       {
-           type: 'POST',
-           contentType: "application/json;charset=utf-8",
-           dataType: "json",
-           url: "/Dictionary/UpdateWord",
-           data: JSON.stringify({ id: Word_id, eng: eng, per: per }),
-           success: function (result) {
-               if (result == true) {
-                   // $("#ShowMessage").text('ثبت شد');
-                   // ListDictionary();
-                   //  ListTask("anjamnashode");
-                   RefreshListWithCheckedCheckbox();
-               }
-               else {
-                   $("#ShowMessage").text('خطا در ثبت');
-               }
-           },
-           error: function (error) {
-               console.log(error);
-           }
-       });
-}
-function UpdateExample() {
-    
-    var Example = $("#MasterModal table textarea[name='Example']").val()
-    var ExampleId = $("#MasterModal table").attr("ExampleId")
-    $.ajax(
-       {
-           type: 'POST',
-           contentType: "application/json;charset=utf-8",
-           dataType: "json",
-           url: "/Dictionary/UpdateExample",
-           data: JSON.stringify({ id: ExampleId, example: Example }),
-           success: function (result) {
-               if (result.result == true) {
-                   RefreshListWithCheckedCheckbox();
-                   ShowExamples(_wordId)
-               }
-               else {
-                   alert(result.message);
-               }
-           },
-           error: function (error) {
-               alert(error.message);
-           }
-       });
-}
-function ListDictionary() {
-    var urll = "/Dictionary/ListDictionary";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        url: urll,
-        success: function (data) {
-
-            //var obj = JSON.parse(data);
-            var obj = data;
-            var html = "<table class='table table-responsive table-dark table-striped tblDictionary' style='direction:rtl; text-align: center;font-size:11px'>\
-            <thead>\
-                <tr>\
-                    <th>Up</th>\
-                    <th>Down</th>\
-                    <th>انگلیسی</th>\
-                    <th>فارسی</th>\
-                    <th>تاریخ رفرش</th>\
-                    <th>سطح</th>\
-                    <th>موفق</th>\
-                    <th>ناموفق</th>\
-                    <th>ویرایش</th>\
-                    <th>حذف</th>\
-                    <th>مثال</th>\
-                </tr>\
-            </thead>\
-            <tbody class='ListDictionarySearch'>"
-            for (var i = 0; i < obj.length; i++) {
-                html += "<tr>"
-                html += "<td><span style='color:red' class='fa fa-sort-up LevelEngUp' data_id=" + obj[i].id + "></span></td><td><span style='color:green' class='fa fa-sort-down LevelEngDown' data_id=" + obj[i].id + "></span></td>"
-                html += "<td class='eng'>" + obj[i].eng + "</td><td  class='per'>" + obj[i].per + "</td><td>" + obj[i].date_refresh + "</td><td>" + obj[i].level + "</td>"
-                html += "<td>" + obj[i].SuccessCount + "</td><td>" + obj[i].UnSuccessCount + "</td>"
-                html += "<td><span class='fa fa-edit' data_id=" + obj[i].id + "></span></td>"
-                html += "<td><span class='fa fa-remove RemoveWord' data_id=" + obj[i].id + "></span></td>"
-                if (obj[i].HasExample > 0)
-                    html += "<td><span style='color:green' class='fa fa-list-alt btnExa' data_id=" + obj[i].id + "></span></td>"
-                else
-                    html += "<td><span style='color:red' class='fa fa-list-alt btnExa' data_id=" + obj[i].id + "></span></td>"
-                html += " </tr>"
-            }
-            html += "</tbody> </table>"
-            $("#DivDictionary").html(html);
-            //CountLevel();
-        },
-        error: function (error) {
-            alert('Dictionary/ListDictionary : ' + error);
-        }
-    })
-}
-function ListDictionaryHamrahBaExample(SkipN) {
-    var urll = "/Dictionary/ListDictionaryHamrahBaExample?SkipN=" + SkipN;
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            $("#DicBaMesal").html(data);
-            //CountLevel();
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function ListDictionaryHamrahBaExampleProUnSuccess() {
-    var urll = "/Dictionary/ListWordExampleSucc_OR_UnSucc";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-
-            $("#DicBaMesalProUnSuccess").html(data);
-            //  CheckedInput();
-        },
-        error: function (error) {
-            alert('Dictionary/ListWordExampleSucc_OR_UnSucc' + error);
-        }
-    })
-}
-function ListPersianToEnglish() {
-    var urll = "/Dictionary/ListPersianToEnglish";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-
-            $("#DicPersianToEnglish").html(data);
-            //  CheckedInput();
-        },
-        error: function (error) {
-            alert('Dictionary/ListPersianToEnglish' + error);
-        }
-    })
-}
-function CheckedInput() {
-
-    var levelval = 0;
-    var urll = "/Dictionary/MaxLevelCount";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        url: urll,
-        success: function (data) {
-            
-            levelval = data;
-            $("#MenuDicBaMesalPro .chkLevel input").each(function () {
-                if (levelval == $(this).val()) {
-                    this.setAttribute("checked", "checked");
-                    this.checked = true;
-                }
-            });
-            // alert(data);
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    });  
-}
-function ListWordExampleDivChk(MyArray)
-{
-    
-    $.ajax(
-     {
-         type: 'Post',
-         data: JSON.stringify({ MyData: MyArray }),
-         contentType: "application/json;charset=utf-8",
-         dataType: "html",
-         url: "/Dictionary/ListWordExampleDivChk",
-         success: function (data) {
-
-             $("#DicBaMesalPro").html(data);
-             DateRefreshShow()
-       
-         },
-         error: function (error) {
-             console.log(error);
-         }
-     });
-}
-function RemoveWord(WordId) {
-    var urll = "/Dictionary/DeleteWord?id=" + WordId;
-    $.ajax({
-        type: "Post",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        url: urll,
-        success: function (data) {
-            var obj = JSON.parse(data);
-            if (obj == true) {
-                alert("حذف با موفقیت انجام شد");
-                //ListDictionary();
-                // ShowExampleRefresh(WordId);
-                RefreshListWithCheckedCheckbox();
-            }
-
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-
-}
-function ArchieveWord(WordId, res) {
-    var urll
-    if (res == true) {
-        urll = "/Dictionary/ArchieveWord?id=" + WordId+"&res="+res;
-    }
-    else {
-        urll = "/Dictionary/ArchieveWord?id=" + WordId + "&res=" + res;
-    }
-    $.ajax({
-        type: "Post",
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        url: urll,
-        success: function (data) {
-            var obj = JSON.parse(data);
-            if (obj == true) {
-                // alert("آرشیو با موفقیت انجام شد");
-                RefreshListWithCheckedCheckbox();
-                ShouldExecute();
-            }
-            else {
-                alert("برای آرشیو شدن حتما باید سطح لغت یک باشد");
-            }
-
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-
-}
-function CreateNewExample(WordId) {
-  
-    var urll = "/Dictionary/NewExample";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            // var obj = data;
-            //var obj = JSON.parse(data);
-            $("#ModalNewExample .modal-body").html(data);
-            $("#ModalNewExample .modal-body textarea").attr("wordid", WordId)
-            $("#ModalNewExample").modal();
-
-            //--------
-        }
-    })
-
-
-}
-function ShouldExecute() {
-   
-    ShowLevel();
-    //BadGheleghtarinWord();
-    //LessMoroor();
-    //Top10LastMoroor();
-    //Top10MaxGroupBy();
-    //ListDictionaryHamrahBaExamplePro();
-}
-function GetlLevelByJqueryAndAppend() {
-    
-    $("#MenuDicBaMesalPro .chkLevel div .lvlchk").remove();
-    $("#MenuDicRandomWord .chkLevel div .lvlchk").remove();
-    
-    var i = 0
-    var lvl = 1
-    $(".ColShowLevel table tr td").each(function () {
-        if (i % 2 == 0) {
-            lvl = $(this).text()
-            //console.log(z)
-
+        if (ListObj[i].exampleTbls.length > 0) {
+            table += "<td><input type='button' value='نمایش " + ListObj[i].exampleTbls.length + "' onclick='showHiddenExample(" + ListObj[i].id + ",\"" + ListObj[i].eng + "\")'/></td>"
         }
         else {
-            //console.log(i)
-            var res = $(this).text()
-            $("#MenuDicBaMesalPro .chkLevel div input[name='Level" + lvl + "'] ").after("<span class='lvlchk' style='color:red'>" + res + "</span>")
-            
-            $("#MenuDicRandomWord .chkLevel div .level" + lvl + " ").after("<span class='lvlchk' style='color:red'>" + res + "</span>")
+            table += "<td><input onclick='CreateUpdateExample(0,\"" + ListObj[i].eng + "\"," + ListObj[i].id + ")' type='button' value='مثال جدید'/></td>"
         }
-        i = i + 1
-    })
+
+        table += "<td>" + (ListObj[i].successCount + ListObj[i].unSuccessCount) + "</td>" +
+
+            "<td>" + (ListObj[i].successCount - ListObj[i].unSuccessCount) + "</td>" +
+            "<td>" + numberDaysTwoDate(todayShamsy8char(), ListObj[i].dateRefresh) + "</td>" +
+            "<td>" + formatDate(ListObj[i].dateRefresh) + "</td>" +
+            "<td>" + calDayOfWeek(ListObj[i].dateRefresh) + "</td>" +
+            "<td><a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + ListObj[i].eng+"'>ترجمه</a></td>"+
+            "<td><input onclick='CreateUpdateExample(0,\"" + ListObj[i].eng + "\"," + ListObj[i].id + ")' type='button' value='مثال جدید'/></td>"+
+            "<td><input type='button'  value='حذف' onclick='DeleteWord(" + ListObj[i].id + ")'/></td>"
+
+        table += "</tr>"
+        // example
+        for (var j = 0; j < ListObj[i].exampleTbls.length; j++) {
+
+
+            var exampleForTranslate = ListObj[i].exampleTbls[j].example
+            //exampleForTranslate = exampleForTranslate.replace(/\r/g, "").replace(/\n/g, "")
+            //exampleForTranslate= exampleForTranslate.replace(/[0-9`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+            //exampleForTranslate = exampleForTranslate.replace(/ˈ/g, ' ')
+            
+            table += "<tr hidden class='examples_" + ListObj[i].exampleTbls[j].idDicTbl + "'>"
+            table += "<td colspan='14' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].exampleTbls[j].id + "'>" +
+                ListObj[i].exampleTbls[j].example +
+                "</div></br><input onclick='makeSoundExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='تلفظ'/> | " +
+                "<input onclick='CreateUpdateExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='ویرایش' /> | " +
+                "<input onclick='DeleteExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='حذف' /> | " +
+                "<a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + exampleForTranslate +"'>ترجمه</a>" +
+
+                "</td>"
+            table += "</tr>"
+        }
+    }
+    table += "</table>"
+
+
+
+    $(".showListWordLevel").empty()
+    $(".showListWordLevel").append(table)
 
 }
-function ShowAndHiddenExample(id,eng) {
-   
-    
+function showHiddenExample(id, eng) {
+    makeSound(eng)
     //-----------
     var res = $(".examples_" + id).attr("hidden");
     if (res == "hidden") {
@@ -1128,18 +150,19 @@ function ShowAndHiddenExample(id,eng) {
         $(".examples_" + id).attr("hidden", true);
     }
 
-    
-    var eng = eng.toLowerCase();
-    $(".examples_" + id +" .ExampleSound").each(function () {
 
+    var eng = eng.toLowerCase();
+    $(".examples_" + id +" div").each(function () {
+        debugger
         $(this).html($(this).html().replace(
             new RegExp(eng, 'g'), '<span style="color:red">' + eng + '</span>'
         ));
     });
 }
-function ShowAndHiddenPersian(id) {
-    var eng=$(".per_" + id).parent().prev().text()
-    TestSound(eng)
+function ShowAndHiddenPersian(id, eng) {
+    makeSound(eng)
+    //var eng = $(".per_" + id).parent().prev().text()
+    //TestSound(eng)
     var res = $(".per_" + id).attr("hidden");
     if (res == "hidden") {
         $(".per_" + id).attr("hidden", false);
@@ -1150,86 +173,283 @@ function ShowAndHiddenPersian(id) {
 
 
 }
-function ClearExamplesTable(){
-    $("#Showexamples table").remove()
+function makeSound(str) {
+
+    var x = 10;// varx = $("Body input[name='SpeedSpeach']").val();
+    var y = 10;// varx = $("Body input[name='SoundSpeach']").val();
+
+    text = str;
+    var msg = new SpeechSynthesisUtterance();
+    var voices = window.speechSynthesis.getVoices();
+    // msg.voice = voices[$('#voices').val()];
+    msg.rate = x / 10;// $('#rate').val() / 10;
+    msg.pitch = y / 10;//$('#pitch').val();
+    msg.text = text;
+
+    msg.onend = function (e) {
+        console.log('Finished in ' + event.elapsedTime + ' seconds.');
+    };
+
+    speechSynthesis.speak(msg);
+
 }
-async function RandomWordWithSoundCheckIsTrue(param) {
-   
-    if (param.check == true) {
-        $("#FindCorretWord input").each(function () {
-            if ($(this).attr("IsTrue") == "true") {
-                $(this).parent().parent().css("background-color", "#06f976")
-            }
-        })
+function makeSoundExample(exampleId) {
 
-        var x=await LevelChangeDown(param.wordId);
+    var text = $(".example_" + exampleId).text();
+    makeSound(text)
+}
 
-        RandomWordWithSound();
-        ShowLevel();
+async function FindExample(exampleId) {
+
+    var obj = {}
+    obj.url = "/Dictionary/FindExample"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        exampleId: exampleId,
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    return ListObj
+
+}
+async function FindWord(wordId) {
+
+    var obj = {}
+    obj.url = "/Dictionary/FindWord"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        wordId: wordId,
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    return ListObj
+
+}
+async function CreateUpdateExample(exampleId, eng, wordId) {
+
+
+
+    if (exampleId > 0) {
+
+        var ListObj = await FindExample(exampleId)
+
+        var table = "<div class='form-group'>" +
+            "<textarea style='direction: ltr;'  name='example' class='form-control'   rows='9'>" + ListObj.example + "</textarea>" +
+            "</div >"
     }
     else {
-        LevelChangeUp(param.wordId);
-       
-        $("#FindCorretWord input").each(function () {
-            if ($(this).attr("IsTrue") == "true")
-            {
-                $(this).parent().parent().css("background-color", "#06f976")
-            }
-        })
-
+        var table = "<div class='form-group'>" +
+            "<textarea style='direction: ltr;'  name='example' class='form-control'  rows='3'></textarea>" +
+            "</div >"
     }
-   
-   
-}
-async function ShowExamples(wordId){
-    _wordId=wordId
-    var x=await  ListExampleWord(wordId)
-    var table="<table class='table'>"
-    for (let index = 0; index <  x.lstExample.length; index++) {
-        table+="<tr>"+
-             //"<td><input type='button' value='edit' onclick='EditExample("+x.lstExample[index].id+")'/>"+
-             //"</td>"+
-            "<td style='white-space: pre-line;direction: ltr; text-align: left;'>"+x.lstExample[index].example+"</br>"+
-            "<input type='button' value='edit' onclick='EditExample("+x.lstExample[index].id+","+wordId+")'/></td>"+
-            "</tr>"
-    }
-    table+="</table>"
-    $("#Showexamples table").remove()
-    $("#Showexamples").append(table)
+
+
+    var modal_footer = "<table><tr>" +
+        "<td><input type='button' class='btn btn-success' value=" + (exampleId > 0 ? 'ویرایش' : 'ایجاد') + " onclick='CreaetUpdateExamplePost(" + exampleId + "," + (ListObj == undefined ? wordId : ListObj.idDicTbl) + ")'/> | " +
+        "<input type='button'  class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +
+        "</tr>"
+    modal_footer += "</table>"
+
+
+    var modal_header = "<span>" + (eng == undefined ? 'ویرایش مثال' : eng) + "</span>"
+    $("#MasterModal .modal-header").empty();
+    $("#MasterModal .modal-header").append(modal_header);
+
+
+    $("#MasterModal .modal-footer").empty();
+    $("#MasterModal .modal-footer").append(modal_footer);
+
+    $("#MasterModal .BodyModal").empty();
+    $("#MasterModal .BodyModal").append(table);
+
+    $("#MasterModal").modal();
 
 }
-function showTheWord(eng) {
-    $("#showTheWord span").remove()
-    $("#showTheWord").append("<span>"+eng+"</span>")
-}
-function DateRefreshShow(){
-    $("#DicBaMesalPro table tr .dateCol").each(function () {
+async function CreaetUpdateExamplePost(exampleId, wordId) {
 
-        var date=$(this).text().trim()
 
-        
-        $(this).empty()
-        $(this).append("<span>"+calDayOfWeek(date)+" - </span><span>"+foramtDate(date)+"</span><span> - "+showDays(todayShamsy(), foramtDate(date))+"</span>")
-    })
-}
+    var example = $("#MasterModal textarea[name='example']").val()
 
-$(document).ready(function () {
+
+    var obj = {}
+    obj.url = "/Dictionary/CreateUpdateExample"
+    obj.dataType = "json"
+    obj.type = "POST"
+    obj.data = { Id: exampleId, IdDicTbl: wordId, example: example}
+
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListtObj = results[0]
     
-    //----------function ListDictionary()
-    $("#SeachInTblDicList").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        $(".ListDictionarySearch tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-    });
-    //--------------------------
-    $("#myInputDic").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        $("#myTable tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-    });
-});
+
+    showAlert(ListtObj, 2000);
+
+    var level = $("input[name='rdbLevel']:checked").val()
+    showLevel(level)
+    showListWordLevel(level)
+    $("#MasterModal").modal("toggle")
+
+
+}
+async function levelUpDown(objectWord) {
+
+
+    var obj = {}
+    obj.url = "/Dictionary/UpdateDicWord"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        UpOrDown: objectWord.status,
+        Id: objectWord.wordId
+
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    var level = $("input[name='rdbLevel']:checked").val()
+
+    showLevel(level)
+    //showAlert(ListObj, 2000)
+    showListWordLevel(level)
+
+}
+async function CreateUpdateWord(wordId) {
 
 
 
+    if (wordId > 0) {
+        var ListtObj = await FindWord(wordId)
+
+
+        var table = "<table class='table table-responsive'>" +
+
+            "<tr><td>انگلیسی</td><td><input type='text'  name='eng'  autocomplete='off' value=" + ListtObj.eng + "  /></td></tr>" +
+            "<tr><td>فارسی</td><td><textarea placehoder='توضیحات' name='per' class='form-control' rows='3'>" + ListtObj.per + "</textarea></td></tr>" +
+
+
+
+
+            "<tr><td>سطح</td><td><input disabled type='number'  name='level'  autocomplete='off' value=" + ListtObj.level + "  /></td></tr>" +
+            "<tr><td>زمان ایجاد</td><td>" + ListtObj.time + " </td></tr>" +
+            "<tr><td>تاریخ ایجاد</td><td>" + formatDate(ListtObj.dateS) + " </td></tr>" +
+            "<tr><td>آخرین مرور</td><td>" + formatDate(ListtObj.dateRefresh) + " </td></tr>" +
+
+            "</table > "
+    }
+    else {
+        var table = "<table class='table table-responsive'>" +
+
+            "<tr><td>انگلیسی</td><td><input type='text'  name='eng'  autocomplete='off'   /></td></tr>" +
+            "<tr><td>فارسی</td><td><textarea placehoder='توضیحات' name='per' class='form-control' rows='3'></textarea></td></tr>" +
+
+
+
+
+            "<tr><td>سطح</td><td><input disabled type='number'  name='level'  autocomplete='off' value=" + 10 + "  /></td></tr>" +
+            "<tr><td>تاریخ ایجاد</td><td>" + todayShamsy() + " </td></tr>" +
+            "<tr><td>آخرین مرور</td><td>" + todayShamsy() + " </td></tr>" +
+
+            "</table > "
+    }
+
+
+    var modal_footer = "<table><tr>" +
+        "<td><input type='button' class='btn btn-success' value=" + (wordId > 0 ? 'ویرایش' : 'ایجاد') + " onclick='CreaetUpdateWordPost(" + wordId + ")'/> | " +
+        "<input type='button'  class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +
+        "</tr>"
+    modal_footer += "</table>"
+
+
+    var modal_header = "<span>" + (wordId > 0 ? 'ویرایش لغت' : 'ایجاد لغت جدید') + "</span>"
+    $("#MasterModal .modal-header").empty();
+    $("#MasterModal .modal-header").append(modal_header);
+
+
+    $("#MasterModal .modal-footer").empty();
+    $("#MasterModal .modal-footer").append(modal_footer);
+
+    $("#MasterModal .BodyModal").empty();
+    $("#MasterModal .BodyModal").append(table);
+
+    $("#MasterModal").modal();
+}
+async function CreaetUpdateWordPost(wordId) {
+
+
+
+
+    var eng = $("#MasterModal input[name='eng']").val()
+    var per = $("#MasterModal textarea[name='per']").val()
+    //  var level = $("#MasterModal input[name='level']").val()
+
+    var obj = {}
+    obj.url = "/Dictionary/UpdateDicWord"
+    obj.dataType = "json"
+    obj.type = "POST"
+    obj.data = { Eng: eng, Per: per, Id: wordId }
+
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListtObj = results[0]
+
+
+    showAlert(ListtObj, 2000);
+
+    var level = $("input[name='rdbLevel']:checked").val()
+    showLevel(level)
+    showListWordLevel(level)
+    $("#MasterModal").modal("toggle")
+
+
+
+}
+
+async function DeleteExample(Id) {
+    var obj = {}
+    obj.url = "/Dictionary/DeleteExample"
+    obj.dataType = "json"
+    obj.type = "POST"
+    obj.data = { Id: Id }
+
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListtObj = results[0]
+    
+
+    showAlert(ListtObj, 2000);
+
+    var level = $("input[name='rdbLevel']:checked").val()
+    showLevel(level)
+    showListWordLevel(level)
+   // $("#MasterModal").modal("toggle")
+}
+async function DeleteWord(Id) {
+    var obj = {}
+    obj.url = "/Dictionary/DeleteWord"
+    obj.dataType = "json"
+    obj.type = "POST"
+    obj.data = { Id: Id }
+
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListtObj = results[0]
+
+
+    showAlert(ListtObj, 2000);
+
+    var level = $("input[name='rdbLevel']:checked").val()
+    showLevel(level)
+    showListWordLevel(level)
+    // $("#MasterModal").modal("toggle")
+}

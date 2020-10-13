@@ -1,5 +1,38 @@
 ﻿function Dictionary() {
     $("#MasterPage").empty()
+
+    var table = "<div style='text-align:center'><div class='btn-group' >" +
+        "<button type='button' onclick='CreateUpdateWord()' class='btn btn-warning' >لغت جدید</button >" +
+        "<button type='button'  class='btn btn-info' >انتقال به امروز</button >" +
+        "<div class='btn-group'>" +
+        "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'> Sony</button>" +
+        "<div class='dropdown-menu'>" +
+        " <a class='dropdown-item' href='#'>Tablet</a>" +
+        " <a class='dropdown-item' href='#'>Smartphone</a>" +
+        "</div>" +
+        "</div>" +
+        "</div>" +
+        "</div ></br>"
+
+     table += "<div class='container-fluid'>" +
+        "<div class='row'>" +
+        "<div class='col-lg-12'>" +
+        "<div class='showLevel' ></div>" +
+        " </div > " +
+        " </div > " +
+        "<div class='row'>" +
+        "<div class='col-lg-12'>" +
+        "<div class='showListWordLevel' ></div>" +
+        " </div > " +
+        " </div > " +
+        "</div>"
+
+    $("#MasterPage").append(table)
+
+    
+    
+    showLevel(10)
+    showListWordLevel(10)
 }
 function Sport() {
     $("#MasterPage").empty()
@@ -161,7 +194,7 @@ $(document).ready(function () {
         var table = "<table class='table' style ='font-size:11px;color:white;text-align:center'> " +
             "<tr><th>امروز</th><th>روز</th><th>ساعت</th><th>هفته</th><th>روز</th><th>سال</th><th>روز</th></tr>" +
             "<tr>" +
-            "<td>" + foramtDate(todayShamsy8char()) + "</td>" +
+            "<td>" + formatDate(todayShamsy8char()) + "</td>" +
             "<td>" + calDayOfWeek(todayShamsy8char()) + "</td>" +
             "<td>" + foramtTime(CurrentTime()) + "</td>" +
             "<td>" + m.jWeek() + "</td>" +
@@ -180,6 +213,9 @@ $(document).ready(function () {
 
 async function CallAll() {
     CalenderListTagh()
+    var newDate = convertDateToslashless(SelectDate(1))
+
+    ListTaskTomarow(newDate)
     //
     //var results = await Promise.all([
     //    CalenderListTagh(),

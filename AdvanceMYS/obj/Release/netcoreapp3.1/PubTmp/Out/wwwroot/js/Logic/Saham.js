@@ -207,7 +207,7 @@ async    function ShowCompareToAvg(ListObj)
       "<th onclick='GetCompareToAvg(\""+"TedadM"+"\")'>تعداد منفی</th><th>جزئیات</th><th>tse</th><th>رهاورد</th><th>tse</th></tr>"
     for (var i = 0; i <  ListObj.lstNamadVM.length; i++) {
         table += "<tr><td style='cursor:pointer' onclick='AddtseAddress("+ListObj.lstNamadVM[i].IdNamad+")'>"+ ListObj.lstNamadVM[i].NamadName+"</td>"+
-           " <td>"+ foramtDate(ListObj.lstNamadVM[i].ShamsyDate)+"</td>"+
+           " <td>"+ formatDate(ListObj.lstNamadVM[i].ShamsyDate)+"</td>"+
            "<td>"+ SeparateThreeDigits(ListObj.lstNamadVM[i].Hajm)+"</td>"+          
            "<td>"+ SeparateThreeDigits(ListObj.lstNamadVM[i].Avgg)+"</td>"+
             "<td>"+ ListObj.lstNamadVM[i].Rate+"</td>"+
@@ -279,7 +279,7 @@ async    function NamadDetail(IdNamad)
         sumHajm+=ListObj.lstNamadVM[i].Hajm
         sum+= ListObj.lstNamadVM[i].DarsadGheymatPayany
         table += "<tr><td>"+ ListObj.lstNamadVM[i].NamadName+"</td>"+
-           " <td>"+ foramtDate(ListObj.lstNamadVM[i].ShamsyDate)+"</td>"+
+           " <td>"+ formatDate(ListObj.lstNamadVM[i].ShamsyDate)+"</td>"+
            "<td>"+ SeparateThreeDigits(ListObj.lstNamadVM[i].Hajm)+"</td>"+
            "<td>"+ SeparateThreeDigits(ListObj.lstNamadVM[i].TedadMoamelat)+"</td>"+
            "<td>"+ ListObj.lstNamadVM[i].DarsadGheymatPayany+"</td>"+
@@ -595,7 +595,7 @@ async    function ShowMoreMinusFive(ListObj)
       "<th onclick='GetCompareToAvg(\""+"TedadM"+"\")'>تعداد منفی</th><th>جزئیات</th><th>tse</th></tr>"
     for (var i = 0; i <  ListObj.lstNamadVM.length; i++) {
         table += "<tr><td style='cursor:pointer' onclick='AddtseAddress("+ListObj.lstNamadVM[i].IdNamad+")'>"+ ListObj.lstNamadVM[i].NamadName+"</td>"+
-           " <td>"+ foramtDate(ListObj.lstNamadVM[i].ShamsyDate)+"</td>"+
+           " <td>"+ formatDate(ListObj.lstNamadVM[i].ShamsyDate)+"</td>"+
            "<td>"+ SeparateThreeDigits(ListObj.lstNamadVM[i].Hajm)+"</td>"+          
              "<td>"+ ListObj.lstNamadVM[i].DarsadGheymatPayany.toFixed(2)+"</td>"+
             "<td><input type='button' value='جزئیات' onclick='NamadDetail("+ListObj.lstNamadVM[i].IdNamad+")'/></td>"

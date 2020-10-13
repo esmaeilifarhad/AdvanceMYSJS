@@ -31,7 +31,7 @@ async function ShowListTaghvim() {
     for (var i = 0; i < lstData.length; i++) {
 
         table += "<tr>"
-        table += "<td>" + foramtDate(lstData[i].date) + "</td>"
+        table += "<td>" + formatDate(lstData[i].date) + "</td>"
         table += "<td>" + calDayOfWeek(lstData[i].date) + "</td>"
         table += "<td><input type='checkbox' disabled name='isHolyDay' " + (lstData[i].isHolyDay == true ? 'checked' : '' ) + "/></td>"
         table += "<td>" + lstData[i].dsc + "</td>"
@@ -65,7 +65,7 @@ async function CreateUpdateTaghvim(TaghvimId) {
         var ListtObj = results[0]
 
         var table = "<table>" +
-            "<tr><td>تاریخ</td><td><input type='text' placeholde='تاریخ ' name='Date'  autocomplete='off' value=" + foramtDate(ListtObj.date)+"  /></td></tr>" +
+            "<tr><td>تاریخ</td><td><input type='text' placeholde='تاریخ ' name='Date'  autocomplete='off' value=" + formatDate(ListtObj.date)+"  /></td></tr>" +
             "<tr><td>توضیحات</td><td><input type='text' placeholde='توضیحات' name='Dsc'  autocomplete='off' value=" + ListtObj.dsc + "  /></td></tr>" +
             "<tr><td>تعطیل</td><td><input type='checkbox'  name='IsHolyDay'  " + (ListtObj.isHolyDay == true?'checked':'') + "  /></td></tr>" +
             "</table > "

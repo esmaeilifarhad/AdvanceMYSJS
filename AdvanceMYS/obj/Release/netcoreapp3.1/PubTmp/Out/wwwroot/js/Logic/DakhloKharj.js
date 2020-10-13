@@ -318,8 +318,8 @@ async function ListDaramd(MojoodyBankId) {
 
     var table = " <table>"+
        "<tr>"+
-        " <td><input type='text' name='DateStart' autocomplete='off' placeholder='شروع' value=" + foramtDate(todayShamsy8char())+"  /></td>"+
-        " <td><input type='text' name='DateEnd' autocomplete='off' placeholder='پایان' value=" + foramtDate(todayShamsy8char()) +" /></td>"+
+        " <td><input type='text' name='DateStart' autocomplete='off' placeholder='شروع' value=" + formatDate(todayShamsy8char())+"  /></td>"+
+        " <td><input type='text' name='DateEnd' autocomplete='off' placeholder='پایان' value=" + formatDate(todayShamsy8char()) +" /></td>"+
        " <td><input type='button' value='جستجو' /></td>"+
        " </tr >"+
    " </table >" +

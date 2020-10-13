@@ -123,7 +123,7 @@ Pass you dates to this function like this:  showDays('1/1/2014','12/25/2014')
 
 }
 //980809|13980809  =>1398/08/09  input parameter
-function foramtDate(str) {
+function formatDate(str) {
     
    
 
@@ -316,7 +316,7 @@ function NewOldDate(str) {
             newDate = convertDateToslashless(newDate)
             return newDate
             break;
-        case 0101://اول ماه بعد
+        case '0101'://اول ماه بعد
 
             var month = m.jMonth() + 1
             var day = m.jDate()
@@ -332,7 +332,7 @@ function NewOldDate(str) {
             }
 
             break;
-        case 00://شنبه هفته بعد
+        case '00'://شنبه هفته بعد
  
             var dayOfWeek = calDayOfWeeknumber(todayShamsy8char())
             dayOfWeek=7 - dayOfWeek
@@ -341,7 +341,7 @@ function NewOldDate(str) {
             newDate = convertDateToslashless(newDate)
             return newDate
             break;
-        case 07://جمعه
+        case '07'://جمعه
             
             var dayOfWeek = calDayOfWeeknumber(todayShamsy8char())
             dayOfWeek = 6 - dayOfWeek
@@ -350,7 +350,7 @@ function NewOldDate(str) {
             newDate = convertDateToslashless(newDate)
             return newDate
             break;
-        case 30://ماه بعد
+        case '30'://ماه بعد
             
             var isKabise = IsKabise(todayShamsy8char())
             var month = m.jMonth() + 1
@@ -366,6 +366,12 @@ function NewOldDate(str) {
             if (month == 12 && isKabise == false) {
                 m.add(29, 'day')
             }
+            var newDate = m.format('jYYYY/jM/jD')
+            newDate = convertDateToslashless(newDate)
+            return newDate
+            break;
+        default:
+            m.add(str, 'day')
             var newDate = m.format('jYYYY/jM/jD')
             newDate = convertDateToslashless(newDate)
             return newDate

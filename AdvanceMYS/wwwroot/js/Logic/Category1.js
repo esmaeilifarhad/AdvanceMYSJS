@@ -339,7 +339,7 @@ async function ListKarkardNew() {
     for (var i = 0; i < date.length; i++) {
 
         table += "<tr>"
-        table += "<td>" + foramtDate(date[i].DayDate) + " - " + calDayOfWeek(date[i].DayDate) + "</td>"
+        table += "<td>" + formatDate(date[i].DayDate) + " - " + calDayOfWeek(date[i].DayDate) + "</td>"
         for (var k = 0; k < header.length; k++) {
             table += "<td>"
             var sumDay = 0
@@ -545,7 +545,7 @@ async function ListTopBestKarkard(Offset, FETCH) {
             table += "<tr>"
         }
         table += "<td>" + ListObj[i].Row + "</td>"
-        table += "<td>" + foramtDate(ListObj[i].Date) + " " + calDayOfWeek(foramtDate(ListObj[i].Date)) + "</td>"
+        table += "<td>" + formatDate(ListObj[i].Date) + " " + calDayOfWeek(formatDate(ListObj[i].Date)) + "</td>"
         table += "<td>" + minuteToTime(ListObj[i].TimePer)+/*" _ " + ListObj[i].TimePer + " _ " + (ListObj[i].TimePer / 60).toFixed(2) +*/ "</td>"
         table += "</tr>"
     }
@@ -624,7 +624,7 @@ async function ListDaysOfWeek() {
             table += "<tr>"
         }
         table += "<td>" + ListObj[i].Row + "</td>"
-        table += "<td>" + foramtDate(ListObj[i].Date) + " " + calDayOfWeek(foramtDate(ListObj[i].Date))+"</td>"
+        table += "<td>" + formatDate(ListObj[i].Date) + " " + calDayOfWeek(formatDate(ListObj[i].Date))+"</td>"
         table += "<td>" + minuteToTime(ListObj[i].TimePer)  + "</td>"
         table += "</tr>"
     }
@@ -703,7 +703,7 @@ async function ListToCurrentTime() {
             table += "<tr>"
         }
         table += "<td>" + ListObj[i].Row + "</td>"
-        table += "<td>" + foramtDate(ListObj[i].DayDate) + " " + calDayOfWeek(foramtDate(ListObj[i].DayDate)) + "</td>"
+        table += "<td>" + formatDate(ListObj[i].DayDate) + " " + calDayOfWeek(formatDate(ListObj[i].DayDate)) + "</td>"
        // table += "<td>" + NameOfDayWeek(ListObj[i].weekday) + "</td>"
         table += "<td>" + minuteToTime(ListObj[i].TimePer/60) + "</td>"
         table += "</tr>"

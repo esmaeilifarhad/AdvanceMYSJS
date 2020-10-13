@@ -35,7 +35,7 @@
             spanSmoke += "<span class='smoke'>" + res[i] + "</span>"
             // console.log(res[i])
         }
-        var DateTime = "<span  class='smoke'>" + foramtDate(ListObj[0].date) + "</span>" + "<span  class='smoke' style='color:yellow'>" + showDays(todayShamsy(), foramtDate(ListObj[0].date)) + "</span>" +
+        var DateTime = "<span  class='smoke'>" + formatDate(ListObj[0].date) + "</span>" + "<span  class='smoke' style='color:yellow'>" + showDays(todayShamsy(), formatDate(ListObj[0].date)) + "</span>" +
             "<span  class='smoke'>" + foramtTime(ListObj[0].time) + "</span>"
         var RepeatedNumber = "<span class='smoke'><input type='checkbox' onclick='inreaseRepeatedNumber(" + ListObj[0].bookId + ")'/></span>" + "<span  class='smoke'>  " + ListObj[0].repeatedNumber + " - </span>"
 
@@ -63,8 +63,8 @@
             table += "<tr>" +
                 "<td>" + (i + 1) + "</td>" +
                 "<td style='white-space: pre'>" + ListObj[i].dsc + "</td>" +
-                "<td>" + foramtDate(ListObj[i].date) + "<br>" + calDayOfWeek(ListObj[i].date) + "</td>" +
-                "<td>" + showDays(todayShamsy(), foramtDate(ListObj[i].date)) + "</td>" +
+                "<td>" + formatDate(ListObj[i].date) + "<br>" + calDayOfWeek(ListObj[i].date) + "</td>" +
+                "<td>" + showDays(todayShamsy(), formatDate(ListObj[i].date)) + "</td>" +
                 "<td>" + ListObj[i].repeatedNumber + "</td>" +
                 "<td><input style='color: black; cursor: pointer'  type='button' value='ویرایش' onclick='EditBook(" + ListObj[i].bookId + ")'></td>" +
                 "<td><input style='color: black; cursor: pointer'  type='button' value='حذف' onclick='DeleteBook(" + ListObj[i].bookId + ")'></td>" +
