@@ -29,7 +29,8 @@ namespace AdvanceMYS.Models.Domain
         public DateTime? CreateDateM { get; set; }
         public DateTime? DateRefreshM { get; set; }
         public bool? IsArchieve { get; set; }
-
+        public bool? LastStatus { get; set; }
+        public bool? LastIsTrueFalse { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<DaysExercise> DaysExercises { get; set; }
         public virtual ICollection<ExampleTbl> ExampleTbls { get; set; }

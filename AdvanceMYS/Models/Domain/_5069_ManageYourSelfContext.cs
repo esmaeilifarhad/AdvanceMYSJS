@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 #nullable disable
 
@@ -30,6 +31,9 @@ namespace AdvanceMYS.Models.Domain
   
         public virtual DbSet<Iodayly> Iodaylies { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
+        public virtual DbSet<Note> Note { get; set; }
+
+        public virtual DbSet<Subject> Subject { get; set; }
         public virtual DbSet<KarKard> KarKards { get; set; }
       
         public virtual DbSet<LogTbl> LogTbls { get; set; }
@@ -112,6 +116,7 @@ namespace AdvanceMYS.Models.Domain
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasMaxLength(250);
+            
             });
 
             modelBuilder.Entity<Taghvim>(entity =>
@@ -290,7 +295,21 @@ namespace AdvanceMYS.Models.Domain
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Job_Category");
             });
-
+            modelBuilder.Entity<Note>(entity =>
+            {
+                entity.ToTable("Note", "5069_Esmaeili");
+                entity.Property(e => e.Description).IsRequired();
+                entity.Property(e => e.DateRefresh).HasMaxLength(8).IsRequired();
+                entity.Property(e => e.DateCreated).HasMaxLength(8).IsRequired();
+               // entity.HasOne(x => x.Job).WithMany(x => x.Notes).HasForeignKey(x => x.JobId);
+                entity.HasOne(e => e.Subject).WithMany(e => e.Note).HasForeignKey(e => e.SubjectId);
+            }
+            );
+            modelBuilder.Entity<Subject>(e => {
+                e.ToTable("Subject", "5069_Esmaeili");
+                e.Property(e => e.Title).IsRequired();
+                e.HasOne(e => e.Job).WithMany(e => e.Subjects).HasForeignKey(e=>e.JobId) ;            
+            });
             modelBuilder.Entity<KarKard>(entity =>
             {
                 entity.ToTable("KarKard", "5069_Esmaeili");

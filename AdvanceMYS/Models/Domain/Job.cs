@@ -22,5 +22,6 @@ namespace AdvanceMYS.Models.Domain
         public virtual Category Category { get; set; }
         public virtual ICollection<KarKard> KarKards { get; set; }
         public virtual ICollection<PercentJob> PercentJobs { get; set; }
+        public virtual  ICollection<Subject> Subjects { get; set; }
     }
 }

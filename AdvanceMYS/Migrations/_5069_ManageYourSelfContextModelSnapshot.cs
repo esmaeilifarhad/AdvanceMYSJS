@@ -207,6 +207,12 @@ namespace AdvanceMYS.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValueSql("((0))");
 
+                    b.Property<bool?>("LastIsTrueFalse")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("LastStatus")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Level")
                         .HasColumnType("int")
                         .HasColumnName("level");
@@ -607,6 +613,46 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("NamadDetail", "5069_Esmaeili");
                 });
 
+            modelBuilder.Entity("AdvanceMYS.Models.Domain.Note", b =>
+                {
+                    b.Property<int>("NoteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("DateCreated")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("DateRefresh")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Time")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("level")
+                        .HasColumnType("int");
+
+                    b.HasKey("NoteId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Note", "5069_Esmaeili");
+                });
+
             modelBuilder.Entity("AdvanceMYS.Models.Domain.PercentJob", b =>
                 {
                     b.Property<int>("PercentId")
@@ -878,6 +924,27 @@ namespace AdvanceMYS.Migrations
                     b.HasIndex("CatId");
 
                     b.ToTable("Sport", "5069_Esmaeili");
+                });
+
+            modelBuilder.Entity("AdvanceMYS.Models.Domain.Subject", b =>
+                {
+                    b.Property<int>("SubjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SubjectId");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("Subject", "5069_Esmaeili");
                 });
 
             modelBuilder.Entity("AdvanceMYS.Models.Domain.Taghvim", b =>
@@ -1187,6 +1254,17 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Namad");
                 });
 
+            modelBuilder.Entity("AdvanceMYS.Models.Domain.Note", b =>
+                {
+                    b.HasOne("AdvanceMYS.Models.Domain.Subject", "Subject")
+                        .WithMany("Note")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+                });
+
             modelBuilder.Entity("AdvanceMYS.Models.Domain.PercentJob", b =>
                 {
                     b.HasOne("AdvanceMYS.Models.Domain.Job", "Job")
@@ -1251,6 +1329,17 @@ namespace AdvanceMYS.Migrations
                         .IsRequired();
 
                     b.Navigation("Cat");
+                });
+
+            modelBuilder.Entity("AdvanceMYS.Models.Domain.Subject", b =>
+                {
+                    b.HasOne("AdvanceMYS.Models.Domain.Job", "Job")
+                        .WithMany("Subjects")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
                 });
 
             modelBuilder.Entity("AdvanceMYS.Models.Domain.Task", b =>
@@ -1363,6 +1452,8 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("KarKards");
 
                     b.Navigation("PercentJobs");
+
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("AdvanceMYS.Models.Domain.ManageTime", b =>
@@ -1388,6 +1479,11 @@ namespace AdvanceMYS.Migrations
             modelBuilder.Entity("AdvanceMYS.Models.Domain.RoutineJob", b =>
                 {
                     b.Navigation("RoutineJobHas");
+                });
+
+            modelBuilder.Entity("AdvanceMYS.Models.Domain.Subject", b =>
+                {
+                    b.Navigation("Note");
                 });
 
             modelBuilder.Entity("AdvanceMYS.Models.Domain.Task", b =>

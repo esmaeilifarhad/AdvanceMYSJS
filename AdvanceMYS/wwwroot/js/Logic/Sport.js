@@ -384,7 +384,9 @@ function findRotbeh() {
         for (i = 0; i < arraySport.length; ++i) {
             //console.log(arraySport[i]);
             if (arraySport[i] == $(this)[0].textContent) {
-                $(this).append(" - <span style='color:black'>" + (i + 1) + "/" + arraySport.length + "</span>")
+                $(this).append(" - <span style='color:black'>" + (i + 1) +
+
+                    + arraySport.length + "</span>")
                 // console.log(arraySport[i] + " - " + (i + 1) + "/" + arraySport.length)
                 break;
             }

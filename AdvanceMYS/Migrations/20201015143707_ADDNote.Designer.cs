@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdvanceMYS.Migrations
 {
     [DbContext(typeof(_5069_ManageYourSelfContext))]
-    [Migration("20201007081252_sp-findBookDsc")]
-    partial class spfindBookDsc
+    [Migration("20201015143707_ADDNote")]
+    partial class ADDNote
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -609,6 +609,39 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("NamadDetail", "5069_Esmaeili");
                 });
 
+            modelBuilder.Entity("AdvanceMYS.Models.Domain.Note", b =>
+                {
+                    b.Property<int>("NoteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("DateCreated")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DateRefresh")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Time")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("level")
+                        .HasColumnType("int");
+
+                    b.HasKey("NoteId");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("Note", "5069_Esmaeili");
+                });
+
             modelBuilder.Entity("AdvanceMYS.Models.Domain.PercentJob", b =>
                 {
                     b.Property<int>("PercentId")
@@ -1189,6 +1222,17 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Namad");
                 });
 
+            modelBuilder.Entity("AdvanceMYS.Models.Domain.Note", b =>
+                {
+                    b.HasOne("AdvanceMYS.Models.Domain.Job", "Job")
+                        .WithMany("Notes")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
             modelBuilder.Entity("AdvanceMYS.Models.Domain.PercentJob", b =>
                 {
                     b.HasOne("AdvanceMYS.Models.Domain.Job", "Job")
@@ -1363,6 +1407,8 @@ namespace AdvanceMYS.Migrations
             modelBuilder.Entity("AdvanceMYS.Models.Domain.Job", b =>
                 {
                     b.Navigation("KarKards");
+
+                    b.Navigation("Notes");
 
                     b.Navigation("PercentJobs");
                 });

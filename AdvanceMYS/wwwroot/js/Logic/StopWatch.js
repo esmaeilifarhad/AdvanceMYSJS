@@ -1,4 +1,4 @@
-﻿//$(document).ready(function () {
+﻿
 var IsPause = true;
 var myVar;
 function ShowTime() {
@@ -33,16 +33,8 @@ function formatAMPM() {
     hours = hours < 10 ? '0' + hours : hours;
     var minutes = date.getMinutes();
     minutes = minutes < 10 ? '0' + minutes : minutes;
-    //console.log(minutes)
-    /*
-    var ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    */
+
     var strTime = hours + ':' + minutes;
-    //alert(strTime);
-    //return strTime;
 
     CreateSTime(0, strTime, "StartJobTime")
 }
@@ -52,16 +44,8 @@ function formatAMPMEnd() {
     hours = hours < 10 ? '0' + hours : hours;
     var minutes = date.getMinutes();
     minutes = minutes < 10 ? '0' + minutes : minutes;
-    //console.log(minutes)
-    /*
-    var ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    */
+
     var strTime = hours + ':' + minutes;
-    //alert(strTime);
-    //return strTime;
 
     CreateSTime(1, strTime, "EndJobTime")
 }
@@ -139,61 +123,35 @@ function CalMinute(thiss) {
 
 
 }
-//function ConvertToTime(thiss) {
-//    
-//    var res = $(thiss).val()
-//    res = res.replace(/:/g, "")
-//    res = res.replace(/-/g, "")
-//    if (res.slice(0, 1) > 2) {
-//        $(thiss).val("--:--")
-//    }
-//    else {
-//        switch (res.length) {
-//            case 1: $(thiss).val(res + "-:--")
-//                break;
-//           case 2: $(thiss).val(res + ":--")
-//               break;
-//            case 3: $(thiss).val(res.slice(0,2) + ":" + res.slice(2,1)+"-")
-//                break;
-//            case 4: $(thiss).val(res.slice(0,2) + ":"+res.slice(1,2))
-//                break;
-//            default: $(thiss).val("--:--")
-//                break;
-//        }
-//    }
-//}
-function SaveInKarkard() {
-   var JobId=$("#SelectJob  option:selected").attr("JobId")
+
+
+async function SaveInKarkard() {
+    //var JobId = $("#SelectJob  option:selected").attr("JobId")
+    var JobId = $("#SelectJob  option:selected").val()
     var StartTime=$(".T_StartTime input").val()
     var EndTime=$(".T_EndTime input").val()
     var SpendTimeMinute=$(".T_MinTime input").val()
+    
 
+    var obj = {}
+    obj.url = "/Karkard/Create"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        JobId: JobId,
+        StartTime: StartTime,
+        EndTime: EndTime,
+        SpendTimeMinute: SpendTimeMinute
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    if (ListObj.length>0)
+        showAlert(ListObj, 3000)
+    ListAllJob()
+    ListKarkardNew()
+    showListKarkard()
+    $("#MasterModal").modal("toggler")
 
-    $.ajax(
-      {
-          type: 'POST',
-          contentType: "application/json;charset=utf-8",
-          dataType: "json",
-          url: "/Karkard/Create",
-          data: JSON.stringify({
-              JobId: JobId,
-              StartTime: StartTime,
-              EndTime:EndTime,
-              SpendTimeMinute:SpendTimeMinute
-          }),
-          success: function (result) {
-
-              if (result.result == true) {
-                  
-                  alert(result.message)
-                  RefreshExecute();
-              }
-              if (result.result == false) {
-                  alert(result.message+"\n"+result.description)
-              }
-          },
-          error: function (error) {
-              console.log(error);
-          }
-      });
 }

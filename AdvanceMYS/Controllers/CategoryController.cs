@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AdvanceMYS.Models.Domain;
+using AdvanceMYS.Models.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -60,6 +62,16 @@ namespace AdvanceMYS.Controllers
         {
             return Json(_db.Jobs.Where(q => q.CategoryId == categoryId).Include(q => q.Category).ToList());
         }
+        public IActionResult IndexJobAll()
+        {
+            string month = Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
+            month = month.Substring(0, 6);
+            return Json(_db.Jobs.Include(q => q.Category).
+                Include(q=>q.PercentJobs).
+                OrderByDescending(q=>
+                q.PercentJobs.SingleOrDefault(q=>q.Date== month).PercentValue).
+                ToList());
+        }
         public IActionResult FindJob(int Id)
         {
             return Json(_db.Jobs.SingleOrDefault(q => q.JobId == Id));
@@ -91,7 +103,47 @@ namespace AdvanceMYS.Controllers
             _db.Jobs.Remove(old);
             return Json(_db.SaveChanges() + " با موفقیت حذف شد ");
         }
+        #endregion
+        #region PercentJob
+        public IActionResult PercentJob(int jobId)
+        {
+         string today=  Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
+            today = today.Substring(0,6);
+            return Json(
+                _db.PercentJobs.SingleOrDefault(q=>q.JobId==jobId && q.Date==today)
+                );
+        }
+        public IActionResult PercentJobPost(Models.Domain.PercentJob newPercentJob)
+        {
+            
+            string today = Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
+            today = today.Substring(0,6);
 
+            var oldPercentJob = _db.PercentJobs.SingleOrDefault(q => q.JobId == newPercentJob.JobId && q.Date == today);
+
+            //update
+            if (oldPercentJob!=null)
+            {
+                oldPercentJob.PercentValue = newPercentJob.PercentValue;
+            }
+            //insert
+            else
+            {
+                newPercentJob.Date = today;
+                _db.PercentJobs.Add(newPercentJob);
+            }
+          
+            _db.SaveChanges();
+            
+            return Json(true
+              
+                );
+        }
+        public ActionResult ListPercentJob(string Date)
+        {
+            var res = _db.PercentJobs.Where(q => q.Date == Date).Select(q => new { q.Date, q.JobId, q.PercentId, q.PercentValue, q.Job.Name }).ToList();
+            return Json(res);
+        }
         #endregion
     }
 }

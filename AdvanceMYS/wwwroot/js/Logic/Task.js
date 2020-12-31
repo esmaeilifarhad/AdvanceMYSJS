@@ -1,5 +1,4 @@
 ﻿//************************************Task*****************************************************
-
 async function TabShowListTask() {
 
     ListTask();
@@ -38,7 +37,8 @@ async function ListTask(stringSerach) {
 function ShowListTask(ListTaskAnjamnashode) {
 
     // console.log(ListTaskAnjamnashode)
-    var table = "<input style='cursor:pointer' type='button' value='انجام' onclick='changeToAnjamShode()'/><input style='cursor:pointer' type = 'button' value = 'حذف' onclick = 'RemoveAllTask()' />" +
+    var table = "<input style='cursor:pointer' type='button' value='انجام' onclick='changeToAnjamShode()'/>" +
+        "<input style='cursor:pointer' type='button' value='حذف' onclick='RemoveAllTask()' />" +
         " <button type='button' style='float:left;' class='btn btn-info' onclick='CreateExcel()'>Create Excel</button>" +
         " <button type='button' /*class='btn btn-info'*/ onclick='transferDate(0)'>امروز</button>" +
         " <button type='button' /*class='btn btn-info'*/ onclick='transferDate(1)'>+1</button>" +
@@ -70,14 +70,14 @@ function ShowListTask(ListTaskAnjamnashode) {
         "         <th>حذف</th>" +
         "     </tr>"
     for (let index = 0; index < ListTaskAnjamnashode.length; index++) {
-
+        
         table += "<tr>" +
             "<td><input Data_id=" + ListTaskAnjamnashode[index].taskId + " class='AnjamShode'  type='checkbox'/></td>" +
             "<td class='Olaviat'>" + ListTaskAnjamnashode[index].olaviat + "</td>" +
             "<td >" + ListTaskAnjamnashode[index].rate + "</td>" +
-            "<td><input type='button' style='background-color:green' class='fa fa-sort-up pointer ' onclick='TaskUpLevel(" + ListTaskAnjamnashode[index].taskId + ")' Data_id='@item.TaskId'/></td>" +
-            "<td><input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='TaskDownLevel(" + ListTaskAnjamnashode[index].taskId + ")'  Data_id='@item.TaskId'/></td>" +
-            "<td>" + ListTaskAnjamnashode[index].cat.title + "</td>" +
+            "<td><input type='button' style='background-color:green' class='fa fa-sort-up pointer '  onclick='UpdateTask2({TaskId:" + ListTaskAnjamnashode[index].taskId + ",Olaviat:" + (ListTaskAnjamnashode[index].olaviat + 1) +"})' /></td>" +
+            "<td><input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='UpdateTask2({TaskId:" + ListTaskAnjamnashode[index].taskId + ",Olaviat:" + (ListTaskAnjamnashode[index].olaviat - 1) +"})' /></td>" +
+            "<td>" + (ListTaskAnjamnashode[index].cat==null?'تعریف نشده': ListTaskAnjamnashode[index].cat.title) + "</td>" +
             "<td style='text-align: right!important;'>" + ListTaskAnjamnashode[index].name + "</td>" +
             "<td>" + formatDate(ListTaskAnjamnashode[index].dateStart) + "<br/>" + calDayOfWeek(ListTaskAnjamnashode[index].dateStart) + "</td>" +
             "<td>" + formatDate(ListTaskAnjamnashode[index].dateEnd) + "<br/>" + calDayOfWeek(ListTaskAnjamnashode[index].dateEnd) + "</td>" +
@@ -220,7 +220,7 @@ async function UpdateToToday() {
     showAlert("تعداد تسک هایی که به امروز انتقال یافت" + ListObj, 2000)
     // alert(ListObj)
     $.LoadingOverlay("hide");
-    Refresh()
+    RefreshTask()
 }
 function eachColorTask() {
     $(".ListTask table tr td:nth-child(2)").each(function () {
@@ -451,7 +451,7 @@ async function CreateTaskPost() {
     ]);
     var ListObj = results[0]
     $("#MasterModal").modal("toggle")
-    Refresh()
+    RefreshTask()
 }
 async function CreateTaskShow(CatId) {
     var oldTask = await CreateTask()
@@ -602,7 +602,7 @@ async function UpdateTask(TaskId) {
     ]);
     var ListObj = results[0]
     $("#MasterModal").modal("toggle")
-    Refresh()
+    RefreshTask()
 
 }
 
@@ -1000,7 +1000,8 @@ async function ListTimingForListTask() {
         }
 
 
-        table += "<td><input type='button' style='background-color:green' class='fa fa-sort-up pointer' onclick='TaskUpLevel(" + ListTaskAnjamnashode[i].taskId + ")'/><input type='button' style='background-color:red' class='fa fa-sort-down pointer' onclick='TaskDownLevel(" + ListTaskAnjamnashode[i].taskId + ")'/></td>" +
+        table += "<td><input type='button' style='background-color:green' class='fa fa-sort-up pointer' onclick='UpdateTask2({TaskId:" + ListTaskAnjamnashode[i].taskId + ",Olaviat:" + (ListTaskAnjamnashode[i].olaviat + 1) + "})'/>" +
+            "<input type='button' style='background-color:red' class='fa fa-sort-down pointer' onclick='UpdateTask2({TaskId:" + ListTaskAnjamnashode[i].taskId + ",Olaviat:" + (ListTaskAnjamnashode[i].olaviat - 1) +"})' /></td > " +
             "<td style='white-space: nowrap;'>" + ListTaskAnjamnashode[i].olaviat + "</td>" +
             "<td style='text-align:right'>" + ListTaskAnjamnashode[i].name.substring(0, 40) + " ... </td>" +
             "<td>" + ListTaskAnjamnashode[i].rate + "</td>" +
@@ -1022,8 +1023,7 @@ async function ListTimingForListTask() {
     $.LoadingOverlay("hide");
 }
 
-async function ListTaskTomarow(date) {
-    
+async function GetTaskByDate(date) {
     var obj = {}
     obj.url = "/Task/ListTaskTomarow"
     obj.dataType = "json"
@@ -1033,6 +1033,11 @@ async function ListTaskTomarow(date) {
         service(obj)
     ]);
     var ListObj = results[0]
+    return ListObj
+}
+async function ListTaskTomarow(date) {
+    var ListObj=  await GetTaskByDate(date)
+   
     
     var table = "<table class='table' style='font-size:10px'>"
     for (var i = 0; i < ListObj.length; i++) {
@@ -1077,7 +1082,7 @@ async function UpdateTiming(taskId) {
     var ListObj = results[0]
     $.LoadingOverlay("hide");
     $("#MasterModal").modal("toggle");
-    Refresh()
+    RefreshTask()
 
 }
 
@@ -1095,16 +1100,17 @@ async function removeTimeTask(taskId) {
     var ListObj = results[0]
     showAlert("حذف شد", 1000)
     $.LoadingOverlay("hide");
-    Refresh()
+    RefreshTask()
 
 }
 
 
 async function UpdateTask2(obj) {
-
+    $.LoadingOverlay("show");
     var TaskId = obj.TaskId
     var IsCheck = obj.IsCheck
     var DateEnd = obj.DateEnd
+    var Olaviat= obj.Olaviat
     $.LoadingOverlay("show");
     var obj = {}
     obj.url = "/Task/UpdateTask"
@@ -1113,7 +1119,8 @@ async function UpdateTask2(obj) {
     obj.data = {
         TaskId: TaskId,
         IsCheck: IsCheck,
-        DateEnd: DateEnd
+        DateEnd: DateEnd,
+        Olaviat: Olaviat
 
     }
     var results = await Promise.all([
@@ -1121,7 +1128,7 @@ async function UpdateTask2(obj) {
     ]);
     var ListObj = results[0]
     $.LoadingOverlay("hide");
-    Refresh()
+    RefreshTask()
 }
 
 
@@ -1255,7 +1262,7 @@ async function RemoveAllTask() {
 
             // ListTaskDateToDate()
             //  ShowStDateEndDate()
-            Refresh()
+            RefreshTask()
             // ListTask("anjamnashode");
             $.LoadingOverlay("hide");
             // resolve("finish")
@@ -1299,6 +1306,30 @@ async function changeToAnjamShode() {
     })
 
 }
+//کلیک بر روی چک باکس و نمایش هر تسک بصورت جدا
+async function ListFilterTask() {
+    var ids = []
+    $("input[name ='chkTask']:checked").each(function () {
+        ids.push(this.value);
+    });
+
+    
+
+    $.LoadingOverlay("show");
+    var obj = {}
+    obj.url = "/Task/ListTask"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = { arrCatId: ids }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    
+    ShowListTask(ListObj)
+    $.LoadingOverlay("hide");
+
+}
 async function GetDateEvent(date) {
 
     var obj = {}
@@ -1326,7 +1357,10 @@ async function GetDateEvent(date) {
 
     if (result != null) {
         table += "<p  style='color:white;background-image: linear-gradient(45deg, #6be8a9, rgba(0,0,0,.9));text-align: center;font-weight: bold;font-size: 20px;'>تقویم</p>"
-        table += "<p>" + result.dsc + "</p>"
+        for (var i = 0; i < result.length; i++) {
+            table += "<p>"+(i+1)+". "  + result[i].dsc + "</p>"
+        }
+       
     }
     if (result2.length > 0) {
         table += "<p  style='color:white;background-image: linear-gradient(45deg, #6be8a9, rgba(0,0,0,.9));text-align: center;font-weight: bold;font-size: 20px;'>وظایف</p>"
@@ -1347,12 +1381,102 @@ async function GetDateEvent(date) {
     $(".ListTaghDetail").empty();
     $(".ListTaghDetail").append(table);
 }
-function Refresh() {
-    ListTask();
+function RefreshTask() {
+    var ids = []
+    $("input[name ='chkTask']:checked").each(function () {
+        ids.push(this.value);
+    });
+    
+    if (ids.length > 0) {
+        ListFilterTask()
+       
+    }
+    else {
+        ListTask();
+    }
     ListTimingForListTask();
     ListTaskAnjamShode()
-    ShowListCat(2);
+   // ShowListCat(2);
     CalenderListTagh()
+
+    var today = todayShamsy8char()
+    ListTaskSeparate(today)
+
+    var newDate = convertDateToslashless(SelectDate(1))
+    ListTaskTomarow(newDate)
+}
+//نمایش تسک ها بصورت جدا شده
+async function ListTaskSeparate(date) {
+    var ListObj = await GetTaskByDate(date)
+    var body = showTaskSeparate(ListObj)
+    $(".ListTaskSeparate").empty()
+    $(".ListTaskSeparate").append(body)
+}
+function showTaskSeparate(ListObj) {
+    var types = {}
+
+    
+    for (var i = 0; i < ListObj.length; i++) {
+        var groupName = ListObj[i].catId
+        if (!types[groupName]) {
+            types[groupName] = [];
+        }
+        types[groupName].push({ name: ListObj[i].name, taskId: ListObj[i].taskId, catTitle: ListObj[i].cat.title, olaviat: ListObj[i].olaviat});
+        
+
+    }
+
+
+    var countCol = 3
+
+    //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    //    var table = "<table style='background-image: linear-gradient(to bottom, #5d92cc, transparent);' class='table table-responsive table-bordered '>"
+    //}
+    //else {
+    //    var table = "<table style='background-image: linear-gradient(to bottom, #5d92cc, transparent);' class='table table-bordered '>"
+    //}
+
+    var table="<div>"
+    var j=0
+    for (var groupName in types) {
+
+        if (j % countCol == 0) {
+            table += "<div class='row'><div class='col-md-4' style='background-image: linear-gradient(to bottom, #5d92cc, transparent);'>"
+            table += "<p style='color: #a01313;font-weight: bolder;'>" + types[groupName][0].catTitle + "</p>"
+            for (var i = 0; i < types[groupName].length; i++) {
+                table += "<p style='border:1px dotted black;padding:3px;font-size:10px;margin: 1px;'>"
+                table += "<input type='button' style='background-color:green' class='fa fa-sort-up pointer ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat + 1) + "})' />"
+                table += "<input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat - 1) + "})' />" 
+                table += "<span style='color:green'>  " + types[groupName][i].olaviat+" _ </span>"
+                table += "<span>" + types[groupName][i].name + "<span><span class='fa fa-edit' style='cursor: pointer' onclick='EditTask(" + types[groupName][i].taskId+")'></span></p>"
+            }
+            table += "</div>"
+        }
+        else {
+            table += "<div class='col-md-4' style='background-image: linear-gradient(to bottom, #5d92cc, transparent);'>"
+            table += "<p style='color: #a01313;font-weight: bolder;'>" + types[groupName][0].catTitle + "</p>"
+            for (var i = 0; i < types[groupName].length; i++) {
+                table += "<p style='border:1px dotted black;padding:3px;font-size:10px;margin: 1px;'>"
+                table += "<input type='button' style='background-color:green' class='fa fa-sort-up pointer ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat + 1) + "})' />"
+                table += "<input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat - 1) + "})' />" 
+                table += "<span style='color:green'>  " + types[groupName][i].olaviat +" _ </span>"
+                table += "<span>" + types[groupName][i].name + "<span><span class='fa fa-edit' style='cursor: pointer' onclick='EditTask(" + types[groupName][i].taskId + ")'></span></p>"
+            }
+            table += "</div>"
+        }
+
+        if (j % countCol == (countCol - 1)) {
+            table += "</div>"
+        }
+
+        j += 1;
+    }
+
+    table += "</div>"
+    
+
+
+    return table
 }
 
 

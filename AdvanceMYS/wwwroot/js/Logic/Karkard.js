@@ -1,114 +1,77 @@
 ﻿//*********************Karkard********************************************************
-$("#TimeForJob input[name='List']").on("click", function () {
-    ListKarkard();
-});
-//Create Get
-$("#TimeForJob").on("click", "input[name='Create']", function () {
-    CreateKarkardGet();
-});
-//Create Get
-$("#TimeForJob").on("click", "input[name='UploadDataCard']", function () {
-    UploadDataCard();
-});
-//Delete
-$("#TimeForJob").on("click", "table .fa-remove", function () {
 
-    var res = confirm("آیا حذف انجام شود؟");
-    if (res == true) {
-        var KarkardId = $(this).attr("KarkardId");
-        DeleteKarkard(KarkardId)
+async function ListKarkard() {
+
+    //$.LoadingOverlay("show");
+    var obj = {}
+    obj.url = "/Karkard/AllKarkardAtMounth"
+    obj.dataType = "json"
+    obj.type = "post"
+    //obj.data = { stringSerach: stringSerach }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+
+    return ListObj
+
+    //$.LoadingOverlay("hide");
+
+}
+async function showListKarkard() {
+    var ListObj = await ListKarkard();
+
+    //check mobile or web
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+        var table = "<table style='background-image: linear-gradient(to bottom, #5c9fe8, transparent);' class='table table-responsive table-striped'>"
+        // alert("mobile")
     }
-});
-function ListKarkard() {
-    var urll = "/Karkard/List";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-
-            $(".DivKarkard").html(data);
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
+    else {
+        var table = "<table  class='table table-striped' style='background-image: linear-gradient(to bottom, #5c9fe8, transparent);'>"
+        // alert("web")
+    }
+    
+    for (var i = 0; i < ListObj.length; i++) {
+        table += "<tr>"
+        table += "<td>" + ListObj[i].job.name + "</td>"
+        table += "<td>" + formatDate(ListObj[i].dayDate) + "</td>"
+        table += "<td>" + calDayOfWeek(ListObj[i].dayDate) + "</td>"
+        table += "<td>" + calDayOfWeek(ListObj[i].dayDate) + "</td>"
+        table += "<td>" + ListObj[i].startTime + "</td>"
+        table += "<td>" + ListObj[i].endTime + "</td>"
+        table += "<td>" + (((ListObj[i].spendTimeMinute) / 60).toFixed(0)) + "</td>"
+        table += "<td><input type='button' value='ویرایش' onclick='editKarkard(" + ListObj[i].karkardId+")' /></td>"
+        table += "<td><input type='button' value='حذف'  onclick='DeleteKarkard(" + ListObj[i].karkardId+")' /></td>"
+        table += "</tr>"
+    }
+    table += "</table>"
+    $(".ListKarkard").empty()
+    $(".ListKarkard").append(table)
+    
 }
-function ShowKarkadPivot() {
-    var urll = "/Karkard/ShowKarkadPivot";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
 
-            $(".ShowKarkadPivot").html(data);
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function CreateKarkardGet() {
-    $.ajax(
-       {
-           type: 'get',
-           contentType: "application/json;charset=utf-8",
-           dataType: "html",
-           url: "/Karkard/Create",
-           success: function (result) {
-               $(".BodyModal").html(result);
-               $("#MasterModal").modal();
-           },
-           error: function (error) {
-               console.log(error);
-           }
+async function DeleteKarkard(KarkardId) {
+    
+    $.LoadingOverlay("show");
+    var obj = {}
+    obj.url = "/Karkard/DeleteKarkard"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = { id: KarkardId }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
 
-       }
-       );
-}
-function CreateKarkardPost() {
-    var SpendTimeMinute = $("#MasterModal input[name='SpendTimeMinute'").val();
-    var DayDate = $("#MasterModal input[name='DayDate'").val();
-    var JobId = $("#MasterModal option:selected").attr("JobId");
-    $.ajax(
-       {
-           type: 'POST',
-           contentType: "application/json;charset=utf-8",
-           dataType: "json",
-           url: "/Karkard/Create",
-           data: JSON.stringify({ JobId: JobId, SpendTimeMinute: SpendTimeMinute, DayDate: DayDate }),
-           success: function (result) {
-               if (result == true) {
-                   RefreshExecute();
-                   ListKarkard();
-               }
-               else {
-                   alert("خطا در ثبت");
-               }
-           }
-       });
-}
-function DeleteKarkard(KarkardId) {
+    showAlert(ListObj,4000)
 
-    $.ajax(
-       {
-           type: 'POST',
-           contentType: "application/json;charset=utf-8",
-           dataType: "json",
-           url: "/Karkard/DeleteKarkard",
 
-           data: JSON.stringify({ KarkardId: KarkardId }),
-           success: function (result) {
-               if (result == true) {
-                   ListKarkard();
-                   RefreshExecute();
-               }
-               else {
-                   alert("خطا در ثبت");
-               }
-           }
-       });
+    $.LoadingOverlay("hide");
+    ListKarkardNew()
+    showListKarkard()
+  
 }
+
+//////////////////////----------------موارد زیر باید توی سیستم اضافه شود
+

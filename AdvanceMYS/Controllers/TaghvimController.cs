@@ -48,7 +48,7 @@ namespace AdvanceMYS.Controllers
            return Json(_db.SaveChanges()+" با موفقیت حذف شد ");
         }
         public IActionResult GetDateEvent(string date) {
-            return Json(_db.Taghvim.SingleOrDefault(q => q.Date == date));
+            return Json(_db.Taghvim.Where(q => q.Date == date).ToList());
         }
     }
 }

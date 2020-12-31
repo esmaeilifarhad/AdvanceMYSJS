@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
 using AdvanceMYS.Models;
 using AdvanceMYS.Models.Domain;
@@ -20,6 +21,7 @@ namespace AdvanceMYS.Controllers
 
         private readonly _5069_ManageYourSelfContext _db;
         int _userId = 1;
+        Models.ADO.UIDSConnection U = new Models.ADO.UIDSConnection();
         public DictionaryController(_5069_ManageYourSelfContext db)
         {
             _db = db;
@@ -63,13 +65,41 @@ group by level
         }
         public IActionResult ListWordLevel(int level)
         {
-            var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
-                  Where(q => q.Level == level && q.IsArchieve == false).
-                  Take(3).
-                  OrderBy(q => q.DateRefresh).
-                  ThenBy(q => q.Time).
-                  ToList();
-            return Json(resDic);
+            if (level == 80)
+            {
+               var today= Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
+                //foreach (var item in _db.DicTbls.ToList())
+                //{
+                //    var x = item.Time.Split(":");
+                //    var y = DateTime.Now.ToString("HH:mm:ss").Split(":");
+                //    var es = int.Parse(y[0]) - int.Parse(x[0]);
+                //}
+
+               
+
+                var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
+                Where(q => q.LastStatus == false  ).
+                OrderBy(q => q.DateRefresh).
+                ThenBy(q => q.Time).
+                Take(1000).
+                ToList().
+                AsEnumerable().Where(
+                    q =>(q.DateRefresh != today) ||
+                (q.DateRefresh == today  && (int.Parse(DateTime.Now.ToString("HH:mm:ss").Split(":")[0]) - int.Parse(q.Time.Split(":")[0]))>2 ) ||
+                 (q.LastIsTrueFalse == false ) 
+                ).ToList();
+                return Json(resDic);
+            }
+            else
+            {
+                var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
+                      Where(q => q.Level == level && q.IsArchieve == false).
+                      OrderBy(q => q.DateRefresh).
+                      ThenBy(q => q.Time).
+                      Take(3).
+                      ToList();
+                return Json(resDic);
+            }
         }
         public IActionResult FindExample(int exampleId)
         {
@@ -99,6 +129,16 @@ group by level
                         oldword.Level -= 1;
                     }
                     oldword.SuccessCount += 1;
+
+                    oldword.DateRefresh = Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
+                    oldword.Time = DateTime.Now.ToString("HH:mm:ss");
+                    oldword.DateRefreshM = DateTime.Now;
+                    oldword.CreateDateM = (oldword.CreateDateM == null ? DateTime.Now : oldword.CreateDateM);
+                    if (oldword.Level < 5)
+                    {
+                        oldword.LastStatus = true;
+                    }
+                    oldword.LastIsTrueFalse = true;
                 }
                 //افزایش سطح
                 else if (word.UpOrDown == "false")
@@ -114,15 +154,24 @@ group by level
                         oldword.Level += 1;
                     }
                     oldword.UnSuccessCount += 1;
+
+                    oldword.DateRefresh = Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
+                    oldword.Time = DateTime.Now.ToString("HH:mm:ss");
+                    oldword.DateRefreshM = DateTime.Now;
+                    oldword.LastStatus = false;
+                    oldword.LastIsTrueFalse = false;
+
                 }
-
-                oldword.Per = (word.Per == null ? oldword.Per : word.Per);
-                oldword.Eng = (word.Eng == null ? oldword.Eng : word.Eng);
-
-                oldword.DateRefresh = Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
-                oldword.Time = DateTime.Now.ToString("HH:mm:ss");
-                oldword.DateRefreshM = DateTime.Now;
+                //Update Word
+                else
+                {
+                    oldword.Per = (word.Per == null ? oldword.Per : word.Per);
+                    oldword.Eng = (word.Eng == null ? oldword.Eng : word.Eng);
+                }
                 oldword.CreateDateM = (oldword.CreateDateM == null ? DateTime.Now : oldword.CreateDateM);
+
+
+
 
                 var res = _db.SaveChanges();
                 return Json(oldword);
@@ -225,6 +274,48 @@ group by level
             if (_db.SaveChanges() > 0)
                 return Json("با موفقیت حذف شد");
             return Json("خطا در حذف");
+        }
+
+        public IActionResult SearchExample(string str) {
+
+            List<Models.ViewModels.Dictionary.VMDictionary> lstV = new List<Models.ViewModels.Dictionary.VMDictionary>();
+            DataTable DT = U.Select(@"
+select 
+d.id
+,d.eng
+,d.per
+,d.level
+,d.IsArchieve
+,d.date_refresh
+,d.date_s
+,d.SuccessCount
+,d.UnSuccessCount
+from [5069_Esmaeili].[example_tbl] e inner join [5069_Esmaeili].[dic_tbl] d
+on e.id_dic_tbl=d.id
+where example like '%" + str + @"%' 
+group by eng,d.id,d.per,d.level,d.IsArchieve,d.date_refresh,d.date_s,d.SuccessCount,d.UnSuccessCount,d.IsArchieve
+");
+            foreach (DataRow item in DT.Rows)
+            {
+               Models.ViewModels.Dictionary.VMDictionary V =new Models.ViewModels.Dictionary.VMDictionary();
+                V.Id = int.Parse(item["id"].ToString());
+                V.Eng = item["eng"].ToString();
+                V.Per = item["per"].ToString();
+                V.IsArchieve = (bool)item["IsArchieve"];
+                V.Level = int.Parse(item["level"].ToString());
+                V.DateRefresh = item["date_refresh"].ToString();
+                V.DateS = item["date_s"].ToString();
+                V.SuccessCount = int.Parse(item["SuccessCount"].ToString());
+                V.UnSuccessCount = int.Parse(item["UnSuccessCount"].ToString());
+
+                V.ExampleTbls = _db.ExampleTbls.Where(q => q.IdDicTbl == V.Id && q.Example.Contains(str)).ToList();
+                lstV.Add(V);
+            }
+            return Json(lstV);
+
+        }
+        public IActionResult SearchWord(string str) {
+            return Json(_db.DicTbls.Include(q=>q.ExampleTbls).Where(q=>q.Eng.Contains(str)).ToList());
         }
     }
 }

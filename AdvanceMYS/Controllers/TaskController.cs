@@ -69,61 +69,7 @@ namespace AdvanceMYS.Controllers
 
                     TaskList = DB.Query<Models.Domain.Task>(query).ToList();
                 }
-                //Models.DataLayer.Task t = new Models.DataLayer.Task();
 
-
-                //              DataTable DT = U.Select(@"
-                //select Tbl.CatId,isnull(Title,N'تعریف نشده') Title from [5069_ManageYourSelf].[5069_Esmaeili].Cat right join
-                //(
-                //select isnull(CatId,0) CatId 
-                //from [5069_ManageYourSelf].[dbo].[Task] 
-                //where IsActive=1 and IsCheck=0 and DateEnd=" + Utility.Utility.ConvertDateToSqlFormat(Utility.Utility.shamsi_date()) + @" and UserId=" + UserId + @"
-                //group by CatId
-                //) tbl
-                //on Cat.CatId=tbl.CatId
-                //order by [Order] asc
-                //                          ");
-
-                /*
-                foreach (DataRow item in DT.Rows)
-                {
-                    Models.DomainModels.Cat C = new Models.DomainModels.Cat();
-                    // V.Radif = int.Parse(item["Radif"].ToString());
-                    C.CatId = int.Parse(item["CatId"].ToString());
-                    C.Title = item["Title"].ToString();
-                    lstC.Add(C);
-                }
-                */
-                /*
-                V.ListCat = lstC;
-                string CurrentDate = Utility.Utility.ConvertDateToSqlFormat(Utility.Utility.shamsi_date());
-                var lstTask = DB.Tasks
-                     .Where(q => q.IsActive == true && q.IsCheck == false && q.UserId == UserId && q.DateEnd == CurrentDate)
-                     .OrderBy(q => q.DateEnd)
-                     .ThenBy(q => q.Olaviat).ToList();
-                List<ViewModels.TaskVM> lstTaskVM = new List<ViewModels.TaskVM>();
-                foreach (var item in lstTask)
-                {
-                    ViewModels.TaskVM T = new ViewModels.TaskVM();
-                    T.Olaviat = item.Olaviat;
-                    T.TaskId = item.TaskId;
-                    T.Name = item.Name;
-                    T.CatId = item.CatId;
-
-                    if (DB.Timings.SingleOrDefault(q => q.TaskId == T.TaskId) != null)
-                        T.Label = DB.Timings.SingleOrDefault(q => q.TaskId == T.TaskId).ManageTime.Label;
-                    else
-                        T.Label = "";
-                    lstTaskVM.Add(T);
-                }
-                V.ListTask = lstTaskVM;
-
-                var ListData = from T in DB.Timings
-                               join MT in DB.ManageTimes on T.ManageTimeId equals MT.ManageTimeId
-                               select new { T.TaskId, MT.Label };
-
-                return PartialView(V);
-                */
             }
             catch (Exception ex)
             {
@@ -137,8 +83,24 @@ namespace AdvanceMYS.Controllers
             return View();
         }
         //[Authorize(Roles = "Task")]
-        public ActionResult ListTask(string stringSerach)
+        public ActionResult ListTask(string stringSerach,string[] arrCatId,string date)
         {
+            if (date!=null) {
+                var res = _db.Tasks.Where(q => q.IsCheck == false && q.DateEnd==date).
+                       Include(q => q.Cat).Include(q => q.Timings).
+                       ThenInclude(q => q.ManageTime).OrderBy(q => q.DateEnd).
+                       ThenBy(q => q.Olaviat).ThenBy(q => q.Timings.SingleOrDefault().ManageTimeId).ToList();
+                return Json(res);
+            }
+            //checkbox
+            if (arrCatId.Length > 0)
+            {
+                var res = _db.Tasks.Where(q => q.IsCheck == false && arrCatId.Contains(q.CatId.ToString())).
+                       Include(q => q.Cat).Include(q => q.Timings).
+                       ThenInclude(q => q.ManageTime).OrderBy(q => q.DateEnd).
+                       ThenBy(q => q.Olaviat).ThenBy(q => q.Timings.SingleOrDefault().ManageTimeId).ToList();
+                return Json(res);
+            }
             //search
             if (stringSerach != null)
             {
@@ -600,7 +562,8 @@ order by DateEnd desc
         public IActionResult GetDateEvent(string date)
         {
 
-            return Json(_db.Tasks.Include(q => q.Cat).Include(q => q.Timings).ThenInclude(q => q.ManageTime).Where(q => q.DateEnd == date).ToList());
+            return Json(_db.Tasks.Include(q => q.Cat).Include(q => q.Timings).
+                ThenInclude(q => q.ManageTime).Where(q => q.DateEnd == date).ToList());
         }
 
        
@@ -659,7 +622,7 @@ order by DateEnd desc
         }
         public IActionResult ListTaskTomarow(string date)
         {
-            var res = _db.Tasks.Include(q=>q.Cat).Where(q => q.DateEnd == date).OrderBy(q=>q.Olaviat).ToList();
+            var res = _db.Tasks.Include(q=>q.Cat).Where(q => q.DateEnd == date && q.IsCheck==false).OrderBy(q=>q.Olaviat).ToList();
             return Json(res);
         }
     }

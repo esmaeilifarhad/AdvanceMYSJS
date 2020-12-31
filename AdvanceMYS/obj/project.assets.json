@@ -9142,23 +9142,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\f.esmaeili\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\AC TI VE\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj",
+      "projectUniqueName": "C:\\Users\\AC TI VE\\OneDrive\\project\\AdvanceMYS\\13990727 - Copy\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj",
       "projectName": "AdvanceMYS",
-      "projectPath": "D:\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj",
-      "packagesPath": "C:\\Users\\f.esmaeili\\.nuget\\packages\\",
-      "outputPath": "D:\\OneDrive\\project\\AdvanceMYS\\13990704\\AdvanceMYS\\AdvanceMYS\\obj\\",
+      "projectPath": "C:\\Users\\AC TI VE\\OneDrive\\project\\AdvanceMYS\\13990727 - Copy\\AdvanceMYS\\AdvanceMYS\\AdvanceMYS.csproj",
+      "packagesPath": "C:\\Users\\AC TI VE\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\AC TI VE\\OneDrive\\project\\AdvanceMYS\\13990727 - Copy\\AdvanceMYS\\AdvanceMYS\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\f.esmaeili\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\AC TI VE\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -9170,6 +9166,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -9181,6 +9178,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "ClosedXML": {
             "target": "Package",
@@ -9241,7 +9239,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

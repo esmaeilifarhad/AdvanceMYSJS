@@ -151,8 +151,8 @@ function convertDateToslashless(str) {
     var todayarray = str.split("/")
     mounth = (parseInt(todayarray[1]) <= 9) ? "0" + parseInt(todayarray[1]) : parseInt(todayarray[1])
     rooz = (parseInt(todayarray[2]) <= 9) ? "0" + parseInt(todayarray[2]) : parseInt(todayarray[2])
-    year = todayarray[0].substring(2, 4)
-    today = "13" + year + "" + mounth + "" + rooz
+    year = todayarray[0]
+    today =  year + "" + mounth + "" + rooz
     return today
     /*
     str = str.replace(/\//g, '')
@@ -458,6 +458,42 @@ function closeCalendar2() {
 }
 function closeModal() {
     $("#MasterModal").modal("toggle")
+}
+//CreateModal
+function CreateModal(header,body,footer) {
+    $.LoadingOverlay("show");
+   
+    var modal_footer = "<table><tr>" +
+        "<td>"+footer +
+        "| <input type='button'  class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +
+        "</tr>"
+    modal_footer += "</table>"
+
+
+    var modal_header = "<span>"+header+"</span>"
+    $("#MasterModal .modal-header").empty();
+    $("#MasterModal .modal-header").append(modal_header);
+
+
+    $("#MasterModal .modal-footer").empty();
+    $("#MasterModal .modal-footer").append(modal_footer);
+
+    $("#MasterModal .BodyModal").empty();
+    $("#MasterModal .BodyModal").append(body);
+
+    $("#MasterModal").modal();
+
+    $.LoadingOverlay("hide");
+}
+function tableReturn() {
+    //check mobile or web
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        var table = "<table style='background-image: linear-gradient(to bottom, #5d92cc, transparent);' class='table table-responsive table-bordered table-striped'>"
+    }
+    else {
+        var table = "<table style='background-image: linear-gradient(to bottom, #5d92cc, transparent);' class='table table-bordered table-striped'>"
+    }
+    return table
 }
 
 

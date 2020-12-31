@@ -57,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5 smokyText" style="overflow:hidden; background-image: linear-gradient(to right, red, yellow);padding:10px;height:110px;text-align:center">اسماعیلی</div>
+                <div class="col-md-5" style="overflow:hidden; background-image: linear-gradient(to right, red, yellow);padding:10px;height:110px;text-align:center">اسماعیلی</div>
                 <div class="col-md-3">
 
                     @if (User.Identity.IsAuthenticated == true)
@@ -116,8 +116,18 @@
                     </button>
                     <button class="btn btn-warning"
                             type="button"
+                            onclick="Karkard()">
+                        فعالیت ها
+                    </button>
+                    <button class="btn btn-warning"
+                            type="button"
                             onclick="Book()">
-                         کتاب
+                        کتاب
+                    </button>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="Note()">
+                        نکته ها
                     </button>
                     <button class="btn btn-warning"
                             type="button"
@@ -143,6 +153,11 @@
                         <a class="dropdown-item" href="#">وظایف کلی</a>
                         <a class="dropdown-item" href="#">وظایف </a>
                     </div>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="CalSpendTimejob()">
+                        زمان مطالعه
+                    </button>
                 </div>
             </div>
         </div>
@@ -262,6 +277,11 @@
     <script src="~/js/Logic/Book.js"></script>
     <script src="~/js/Logic/Category.js"></script>
     <script src="~/js/Logic/Dictionary.js"></script>
+    <script src="~/js/Logic/StopWatch.js"></script>
+    <script src="~/js/Logic/Karkard.js"></script>
+    <script src="~/js/Logic/Note.js"></script>
+    <script src="~/js/Logic/RoutineJob.js"></script>
+    <script src="~/js/Logic/Setting.js"></script>
 
     @RenderSection("Scripts", required: false)
 

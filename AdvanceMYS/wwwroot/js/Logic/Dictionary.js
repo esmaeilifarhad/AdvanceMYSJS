@@ -39,12 +39,36 @@ async function showLevel(level) {
         var res = ListObj.find(x =>
             x.nameLevel == i.toString())
 
-        table += "<td><input " + (level == i ? 'checked' : '') + " onclick='showListWordLevel(" + i + ")' name='rdbLevel' type='radio' value='" + i + "' />  سطح : " + (res == undefined ? i : res.nameLevel) + " تعداد : " + (res == undefined ? 0 : res.countLevel) + "</td>"
+        table += "<td><input " + (level == i ? 'checked' : '') + " onclick='ListWordLevel(" + i + ")' name='rdbLevel' type='radio' value='" + i + "' />  سطح : " + (res == undefined ? i : res.nameLevel) + " تعداد : " + (res == undefined ? 0 : res.countLevel) + "</td>"
     }
     table += "</tr>"
 
+    table += "<tr style='white-space: pre-wrap;'>"
+    table += "<td><input  onclick='ListWordLevel(" + 80 + ")' name='rdbLevel' type='radio' value='" + 80 + "' /> اشتباه تا 4  <span style='color:red' class='countRamindForRevise'></span></td>"
+    table += "</tr>"
+    
+  
+    var CurrentValue=""
+    $("input[name='rdbLevel']").each(function () {
+        var result = $(this).is(":checked")
+        if (result == true) {
+            CurrentValue = $(this).val()
+           
+
+        }
+    })
+
     $(".showLevel").empty()
     $(".showLevel").append(table)
+
+    $("input[name='rdbLevel']").each(function () {
+        if (CurrentValue == $(this).val()) {
+            $(this).attr("checked", true)
+
+        }
+    })
+
+   
 
 }
 async function ListWordLevel(level) {
@@ -60,14 +84,20 @@ async function ListWordLevel(level) {
         service(obj)
     ]);
     var ListObj = results[0]
-    return ListObj
-
+   // return ListObj
+    showListWordLevel(ListObj)
+    if (level == 80) {
+        $(".countRamindForRevise").empty()
+        $(".countRamindForRevise").append(" - "+ListObj.length)
+    }
 }
-async function showListWordLevel(level) {
+async function showListWordLevel(ListObj) {
+    debugger
+  //  var ListObj = await ListWordLevel(level)
 
-    var ListObj = await ListWordLevel(level)
     var styleWord = ""
-    var table = "<input onclick='CreateUpdateWord()' type='button' class='btn btn-warning' value='جدید' />"
+    var table = "<input onclick='CreateUpdateWord()'  type='button' class='btn btn-warning' value='جدید' />"
+    table += "<input onkeyup='SearchExample(this)'  type='text' class='btn btn-info' placeholder='seach in example' />"
     //check mobile or web
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         table += "<table style='/*display: inline-table;*/' class='table table-striped table-responsive'>"
@@ -78,7 +108,7 @@ async function showListWordLevel(level) {
         // alert("web")
     }
     // header th table
-    table += "<tr><th>english</th><th>Persian</th><th>up</th><th>down</th><th>ویرایش</th><th>مثال</th><th>تعداد بار</th><th>نرخ</th><th>تعداد روز</th><th>DateRefresh</th><th>روز هفته</th><th>ترجمه</th><th>مثال جدید</th><th>حذف</th></tr>"
+    table += "<tr><th>english</th><th>Persian</th><th>up</th><th>down</th><th>مثال</th><th>ویرایش</th><th>تعداد بار</th><th>نرخ</th><th>تعداد روز</th><th>DateRefresh</th><th>روز هفته</th><th>زمان</th><th>English</th><th>ترجمه</th><th>مثال جدید</th><th>حذف</th></tr>"
     for (var i = 0; i < ListObj.length; i++) {
         if (i % 2 == 0)
             styleWord = 'color:red;background-image: linear-gradient(45deg, black, transparent);'
@@ -89,8 +119,8 @@ async function showListWordLevel(level) {
 
            
             "<td><input type='button' style='background-color:red' value='غلط' onclick='levelUpDown({status:false,wordId:" + ListObj[i].id + "})'/></td>" +
-            "<td><input type='button' style='background-color:green' value='درست' onclick='levelUpDown({status:true,wordId:" + ListObj[i].id + "})'/></td>"+
-        "<td><input type='button'  value='ویرایش' onclick='CreateUpdateWord(" + ListObj[i].id + ")'/></td>" 
+            "<td><input type='button' style='background-color:green' value='درست' onclick='levelUpDown({status:true,wordId:" + ListObj[i].id + "})'/></td>"
+      
 
         if (ListObj[i].exampleTbls.length > 0) {
             table += "<td><input type='button' value='نمایش " + ListObj[i].exampleTbls.length + "' onclick='showHiddenExample(" + ListObj[i].id + ",\"" + ListObj[i].eng + "\")'/></td>"
@@ -99,12 +129,17 @@ async function showListWordLevel(level) {
             table += "<td><input onclick='CreateUpdateExample(0,\"" + ListObj[i].eng + "\"," + ListObj[i].id + ")' type='button' value='مثال جدید'/></td>"
         }
 
-        table += "<td>" + (ListObj[i].successCount + ListObj[i].unSuccessCount) + "</td>" +
+        table +="<td><input type='button'  value='ویرایش' onclick='CreateUpdateWord(" + ListObj[i].id + ")'/></td>" 
+
+
+        table += "<td><span style='color:blue'>" + ListObj[i].level+"</span>/" + (ListObj[i].successCount + ListObj[i].unSuccessCount) + "</td>" +
 
             "<td>" + (ListObj[i].successCount - ListObj[i].unSuccessCount) + "</td>" +
             "<td>" + numberDaysTwoDate(todayShamsy8char(), ListObj[i].dateRefresh) + "</td>" +
             "<td>" + formatDate(ListObj[i].dateRefresh) + "</td>" +
             "<td>" + calDayOfWeek(ListObj[i].dateRefresh) + "</td>" +
+            "<td>" + ListObj[i].time + "</td>" +
+            "<td><a target='_blank' href='https://www.oxfordlearnersdictionaries.com/definition/english/" + ListObj[i].eng + "'>english</a></td>" +
             "<td><a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + ListObj[i].eng+"'>ترجمه</a></td>"+
             "<td><input onclick='CreateUpdateExample(0,\"" + ListObj[i].eng + "\"," + ListObj[i].id + ")' type='button' value='مثال جدید'/></td>"+
             "<td><input type='button'  value='حذف' onclick='DeleteWord(" + ListObj[i].id + ")'/></td>"
@@ -113,14 +148,14 @@ async function showListWordLevel(level) {
         // example
         for (var j = 0; j < ListObj[i].exampleTbls.length; j++) {
 
-
+            
             var exampleForTranslate = ListObj[i].exampleTbls[j].example
             //exampleForTranslate = exampleForTranslate.replace(/\r/g, "").replace(/\n/g, "")
             //exampleForTranslate= exampleForTranslate.replace(/[0-9`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
-            //exampleForTranslate = exampleForTranslate.replace(/ˈ/g, ' ')
+            exampleForTranslate = exampleForTranslate.replace(/'/g, ',')
             
             table += "<tr hidden class='examples_" + ListObj[i].exampleTbls[j].idDicTbl + "'>"
-            table += "<td colspan='14' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].exampleTbls[j].id + "'>" +
+            table += "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].exampleTbls[j].id + "'>" +
                 ListObj[i].exampleTbls[j].example +
                 "</div></br><input onclick='makeSoundExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='تلفظ'/> | " +
                 "<input onclick='CreateUpdateExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='ویرایش' /> | " +
@@ -138,6 +173,8 @@ async function showListWordLevel(level) {
     $(".showListWordLevel").empty()
     $(".showListWordLevel").append(table)
 
+   
+
 }
 function showHiddenExample(id, eng) {
     makeSound(eng)
@@ -153,11 +190,23 @@ function showHiddenExample(id, eng) {
 
     var eng = eng.toLowerCase();
     $(".examples_" + id +" div").each(function () {
-        debugger
+        
         $(this).html($(this).html().replace(
             new RegExp(eng, 'g'), '<span style="color:red">' + eng + '</span>'
         ));
     });
+
+    
+    var eng = $("input[name='searchExample']").val()
+    eng = eng.toLowerCase();
+    if (eng.length < 1) return
+    $(".examples_" + id + " div").each(function () {
+
+        $(this).html($(this).html().replace(
+            new RegExp(eng, 'g'), '<span style="color:blue">' + eng + '</span>'
+        ));
+    });
+
 }
 function ShowAndHiddenPersian(id, eng) {
     makeSound(eng)
@@ -198,7 +247,6 @@ function makeSoundExample(exampleId) {
     var text = $(".example_" + exampleId).text();
     makeSound(text)
 }
-
 async function FindExample(exampleId) {
 
     var obj = {}
@@ -293,7 +341,7 @@ async function CreaetUpdateExamplePost(exampleId, wordId) {
 
     var level = $("input[name='rdbLevel']:checked").val()
     showLevel(level)
-    showListWordLevel(level)
+    ListWordLevel(level)
     $("#MasterModal").modal("toggle")
 
 
@@ -318,7 +366,7 @@ async function levelUpDown(objectWord) {
 
     showLevel(level)
     //showAlert(ListObj, 2000)
-    showListWordLevel(level)
+    ListWordLevel(level)
 
 }
 async function CreateUpdateWord(wordId) {
@@ -331,7 +379,7 @@ async function CreateUpdateWord(wordId) {
 
         var table = "<table class='table table-responsive'>" +
 
-            "<tr><td>انگلیسی</td><td><input type='text'  name='eng'  autocomplete='off' value=" + ListtObj.eng + "  /></td></tr>" +
+            "<tr><td>انگلیسی</td><td><input type='text'  name='eng'  autocomplete='off' value=\"" + ListtObj.eng + "\"  /></td></tr>" +
             "<tr><td>فارسی</td><td><textarea placehoder='توضیحات' name='per' class='form-control' rows='3'>" + ListtObj.per + "</textarea></td></tr>" +
 
 
@@ -402,17 +450,55 @@ async function CreaetUpdateWordPost(wordId) {
     var ListtObj = results[0]
 
 
-    showAlert(ListtObj, 2000);
-
+    
+    $("#MasterModal").modal("toggle")
     var level = $("input[name='rdbLevel']:checked").val()
     showLevel(level)
-    showListWordLevel(level)
-    $("#MasterModal").modal("toggle")
+    ListWordLevel(level)
+    showAlert(ListtObj, 2000);
+  
 
 
 
 }
+async function SearchExample(thiss) {
+    if (thiss.value.length > 2) {
+        var obj = {}
+        obj.url = "/Dictionary/SearchExample"
+        obj.dataType = "json"
+        obj.type = "post"
+        obj.data = {
+            str: thiss.value,
+        }
+        var results = await Promise.all([
+            service(obj)
+        ]);
+        var ListObj = results[0]
+       
+        
+        showListWordLevel(ListObj)
+    }
 
+}
+async function SearchWord(thiss) {
+    if (thiss.value.length > 2) {
+        var obj = {}
+        obj.url = "/Dictionary/SearchWord"
+        obj.dataType = "json"
+        obj.type = "post"
+        obj.data = {
+            str: thiss.value,
+        }
+        var results = await Promise.all([
+            service(obj)
+        ]);
+        var ListObj = results[0]
+
+
+        showListWordLevel(ListObj)
+    }
+
+}
 async function DeleteExample(Id) {
     var obj = {}
     obj.url = "/Dictionary/DeleteExample"
@@ -430,7 +516,7 @@ async function DeleteExample(Id) {
 
     var level = $("input[name='rdbLevel']:checked").val()
     showLevel(level)
-    showListWordLevel(level)
+    ListWordLevel(level)
    // $("#MasterModal").modal("toggle")
 }
 async function DeleteWord(Id) {
@@ -450,6 +536,6 @@ async function DeleteWord(Id) {
 
     var level = $("input[name='rdbLevel']:checked").val()
     showLevel(level)
-    showListWordLevel(level)
+    ListWordLevel(level)
     // $("#MasterModal").modal("toggle")
 }

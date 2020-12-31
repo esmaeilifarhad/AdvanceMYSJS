@@ -25,10 +25,28 @@ async function ShowListCat(Code) {
     for (let index = 0; index < catData.length; index++) {
 
         if (index % countCol == 0) {
-            showRateTaskDays += "<tr><td><input onclick='ListSportFilter(" + catData[index].catId + ")' type='radio' value=" + catData[index].catId + " name='rdbSport'></td><td>" + catData[index].title + "</td><td><input style='background-color:lightcoral;color:black' type='button' value='ویرایش' onclick='ShowEditCat(" + catData[index].catId + ")'></td>"
+
+            showRateTaskDays += "<tr>"
+            if (Code == 2) {
+                showRateTaskDays += "<td><input onclick='ListFilterTask(" + catData[index].catId + ")' type='checkbox' value=" + catData[index].catId + " name='chkTask'></td>"
+            }
+            if (Code == 1) {
+                showRateTaskDays += "<td><input onclick='ListSportFilter(" + catData[index].catId + ")' type='radio' value=" + catData[index].catId + " name='rdbSport'></td>"
+            }
+            showRateTaskDays +="<td>" + catData[index].title + "</td>" 
+            showRateTaskDays +="<td><input style='background-color:lightcoral;color:black' type='button' value='ویرایش' onclick='ShowEditCat(" + catData[index].catId + ")'></td>"
         }
         else {
-            showRateTaskDays += "<td><input  onclick='ListSportFilter(" + catData[index].catId + ")' type='radio' value=" + catData[index].catId + " name='rdbSport'></td><td>" + catData[index].title + "</td><td><input style='background-color:lightcoral;color:black' type='button' value='ویرایش' onclick='ShowEditCat(" + catData[index].catId + ")'></td>"
+
+            if (Code == 2) {
+                showRateTaskDays += "<td><input onclick='ListFilterTask(" + catData[index].catId + ")' type='checkbox' value=" + catData[index].catId + " name='chkTask'></td>"
+            }
+            if (Code == 1) {
+                showRateTaskDays += "<td><input onclick='ListSportFilter(" + catData[index].catId + ")' type='radio' value=" + catData[index].catId + " name='rdbSport'></td>"
+            }
+
+            showRateTaskDays +="<td>" + catData[index].title + "</td>" 
+            showRateTaskDays +="<td><input style='background-color:lightcoral;color:black' type='button' value='ویرایش' onclick='ShowEditCat(" + catData[index].catId + ")'></td>"
         }
         if (Code == 2) {
             
@@ -113,6 +131,7 @@ async function ShowEditCat(CatId) {
 
     var tablebutt = "<table  style='font-size: 9px;'>"
     tablebutt += "<tr>" +
+        "<td><input type='button' class='btn btn-warning' value='حذف' onclick='DeleteCat(" + CatId + ")'/> | " +
         "<td><input type='button' class='btn btn-success' value='ذخیره' onclick='CreateUpdateCat(" + CatId + ")'/> | " +
         "<input type='button' class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +
         "</tr>"
@@ -157,5 +176,23 @@ async function CreateUpdateCat(CatId) {
     // return ListtObj;
 
     
+}
+async function DeleteCat(CatId) {
+
+    var obj = {}
+    obj.url = "/Cat/DeleteCat"
+    obj.dataType = "json"
+    obj.type = "POST"
+    obj.data = { id: CatId }
+
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListtObj = results[0]
+    $("#MasterModal").modal("toggle")
+    showAlert(ListtObj, 2000);
+
+    ShowListCat(Code)
+
 }
 
