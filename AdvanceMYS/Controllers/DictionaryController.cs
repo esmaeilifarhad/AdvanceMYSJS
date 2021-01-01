@@ -28,6 +28,8 @@ namespace AdvanceMYS.Controllers
         public DictionaryController(_5069_ManageYourSelfContext db)
         {
             _db = db;
+            Models.Services.Service s = new Models.Services.Service(_db);
+            s.SendDictonaryEmail();
            // _messageSender = messageSender;
           
         }
@@ -310,7 +312,8 @@ group by eng,d.id,d.per,d.level,d.IsArchieve,d.date_refresh,d.date_s,d.SuccessCo
 
         }
         public  IActionResult SearchWord(string str) {
-            _messageSender.SendEmailAsync("esmaili.farhad67@gmail.com","subject","message");
+
+           
             return   Json(_db.DicTbls.Include(q=>q.ExampleTbls).Where(q=>q.Eng.Contains(str)).ToList());
         }
     }

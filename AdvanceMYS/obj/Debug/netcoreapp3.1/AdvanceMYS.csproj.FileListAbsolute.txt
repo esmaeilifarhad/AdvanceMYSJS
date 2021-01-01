@@ -3009,7 +3009,6 @@ C:\Users\AC TI VE\OneDrive\project\AdvanceMYS\13990727 - Copy\AdvanceMYS\Advance
 C:\Users\AC TI VE\OneDrive\project\AdvanceMYS\13990727 - Copy\AdvanceMYS\AdvanceMYS\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
 C:\Users\AC TI VE\OneDrive\project\AdvanceMYS\13990727 - Copy\AdvanceMYS\AdvanceMYS\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\AC TI VE\OneDrive\project\AdvanceMYS\13990727 - Copy\AdvanceMYS\AdvanceMYS\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\AC TI VE\OneDrive\project\AdvanceMYS\13990727 - Copy\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.csprojAssemblyReference.cache
 C:\Users\AC TI VE\OneDrive\project\AdvanceMYS\13990727 - Copy\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.AssemblyInfoInputs.cache
 C:\Users\AC TI VE\OneDrive\project\AdvanceMYS\13990727 - Copy\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.AssemblyInfo.cs
 C:\Users\AC TI VE\OneDrive\project\AdvanceMYS\13990727 - Copy\AdvanceMYS\AdvanceMYS\obj\Debug\netcoreapp3.1\AdvanceMYS.csproj.CoreCompileInputs.cache

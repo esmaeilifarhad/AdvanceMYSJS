@@ -23,6 +23,7 @@ namespace AdvanceMYS.Models.Repositories
                 mail.Subject = subject;
                 //بدنه ایمیل
                 mail.Body = message;
+                mail.IsBodyHtml = isMessageHtml;
                 //مشخص کرن پورت 
                 SmtpServer.Port = 587;
                 //SmtpServer.UseDefaultCredentials = true;
