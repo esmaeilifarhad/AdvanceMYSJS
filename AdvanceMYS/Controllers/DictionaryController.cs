@@ -6,6 +6,7 @@ using System.Net.WebSockets;
 using System.Threading.Tasks;
 using AdvanceMYS.Models;
 using AdvanceMYS.Models.Domain;
+using AdvanceMYS.Models.Repositories;
 using AdvanceMYS.Models.Utility;
 using Dapper;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -20,11 +21,15 @@ namespace AdvanceMYS.Controllers
     {
 
         private readonly _5069_ManageYourSelfContext _db;
+        // private readonly MessageSender _messageSender;
+        MessageSender _messageSender = new MessageSender();
         int _userId = 1;
         Models.ADO.UIDSConnection U = new Models.ADO.UIDSConnection();
         public DictionaryController(_5069_ManageYourSelfContext db)
         {
             _db = db;
+           // _messageSender = messageSender;
+          
         }
 
         public IActionResult ListLevel()
@@ -68,15 +73,6 @@ group by level
             if (level == 80)
             {
                var today= Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
-                //foreach (var item in _db.DicTbls.ToList())
-                //{
-                //    var x = item.Time.Split(":");
-                //    var y = DateTime.Now.ToString("HH:mm:ss").Split(":");
-                //    var es = int.Parse(y[0]) - int.Parse(x[0]);
-                //}
-
-               
-
                 var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
                 Where(q => q.LastStatus == false  ).
                 OrderBy(q => q.DateRefresh).
@@ -259,7 +255,6 @@ group by level
             }
            
         }
-
         public IActionResult DeleteExample(int Id) {
            var res= _db.ExampleTbls.SingleOrDefault(q => q.Id == Id);
             _db.ExampleTbls.Remove(res);
@@ -314,8 +309,9 @@ group by eng,d.id,d.per,d.level,d.IsArchieve,d.date_refresh,d.date_s,d.SuccessCo
             return Json(lstV);
 
         }
-        public IActionResult SearchWord(string str) {
-            return Json(_db.DicTbls.Include(q=>q.ExampleTbls).Where(q=>q.Eng.Contains(str)).ToList());
+        public  IActionResult SearchWord(string str) {
+            _messageSender.SendEmailAsync("esmaili.farhad67@gmail.com","subject","message");
+            return   Json(_db.DicTbls.Include(q=>q.ExampleTbls).Where(q=>q.Eng.Contains(str)).ToList());
         }
     }
 }

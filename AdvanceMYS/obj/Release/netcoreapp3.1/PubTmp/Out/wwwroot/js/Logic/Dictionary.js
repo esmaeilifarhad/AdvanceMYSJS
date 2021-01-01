@@ -44,7 +44,7 @@ async function showLevel(level) {
     table += "</tr>"
 
     table += "<tr style='white-space: pre-wrap;'>"
-    table += "<td><input  onclick='ListWordLevel(" + 80 + ")' name='rdbLevel' type='radio' value='" + 80 + "' /> اشتباه تا 4 </td>"
+    table += "<td><input  onclick='ListWordLevel(" + 80 + ")' name='rdbLevel' type='radio' value='" + 80 + "' /> اشتباه تا 4  <span style='color:red' class='countRamindForRevise'></span></td>"
     table += "</tr>"
     
   
@@ -86,9 +86,13 @@ async function ListWordLevel(level) {
     var ListObj = results[0]
    // return ListObj
     showListWordLevel(ListObj)
+    if (level == 80) {
+        $(".countRamindForRevise").empty()
+        $(".countRamindForRevise").append(" - "+ListObj.length)
+    }
 }
 async function showListWordLevel(ListObj) {
-
+    debugger
   //  var ListObj = await ListWordLevel(level)
 
     var styleWord = ""

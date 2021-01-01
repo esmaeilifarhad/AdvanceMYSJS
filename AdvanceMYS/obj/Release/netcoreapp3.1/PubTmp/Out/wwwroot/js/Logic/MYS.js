@@ -187,6 +187,7 @@ function BaseData() {
 
     table +=
         "<div class='container-fluid'>" +
+
         "<div class='row'>" +
         "<div class='col-md-4'>" +
         " <div class='ListTaghvim'></div>" +
@@ -202,6 +203,13 @@ function BaseData() {
         " <div class='ListAllJob'></div>" +
         "</div > " +
 
+    "</div > " +
+
+    "<div class='row'>" +
+    "<div class='col-md-4'>" +
+    " <div class='ListSetting'></div>" +
+    "</div > " +
+    "</div > " +
 
 
 
@@ -211,6 +219,7 @@ function BaseData() {
     ListCategory()
     ListAllJob()
     ListKarkardNew()
+    Setting("ListSetting")
 }
 function Karkard() {
     $("#MasterPage").empty()

@@ -35,7 +35,7 @@ namespace AdvanceMYS
 
             string IpAddress= Models.Utility.Utility.GetIPAddress();
             //192.168.1.105    home
-            if (IpAddress == "172.31.195.125")
+            if (IpAddress == "172.31.195.125" )
             {
                 services.AddDbContext<Models.Domain._5069_ManageYourSelfContext>(options =>
         options.UseSqlServer(

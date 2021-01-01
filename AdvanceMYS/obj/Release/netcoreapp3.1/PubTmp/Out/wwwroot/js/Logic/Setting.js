@@ -1,165 +1,35 @@
-﻿//--Execute All List when click Tab
-$("ul li a[href='#Setting']").on("click", function () {
-    ListHolyDay();
-    ListSetting();
-});
-//***************************************************HolyDay
-function ListHolyDay() {
-    var urll = "/HolyDay/ListHolyDay";
-    $.ajax({
-        type: "Get",
-        contentType: "application/json;charset=utf-8",
-        dataType: "html",
-        url: urll,
-        success: function (data) {
-            $(".ListHolyDay").html(data);
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    })
-}
-function CreateHolyDayPost() {
+﻿async function getDataSetting() {
    
-    var MojoodyName = $("#MasterModal input[name='MojoodyName']").val();
-    $.ajax(
-       {
-           type: 'POST',
-           contentType: "application/json;charset=utf-8",
-           dataType: "json",
-           url: "/HolyDay/CreateHolyDay",
-           data: JSON.stringify({ MojoodyName: MojoodyName }),
-           success: function (result) {
-               if (result == true) {
-                   RefreshListHolyDay();
-               }
-               else {
-                   alert("خطا در ثبت");
-               }
-           },
-           error: function (error) {
-               console.log(error);
-           }
-       });
-}
-function CreateHolyDayGet() {
- 
-    $.ajax(
-       {
-           type: 'get',
-           contentType: "application/json;charset=utf-8",
-           dataType: "html",
-           url: "/HolyDay/CreateHolyDay",
-           success: function (result) {
-               $(".BodyModal").html(result);
-               $("#MasterModal").modal();
-           },
-           error: function (error) {
-               console.log(error);
-           }
-       }
-       );
-}
-function EditHolyDay(HolyDayId) {
-    $.ajax(
-       {
-           type: 'get',
-           contentType: "application/json;charset=utf-8",
-           dataType: "html",
-           url: "/HolyDay/EditHolyDay?HolyDayId=" + HolyDayId,
-           success: function (result) {
-               $(".BodyModal").html(result);
-               $("#MasterModal").modal();
-           },
-           error: function (error) {
-               console.log(error);
-           }
-       });
-}
-function UpdateHolyDay() {
- 
-    var MojoodyName = $("#MasterModal input[name='MojoodyName']").val();
-    var HolyDayId = $("#MasterModal div[name='EditHolyDay'] table").attr("HolyDayId");
-    $.ajax(
-       {
-           type: 'POST',
-           contentType: "application/json;charset=utf-8",
-           dataType: "json",
-           url: "/HolyDay/UpdateHolyDay",
-           data: JSON.stringify({ MojoodyName: MojoodyName, HolyDayId: HolyDayId }),
-           success: function (result) {
-                   RefreshListHolyDay();
-           }
-       });
-}
-function DeleteHolyDay(HolyDayId) {
-    $.ajax(
-       {
-           type: 'POST',
-           contentType: "application/json;charset=utf-8",
-           dataType: "json",
-           url: "/HolyDay/DeleteHolyDay",
+        var obj = {}
+        obj.url = "/Setting/Index"
+        obj.dataType = "json"
+        obj.type = "POST"
+        //obj.data = { Code: Code }
 
-           data: JSON.stringify({ HolyDayId: HolyDayId }),
-           success: function (result) {
-               if (result == true) {
-                   RefreshListHolyDay();
-               }
-               else {
-                   alert("خطا در ثبت");
-               }
-           }
-       });
+        var results = await Promise.all([
+            service(obj)
+        ]);
+        var ListtObj = results[0]
+
+        return ListtObj;
+   
 }
-function RefreshListHolyDay() {
-    ListHolyDay();
-    ListTypeHazineh();
-    ListDaramd();
+async function Setting(className) {
+    var listObj = await getDataSetting()
+    debugger
+    var grid = gridSetting(listObj)
+    $("." + className).empty()
+    $("." + className).append(grid)
 }
-//--------------------------Events
-//--Create Get
-$(".ListHolyDay").on("click", "input[name='CreateHolyDay']", function () {
-    CreateHolyDayGet();
-});
-//--Delete
-$(".ListHolyDay").on("click", ".fa-remove", function () {
-    var res = confirm("آیا حذف انجام شود؟");
-    if (res == true) {
-        var HolyDayId = $(this).attr("HolyDayId");
-        DeleteHolyDay(HolyDayId);
+function gridSetting(listObj) {
+    var table = tableReturn();
+    debugger
+    for (var i = 0; i < listObj.length; i++) {
+        
+        table += "<tr>"
+        table += "<td>" + listObj[i].name + "</td><td>" + listObj[i].value + "</td>"
+        table += "</tr>"
     }
-});
-//--Edit
-$(".ListHolyDay").on("click", ".fa-edit", function () {
-    var HolyDayId = $(this).attr("HolyDayId");
-    EditHolyDay(HolyDayId);
-});
-
-function ListSetting() {
-
-    var ShowFooterAlert = localStorage.getItem("ShowFooterAlert");
-    
-    
-    var table = "<a href='/Setting/ListLog'>نمایش لاگ </a>" +
-        "<table class='table'>" 
-        if (ShowFooterAlert == 'true')
-        table += "<tr><td>نمایش فوتر</td><td>نمایش : <input type='radio' name='rdbShowFooter' value=true onclick='changeRdbFooter(true)' checked/>عدم نمایش : <input type='radio' name='rdbShowFooter' value=false onclick='changeRdbFooter(false)'/></td><tr>"
-    else
-        table += "<tr><td>نمایش فوتر</td><td>نمایش : <input type='radio' name='rdbShowFooter' value=true onclick='changeRdbFooter(true)'/>عدم نمایش : <input type='radio' name='rdbShowFooter' value=false checked onclick='changeRdbFooter(false)'/></td><tr>"
-    table+="</table>"
-    $("#Setting .Setting").empty()
-    $("#Setting .Setting").append(table)
-
-    
-    
+    table += "</table>"
+    return table
 }
-function changeRdbFooter(status) {
-    
-    if (status == true) {
-        localStorage.setItem("ShowFooterAlert", "true");
-    }
-    else {
-        localStorage.setItem("ShowFooterAlert", "false");
-    }
-}
-
