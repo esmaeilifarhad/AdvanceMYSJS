@@ -1,0 +1,290 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+@*<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fa" lang="fa" dir="rtl">*@
+<head>
+
+    <style>
+        /*فونت*/
+        @@font-face {
+            font-family: 'BNazanin';
+            src: url('/fonts/BNazanin.eot?#') format('eot'), url('/fonts/BNazanin.woff') format('woff'), url('/fonts/BNazanin.ttf') format('truetype');
+        }
+
+        @@font-face {
+            font-family: 'Morvarid';
+            src: url('/fonts/Far_Morvarid.eot?#') format('eot'), url('/fonts/Far_Morvarid.woff') format('woff'), url('/fonts/Far_Morvarid.ttf') format('truetype');
+        }
+    </style>
+    <link href="~/css/MYS_Css/smoky.css" rel="stylesheet" />
+   
+
+
+    @*<meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />*@
+
+    <meta charset="utf-8">
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <title>Manage Your Self</title>
+    <link href="~/fav.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link href="~/persianDatepicker-master/css/persianDatepicker-default.css" rel="stylesheet" />
+    <link href="~/persianDatepicker-master/css/persianDatepicker-dark.css" rel="stylesheet" />
+
+
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/css/MYS_Css/Menu.css" rel="stylesheet" />
+
+    <script src="~/persianDatepicker-master/js/jquery-1.10.1.min.js"></script>
+    <script src="~/persianDatepicker-master/js/persianDatepicker.min.js"></script>
+
+</head>
+<body style="direction: rtl; font-family: 'BNazanin';text-align:right">
+    <header style=" background-color: #940808;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="DateDetail" style="padding: 10px 15px 0px 0px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5" style="overflow:hidden; background-image: linear-gradient(to right, red, yellow);padding:10px;height:110px;text-align:center">اسماعیلی</div>
+                <div class="col-md-3">
+
+                    @if (User.Identity.IsAuthenticated == true)
+                    {
+                        <span style="color:wheat">
+                            @User.Identity.Name
+                        </span>
+
+                        <span> | </span>
+
+                        <span onclick="Logout()" style="color:wheat">
+                            خروج
+                        </span>
+
+                    }
+                    else
+                    {
+                        <span>کاربر مهمان</span>
+
+                        <span> | </span>
+
+                        <span style="color:wheat">
+                            ورود
+                        </span>
+                    }
+
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+        <div id="menu" style=" padding: 0px 15px 10px 15px;">
+            <div id="menu_MYS" style="background-color:black;text-align:right!important">
+                <div class="dropdown">
+                    <a asp-controller="ManageYourSelf" asp-action="Index" class="btn btn-warning"
+                       type="button">
+                        خانه
+                    </a>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="Dictionary()">
+                        دیگشنری
+                    </button>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="Sport()">
+                        ورزش
+                    </button>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="BaseData()">
+                        اطلاعات پایه
+                    </button>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="Karkard()">
+                        فعالیت ها
+                    </button>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="Book()">
+                        کتاب
+                    </button>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="Note()">
+                        نکته ها
+                    </button>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="RepeatedTask()">
+                        وظایف تکراری
+                    </button>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="Task()">
+                        وظایف
+                    </button>
+
+                    <button class="btn btn-warning dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        وظایف
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="text-align:right">
+                        <a class="dropdown-item" href="#" onclick="Task()">وظایف امروز</a>
+                        <a class="dropdown-item" href="#">وظایف کلی</a>
+                        <a class="dropdown-item" href="#">وظایف </a>
+                    </div>
+                    <button class="btn btn-warning"
+                            type="button"
+                            onclick="CalSpendTimejob()">
+                        زمان مطالعه
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div>
+        <main role="main" class="pb-3">
+            <div id="MasterPage">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 1399 - AdvanceMYS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <!--Modal Start-->
+    <div style="font-family: BNazanin;font-size: 12px;">
+        <!--  Modal Master -->
+        <div class="modal fade" id="MasterModal" style="z-index:1060">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header" style="direction: rtl;
+        text-align: center;
+        display: initial;
+        background-image: linear-gradient(45deg, black, transparent);
+">
+                        <br>
+                        <h4 class="modal-title HeaderModal"></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body BodyModal">
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                        <span> </span>
+                        <button type="button" class="btn btn-primary btnSave" data-dismiss="modal">ثبت</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Modal Calendar1 -->
+        <div class="modal fade" id="Calendar1" style="z-index:1050">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header" style="direction:ltr">
+                        <br>
+                        <h4 class="modal-title HeaderModal"></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body BodyModal">
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                        <span> </span>
+                        <button type="button" class="btn btn-primary btnSave" data-dismiss="modal">ثبت</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Modal Calendar2 -->
+        <div class="modal fade" id="Calendar2" style="z-index:1055">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header" style="direction:ltr">
+                        <br>
+                        <h4 class="modal-title HeaderModal"></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body BodyModal">
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                        <span> </span>
+                        <button type="button" class="btn btn-primary btnSave" data-dismiss="modal">ثبت</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+   
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    @*---------------------------------------------Utility--------------------------------*@
+    <script src="~/js/Utility/loadingoverlay.min.js"></script>
+    <script src="~/js/Utility/sweetalert2@9.js"></script>
+    <script src="~/js/Utility/moment.js"></script>
+    <script src="~/js/Utility/moment.min.js"></script>
+    <script src="~/js/Utility/moment-jalaali.js"></script>
+    <script src="~/js/Logic/Utility.js"></script>
+    <script src="~/js/Utility/Speech.js"></script>
+    @*---------------------------------------------Logic--------------------------------*@
+    <script src="~/js/Logic/Services.js"></script>
+    <script src="~/js/Logic/Task.js"></script>
+    <script src="~/js/Logic/MYS.js"></script>
+    <script src="~/js/Logic/Cat.js"></script>
+    <script src="~/js/Logic/Account.js"></script>
+    <script src="~/js/Logic/Taghvim.js"></script>
+    <script src="~/js/Logic/Sport.js"></script>
+    <script src="~/js/Logic/Book.js"></script>
+    <script src="~/js/Logic/Category.js"></script>
+    <script src="~/js/Logic/Dictionary.js"></script>
+    <script src="~/js/Logic/StopWatch.js"></script>
+    <script src="~/js/Logic/Karkard.js"></script>
+    <script src="~/js/Logic/Note.js"></script>
+    <script src="~/js/Logic/RoutineJob.js"></script>
+    <script src="~/js/Logic/Setting.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+
+</body>
+</html>
