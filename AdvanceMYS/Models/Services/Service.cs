@@ -44,17 +44,17 @@ namespace AdvanceMYS.Models.Services
                 body += "<tr style='background-color:" + (stylecondition == 0 ? "gray" : "white") + "'>";
                 body += "<td style='border:1px solid'>" + item.Eng + "</td><td style='border:1px solid'>" + item.Per + "</td>";
                 body += "</tr>";
-                var examples = _db.ExampleTbls.Where(q => q.IdDicTbl == item.Id).ToList();
-                foreach (var example in examples)
-                {
-                    body += "<tr style='background-color:" + (stylecondition == 0 ? "gray" : "white") + "'>";
-                    body += "<td colspan=2 style='border:1px solid'>" + example.Example + "</td>";
-                    body += "</tr>";
-                }
+                //var examples = _db.ExampleTbls.Where(q => q.IdDicTbl == item.Id).ToList();
+                //foreach (var example in examples)
+                //{
+                //    body += "<tr style='background-color:" + (stylecondition == 0 ? "gray" : "white") + "'>";
+                //    body += "<td colspan=2 style='border:1px solid'>" + example.Example + "</td>";
+                //    body += "</tr>";
+                //}
                 i += 1;
             }
             body += "</table>";
-            _messageSender.SendEmailAsync("esmaili.farhad67@gmail.com", "Dictionary"+DateTime.Now.ToString(), body,true);
+            _messageSender.SendEmailAsync("esmaili.farhad67@gmail.com", "Dictionary_"+ today, body,true);
         }
         public void SendTaskEmail() {
             var today = Utility.Utility.ConvertDateToSqlFormat(Utility.Utility.shamsi_date());
@@ -65,12 +65,12 @@ namespace AdvanceMYS.Models.Services
             var body = "<table>";
             foreach (var item in tasks)
             {
-                body += "<tr>";
-                body += "<td>" + item.Name + "</td>";
+                body += "<tr  style='border:1px solid'>";
+                body += "<td  style='border:1px solid'>" + item.Olaviat + "</td><td  style='border:1px solid'>" + item.Name + "</td><td  style='border:1px solid'>" + item.DateEnd + "</td>";
                 body += "<tr>";
             }
             body += "</table>";
-            _messageSender.SendEmailAsync("esmaili.farhad67@gmail.com", "Task" + DateTime.Now.ToString(), body, true);
+            _messageSender.SendEmailAsync("esmaili.farhad67@gmail.com", "Task_" + today, body, true);
         }
     }
 }

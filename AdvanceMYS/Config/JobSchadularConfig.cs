@@ -19,14 +19,14 @@ namespace AdvanceMYS.Config
             services.AddCronJob<JobDictionary>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
-                c.CronExpression = @"* 8,12,14,18,20,21 * * *";
+                c.CronExpression = @"0 8,12,14,18,20,21 * * *";
             });
             // 0 6,18 * * * /bin/sh backup.sh	To perform a database backup twice a day at 6 AM and 6 PM.
             services.AddCronJob<JobTask>(c =>
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
                // c.CronExpression = @"44 9 * * *";
-                 c.CronExpression = @"* 8,11,14,17,20,22 * * *";
+                 c.CronExpression = @"0 8,11,14,17,20,22 * * *";
             });
             //services.AddCronJob<MyCronJob3>(c =>
             //{
