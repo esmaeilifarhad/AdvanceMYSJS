@@ -8,7 +8,7 @@ namespace AdvanceMYS.Models.Repositories
 {
     public class MessageSender //: IMessageSender
     {
-        public void SendEmailAsync(string toEmail, string subject, string message, bool isMessageHtml = false)
+        public   Task SendEmailAsync(string toEmail, string subject, string message, bool isMessageHtml = false)
         {
             try
             {
@@ -31,19 +31,22 @@ namespace AdvanceMYS.Models.Repositories
                 //username : به جای این کلمه نام کاربری ایمیل خود را قرار دهید
                 //password : به جای این کلمه رمز عبور ایمیل خود را قرار دهید
                 SmtpServer.Credentials = new System.Net.NetworkCredential("farhadsender1367", "Fe23565!@#");
-               
 
-                SmtpServer.Send(mail);
+                return Task.Run(()=>
+                 SmtpServer.Send(mail)
+                );
+               
                 //MessageBox.Show("mail Send");
             }
             catch (Exception ex)
             {
                 
                 ex.ToString();
+                return Task.CompletedTask;
             }
 
           
-          // return Task.CompletedTask;
+          // await  Task.CompletedTask;
         }
     }
 }
