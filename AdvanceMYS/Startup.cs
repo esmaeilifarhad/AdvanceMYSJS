@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AdvanceMYS.Config;
 using AdvanceMYS.Models.JobScedular;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,8 +58,12 @@ namespace AdvanceMYS
             services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
-        
-           services.AddHostedService<MyHostedService>();
+
+            //services.AddHostedService<MyHostedService>();
+            services.AddJJobSchadularConfig();
+
+
+
 
         }
 

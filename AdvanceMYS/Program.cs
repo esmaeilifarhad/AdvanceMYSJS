@@ -23,8 +23,11 @@ namespace AdvanceMYS
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                })
-            .ConfigureServices(services=>
-                services.AddHostedService<MyHostedService>());
+                });
+
+      
+        
+            //.ConfigureServices(services=>
+            //    services.AddHostedService<MyHostedService>());
     }
 }
