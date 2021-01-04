@@ -21,16 +21,13 @@ namespace AdvanceMYS.Controllers
     {
 
         private readonly _5069_ManageYourSelfContext _db;
-        // private readonly MessageSender _messageSender;
-        MessageSender _messageSender = new MessageSender();
+       
         int _userId = 1;
         Models.ADO.UIDSConnection U = new Models.ADO.UIDSConnection();
         public DictionaryController(_5069_ManageYourSelfContext db)
         {
             _db = db;
-            Models.Services.Service s = new Models.Services.Service(_db);
-            s.SendDictonaryEmail();
-           // _messageSender = messageSender;
+          
           
         }
 
