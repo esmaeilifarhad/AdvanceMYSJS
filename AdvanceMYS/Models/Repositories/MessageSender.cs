@@ -37,7 +37,7 @@ namespace AdvanceMYS.Models.Repositories
                     SmtpServer.Send(mail);
                 });
                
-                //MessageBox.Show("mail Send");
+               
             }
             catch (Exception ex)
             {
@@ -47,7 +47,7 @@ namespace AdvanceMYS.Models.Repositories
             }
 
           
-          // return
+         
         }
     }
 }
