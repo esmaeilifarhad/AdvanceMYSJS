@@ -93,6 +93,15 @@ namespace AdvanceMYS.Controllers
         }
         public IActionResult FindEndTimeIsNull() {
            var res= _db.KarKards.Include(q => q.Job).Where(q => q.JobId > 0 && q.EndTime == null).ToList();
+            var today= Models.Utility.Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
+            foreach (var item in res)
+            {
+                if (item.DayDate != today)
+                {
+                    _db.KarKards.Remove(item);
+                }
+            }
+            _db.SaveChanges();
             return Json(res);
         }
         public IActionResult AllKarkardAtMounth() {
