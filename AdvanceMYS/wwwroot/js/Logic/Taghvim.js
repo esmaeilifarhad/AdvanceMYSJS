@@ -51,7 +51,7 @@ async function ShowListTaghvim() {
 }
 
 async function CreateUpdateTaghvim(TaghvimId) {
-    
+    debugger
     if (TaghvimId > 0) {
         var obj = {}
         obj.url = "/Taghvim/Find"
@@ -63,10 +63,10 @@ async function CreateUpdateTaghvim(TaghvimId) {
             service(obj)
         ]);
         var ListtObj = results[0]
-
+      
         var table = "<table>" +
             "<tr><td>تاریخ</td><td><input type='text' placeholde='تاریخ ' name='Date'  autocomplete='off' value=" + formatDate(ListtObj.date)+"  /></td></tr>" +
-            "<tr><td>توضیحات</td><td><input type='text' placeholde='توضیحات' name='Dsc'  autocomplete='off' value=" + ListtObj.dsc + "  /></td></tr>" +
+            "<tr><td>توضیحات</td><td><input type='text' placeholde='توضیحات' name='Dsc'  autocomplete='off' value=\"" + ListtObj.dsc + "\"  /></td></tr>" +
             "<tr><td>تعطیل</td><td><input type='checkbox'  name='IsHolyDay'  " + (ListtObj.isHolyDay == true?'checked':'') + "  /></td></tr>" +
             "</table > "
     }

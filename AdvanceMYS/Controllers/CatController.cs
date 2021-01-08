@@ -47,6 +47,7 @@ namespace AdvanceMYS.Controllers
            
         }
         public IActionResult DeleteCat(int id) {
+            _db.Tasks.RemoveRange(_db.Tasks.Where(q => q.CatId == id));
             _db.Cats.Remove(_db.Cats.SingleOrDefault(q=>q.CatId==id));
             if (_db.SaveChanges() > 0)
                 return Json("با موفقیت حذف شد");

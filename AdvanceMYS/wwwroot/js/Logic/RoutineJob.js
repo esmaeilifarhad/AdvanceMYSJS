@@ -50,8 +50,8 @@ async function listRoutineJob() {
         }
         table += "</td><td>" + listObj[i].rate + "</td>"
         table += "<td>" + listObj[i].order + "</td>"
-        table += "<td><span class='fa fa-edit' onclick='showForm(" + listObj[i].routineJobId+")'></span></td>"
-        table += "<td><span class='fa fa-remove'></span></td>"
+        table += "<td><span class='fa fa-edit' style='cursor:pointer' onclick='showForm(" + listObj[i].routineJobId+")'></span></td>"
+        table += "<td><span class='fa fa-remove' style='cursor:pointer' onclick='RemoveRoutineJob(" + listObj[i].routineJobId +")'></span></td>"
         table +="</tr>"
     }
     table+="</table>"
@@ -133,6 +133,18 @@ async function GetDataRoutineJob() {
     var ListtObj = results[0]
     return ListtObj
 
+}
+async function RemoveRoutineJob(routineJobId) {
+    var obj = {}
+    obj.url = "/RoutineJob/Delete"
+    obj.dataType = "json"
+    obj.type = "POST"
+    obj.data = { Id: routineJobId }
+
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    listRoutineJob()
 }
 /*نمایش کارهای تکراری برای زدن تیک*/
 async function RepeatedTaskForCheck() {

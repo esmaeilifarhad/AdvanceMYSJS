@@ -47,6 +47,7 @@ namespace AdvanceMYS.Controllers
         }
         public IActionResult Delete(int Id)
         {
+            _db.RoutineJobHas.RemoveRange(_db.RoutineJobHas.Where(q => q.RoutineJobId == Id));
             var old = _db.RoutineJobs.SingleOrDefault(q => q.RoutineJobId == Id);
             _db.RoutineJobs.Remove(old);
             return Json(_db.SaveChanges() + " با موفقیت حذف شد ");

@@ -68,7 +68,9 @@ namespace AdvanceMYS.Controllers
             month = month.Substring(0, 6);
             return Json(_db.Jobs.Include(q => q.Category).
                 Include(q=>q.PercentJobs).
-                OrderByDescending(q=>
+               Include(q=>q.KarKards).
+               OrderByDescending(q=>q.KarKards.Where(q=>q.DayDate==Utility.ConvertDateToSqlFormat(Utility.shamsi_date())).Sum(q=>q.SpendTimeMinute)).
+                ThenByDescending(q=>
                 q.PercentJobs.SingleOrDefault(q=>q.Date== month).PercentValue).
                 ToList());
         }
