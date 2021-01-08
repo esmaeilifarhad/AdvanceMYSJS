@@ -1,4 +1,6 @@
 ﻿using AdvanceMYS.Models.JobScedular;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -9,6 +11,12 @@ namespace AdvanceMYS.Config
 {
     public static class JobSchadularConfig
     {
+        //public  IConfiguration Configuration { get; }
+
+        //public JobSchadularConfig(IConfiguration configuration)
+        //{
+        //    Configuration = configuration;
+        //}
         public static IServiceCollection AddJJobSchadularConfig(this IServiceCollection services)
         {
             //https://www.hostinger.com/tutorials/cron-job
@@ -34,6 +42,26 @@ namespace AdvanceMYS.Config
             //    c.CronExpression = @"50 12 * * *";
             //});
 
+            return services;
+        }
+        public static IServiceCollection AddDbContextConfig(this IServiceCollection services, IConfiguration Configuration)
+        {
+            string IpAddress = Models.Utility.Utility.GetIPAddress();
+            //192.168.1.105    home
+            if (IpAddress == "172.31.195.125")
+            {
+                services.AddDbContext<Models.Domain._Context>(options =>
+        options.UseSqlServer(
+            Configuration.GetConnectionString("MYS_ConnectionJob")));
+                Models.Connection.Connection._ConnectionString = Configuration.GetConnectionString("MYS_ConnectionJob");
+            }
+            else
+            {
+                services.AddDbContext<Models.Domain._Context>(options =>
+            options.UseSqlServer(
+                Configuration.GetConnectionString("MYS_Connection")));
+                Models.Connection.Connection._ConnectionString = Configuration.GetConnectionString("MYS_Connection");
+            }
             return services;
         }
     }

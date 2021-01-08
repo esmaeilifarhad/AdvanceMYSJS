@@ -1,41 +1,37 @@
 ﻿using DomainClass.DomainClass;
 using Microsoft.EntityFrameworkCore;
 
-#nullable disable
 
-namespace AdvanceMYS.Models.Domain
-//namespace DomainClass.DomainClass
+namespace DataAccess.Context
 {
-    public partial class _Context : DbContext
+    public partial class dbContext:DbContext
     {
-       
-
-        public _Context(DbContextOptions<_Context> options)
-            : base(options)
+        public dbContext(DbContextOptions<dbContext> options) : base(options)
         {
+
         }
 
-     
+
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<Cat> Cats { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<ContentTbl> ContentTbls { get; set; }
         public virtual DbSet<DaysExercise> DaysExercises { get; set; }
         public virtual DbSet<DicTbl> DicTbls { get; set; }
-      
+
         public virtual DbSet<ExampleTbl> ExampleTbls { get; set; }
-  
+
         public virtual DbSet<Iodayly> Iodaylies { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<Note> Note { get; set; }
 
         public virtual DbSet<Subject> Subject { get; set; }
         public virtual DbSet<KarKard> KarKards { get; set; }
-      
+
         public virtual DbSet<LogTbl> LogTbls { get; set; }
         public virtual DbSet<ManageTime> ManageTimes { get; set; }
         public virtual DbSet<MasterDatum> MasterData { get; set; }
-      
+
         public virtual DbSet<Menu> Menus { get; set; }
         public virtual DbSet<Menuha> Menuhas { get; set; }
         public virtual DbSet<MvchomeHeaderThree> MvchomeHeaderThrees { get; set; }
@@ -54,7 +50,7 @@ namespace AdvanceMYS.Models.Domain
         public virtual DbSet<ShowSumLastPercantage> ShowSumLastPercantages { get; set; }
         public virtual DbSet<SliderPhoto> SliderPhotos { get; set; }
         public virtual DbSet<Sport> Sports { get; set; }
-      
+
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<TaskImage> TaskImages { get; set; }
         public virtual DbSet<Timing> Timings { get; set; }
@@ -62,20 +58,20 @@ namespace AdvanceMYS.Models.Domain
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseSqlServer("Server=.;Database=5069_ManageYourSelf;Trusted_Connection=True;");
-//            }
-//        }
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Server=.;Database=5069_ManageYourSelf;Trusted_Connection=True;");
+        //            }
+        //        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
 
-          
+
+
 
             modelBuilder.Entity<Book>(entity =>
             {
@@ -112,14 +108,14 @@ namespace AdvanceMYS.Models.Domain
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasMaxLength(250);
-            
+
             });
 
             modelBuilder.Entity<Taghvim>(entity =>
             {
                 entity.ToTable("Taghvim", "5069_Esmaeili");
 
-      
+
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -154,9 +150,9 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_ContentTbl_TitleTbl");
             });
 
-        
 
-          
+
+
 
             modelBuilder.Entity<DaysExercise>(entity =>
             {
@@ -232,7 +228,7 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_dic_tbl_Users");
             });
 
-           
+
 
             modelBuilder.Entity<ExampleTbl>(entity =>
             {
@@ -252,9 +248,9 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_example_tbl_dic_tbl");
             });
 
-          
 
-          
+
+
             modelBuilder.Entity<Iodayly>(entity =>
             {
                 entity.HasKey(e => e.Ioid);
@@ -297,14 +293,14 @@ namespace AdvanceMYS.Models.Domain
                 entity.Property(e => e.Description).IsRequired();
                 entity.Property(e => e.DateRefresh).HasMaxLength(8).IsRequired();
                 entity.Property(e => e.DateCreated).HasMaxLength(8).IsRequired();
-               // entity.HasOne(x => x.Job).WithMany(x => x.Notes).HasForeignKey(x => x.JobId);
+                // entity.HasOne(x => x.Job).WithMany(x => x.Notes).HasForeignKey(x => x.JobId);
                 entity.HasOne(e => e.Subject).WithMany(e => e.Note).HasForeignKey(e => e.SubjectId);
             }
             );
             modelBuilder.Entity<Subject>(e => {
                 e.ToTable("Subject", "5069_Esmaeili");
                 e.Property(e => e.Title).IsRequired();
-                e.HasOne(e => e.Job).WithMany(e => e.Subjects).HasForeignKey(e=>e.JobId) ;            
+                e.HasOne(e => e.Job).WithMany(e => e.Subjects).HasForeignKey(e => e.JobId);
             });
             modelBuilder.Entity<KarKard>(entity =>
             {
@@ -325,7 +321,7 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_KarKard_Job");
             });
 
-         
+
 
             modelBuilder.Entity<LogTbl>(entity =>
             {
@@ -366,7 +362,7 @@ namespace AdvanceMYS.Models.Domain
                 entity.Property(e => e.WeightDate).HasMaxLength(6);
             });
 
-          
+
 
             modelBuilder.Entity<Menu>(entity =>
             {
@@ -392,7 +388,7 @@ namespace AdvanceMYS.Models.Domain
                     .HasMaxLength(250);
             });
 
-          
+
 
             modelBuilder.Entity<MvchomeHeaderThree>(entity =>
             {
@@ -550,7 +546,7 @@ namespace AdvanceMYS.Models.Domain
                 entity.Property(e => e.Value).HasMaxLength(250);
             });
 
-           
+
 
             modelBuilder.Entity<ShowLastPercantageJob>(entity =>
             {
@@ -601,9 +597,9 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_Sport_Cat");
             });
 
-           
 
-           
+
+
 
             modelBuilder.Entity<Task>(entity =>
             {
@@ -679,11 +675,11 @@ namespace AdvanceMYS.Models.Domain
                     .HasConstraintName("FK_TitleTbl_Book");
             });
 
-          
+
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("User","5069_Esmaeili");
+                entity.ToTable("User", "5069_Esmaeili");
 
                 entity.HasIndex(e => e.UserName, "IX_Users")
                     .IsUnique();
@@ -728,6 +724,7 @@ namespace AdvanceMYS.Models.Domain
             OnModelCreatingPartial(modelBuilder);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
+
 }
