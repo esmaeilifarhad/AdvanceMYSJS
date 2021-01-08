@@ -24,14 +24,14 @@ namespace AdvanceMYS.Controllers
 
     public class TaskController : Controller
     {
-        //Models.Domain._5069_ManageYourSelfContext db = new Models.Domain._5069_ManageYourSelfContext();
+        //DomainClass.DomainClass._5069_ManageYourSelfContext db = new DomainClass.DomainClass._5069_ManageYourSelfContext();
 
-        private readonly _5069_ManageYourSelfContext _db;
+        private readonly _Context _db;
         int UserId = 1;
         // private readonly UserManager<> _userManager;
         //   System.Security.Claims.ClaimsPrincipal currentUser = User;
         // private readonly int UserId;
-        public TaskController(_5069_ManageYourSelfContext db)
+        public TaskController(_Context db)
         {
             //System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             _db = db;
@@ -46,12 +46,12 @@ namespace AdvanceMYS.Controllers
         }
         public ActionResult ListTaskGeneral()
         {
-            List<Models.Domain.Task> TaskList = new List<Models.Domain.Task>();
+            List<DomainClass.DomainClass.Task> TaskList = new List<DomainClass.DomainClass.Task>();
 
             try
             {
                 Models.ViewModels.VM_Public V = new Models.ViewModels.VM_Public();
-                List<Models.Domain.Cat> lstC = new List<Models.Domain.Cat>();
+                List<DomainClass.DomainClass.Cat> lstC = new List<DomainClass.DomainClass.Cat>();
 
                 string query = @"
   select Tbl.CatId,isnull(Title,N'تعریف نشده') Title from [5069_ManageYourSelf].[5069_Esmaeili].Cat right join
@@ -67,7 +67,7 @@ namespace AdvanceMYS.Controllers
                 using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
                 {
 
-                    TaskList = DB.Query<Models.Domain.Task>(query).ToList();
+                    TaskList = DB.Query<DomainClass.DomainClass.Task>(query).ToList();
                 }
 
             }
@@ -75,7 +75,7 @@ namespace AdvanceMYS.Controllers
             {
                 //Error.message = ex.InnerException.Message;
                 //Error.result = false;
-                ////throw new ArgumentException(ex.InnerException.Message);
+              throw new ArgumentException(ex.InnerException.Message);
                 //return Json(Error, JsonRequestBehavior.AllowGet);
 
             }
@@ -186,7 +186,7 @@ namespace AdvanceMYS.Controllers
                 {
 
 
-                    Models.Domain.Task newTask = new Models.Domain.Task();
+                    DomainClass.DomainClass.Task newTask = new DomainClass.DomainClass.Task();
                     newTask.IsActive = (NewTask.IsActive == null ? OldTask.IsActive : NewTask.IsActive);
                     newTask.IsCheck = (NewTask.IsCheck == null ? OldTask.IsCheck : NewTask.IsCheck);
                     newTask.DateStart = (NewTask.DateStart == null ? OldTask.DateStart : Utility.ConvertDateToSqlFormat(NewTask.DateStart));
@@ -204,7 +204,7 @@ namespace AdvanceMYS.Controllers
                         var oldTimings = _db.Timings.SingleOrDefault(q => q.TaskId == TaskId);
                         if (oldTimings == null)
                         {
-                            Timing m = new Timing();
+                            DomainClass.DomainClass.Timing m = new DomainClass.DomainClass.Timing();
                             m.TaskId = TaskId;
                             m.ManageTimeId = NewTask.ManageTimeId;
                             _db.Timings.Add(m);
@@ -241,7 +241,7 @@ namespace AdvanceMYS.Controllers
                     var oldTimings = _db.Timings.SingleOrDefault(q => q.TaskId == TaskId);
                     if (oldTimings == null)
                     {
-                        Timing m = new Timing();
+                        DomainClass.DomainClass.Timing m = new DomainClass.DomainClass.Timing();
                         m.TaskId = TaskId;
                         m.ManageTimeId = NewTask.ManageTimeId;
                         _db.Timings.Add(m);
@@ -287,7 +287,7 @@ namespace AdvanceMYS.Controllers
             {
                 for (int i = 0; i < parts.Length; i++)
                 {
-                    Models.Domain.Task NewTask = new Models.Domain.Task();
+                    DomainClass.DomainClass.Task NewTask = new DomainClass.DomainClass.Task();
                     NewTask.Name = parts[i];
                     NewTask.Olaviat = T.Olaviat;
                     NewTask.Rate = T.Rate;
@@ -307,7 +307,7 @@ namespace AdvanceMYS.Controllers
                         var oldTimings = _db.Timings.SingleOrDefault(q => q.TaskId == NewTask.TaskId);
                         if (oldTimings == null)
                         {
-                            Timing m = new Timing();
+                            DomainClass.DomainClass.Timing m = new DomainClass.DomainClass.Timing();
                             m.TaskId = NewTask.TaskId;
                             m.ManageTimeId = T.ManageTimeId;
                             _db.Timings.Add(m);
@@ -345,7 +345,7 @@ namespace AdvanceMYS.Controllers
                     var oldTimings = _db.Timings.SingleOrDefault(q => q.TaskId == T.TaskId);
                     if (oldTimings == null)
                     {
-                        Timing m = new Timing();
+                        DomainClass.DomainClass.Timing m = new DomainClass.DomainClass.Timing();
                         m.TaskId = T.TaskId;
                         m.ManageTimeId = T.ManageTimeId;
                         _db.Timings.Add(m);
@@ -442,7 +442,7 @@ order by DateEnd,Value,Olaviat
             var Timings = _db.Timings.SingleOrDefault(q => q.TaskId == TaskId);
             if (Timings == null)
             {
-                Models.Domain.Timing t = new Timing();
+                DomainClass.DomainClass.Timing t = new DomainClass.DomainClass.Timing();
                 t.TaskId = TaskId;
                 t.ManageTimeId = ManageTimeId;
                 _db.Timings.Add(t);

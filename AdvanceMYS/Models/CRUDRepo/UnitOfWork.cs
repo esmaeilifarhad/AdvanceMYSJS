@@ -7,8 +7,8 @@ namespace AdvanceMYS.Models.CRUDRepo
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public Models.Domain._5069_ManageYourSelfContext Context { get; }
-        public UnitOfWork(Models.Domain._5069_ManageYourSelfContext gDSContext)
+        public Models.Domain._Context Context { get; }
+        public UnitOfWork(Models.Domain._Context gDSContext)
         {
             Context = gDSContext;
         }

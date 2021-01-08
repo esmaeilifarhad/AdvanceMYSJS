@@ -12,9 +12,9 @@ namespace AdvanceMYS.Models.JobScedular
     public class SampleHostedService : IHostedService
     {
         private readonly ILogger<SampleHostedService> _logger;
-        private readonly _5069_ManageYourSelfContext db;
+        private readonly _Context db;
 
-        public SampleHostedService(ILogger<SampleHostedService> logger, _5069_ManageYourSelfContext db)
+        public SampleHostedService(ILogger<SampleHostedService> logger, _Context db)
         {
             _logger = logger;
             this.db = db;

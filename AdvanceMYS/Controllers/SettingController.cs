@@ -9,8 +9,8 @@ namespace AdvanceMYS.Controllers
 {
     public class SettingController : Controller
     {
-        public readonly _5069_ManageYourSelfContext _db;
-        public SettingController(_5069_ManageYourSelfContext db)
+        public readonly _Context _db;
+        public SettingController(_Context db)
         {
             _db = db;
         }

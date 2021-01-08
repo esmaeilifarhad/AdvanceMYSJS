@@ -10,14 +10,14 @@ namespace AdvanceMYS.Controllers
 {
     public class RoutineJobController : Controller
     {
-        private readonly _5069_ManageYourSelfContext _db;
+        private readonly _Context _db;
         int UserId = 1;
-        public RoutineJobController(_5069_ManageYourSelfContext db)
+        public RoutineJobController(_Context db)
         {
             _db = db;
         }
 
-        public IActionResult CreateUpdatePost(Models.Domain.RoutineJob RoutineJob)
+        public IActionResult CreateUpdatePost(DomainClass.DomainClass.RoutineJob RoutineJob)
         {
             //create
             if (RoutineJob.RoutineJobId == 0)
@@ -57,7 +57,7 @@ namespace AdvanceMYS.Controllers
         {
             return Json(_db.RoutineJobs.ToList().OrderBy(q=>q.Order));
         }
-        public IActionResult checkInRoutineJobha(Models.Domain.RoutineJobHa RoutineJobHa) {
+        public IActionResult checkInRoutineJobha(DomainClass.DomainClass.RoutineJobHa RoutineJobHa) {
            var old= _db.RoutineJobHas.SingleOrDefault(q=>q.RoutineJobId==RoutineJobHa.RoutineJobId && q.Date==RoutineJobHa.Date);
             var msg = "";
             if (RoutineJobHa.IsCheck == true)

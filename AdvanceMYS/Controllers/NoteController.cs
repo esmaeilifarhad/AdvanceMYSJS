@@ -11,8 +11,8 @@ namespace AdvanceMYS.Controllers
     
     public class NoteController : Controller
     {
-        private readonly _5069_ManageYourSelfContext _db;
-        public NoteController(_5069_ManageYourSelfContext db)
+        private readonly _Context _db;
+        public NoteController(_Context db)
         {
             _db = db;
         }
@@ -24,7 +24,7 @@ namespace AdvanceMYS.Controllers
                 ToList();
                 return Json(res);
         }
-        public IActionResult CreateUpdateNote(Models.Domain.Note note)
+        public IActionResult CreateUpdateNote(DomainClass.DomainClass.Note note)
         {
             if (note.NoteId > 0)
             {
@@ -73,7 +73,7 @@ namespace AdvanceMYS.Controllers
         public IActionResult ListSubjectByJobId(int jobId) {
             return Json(_db.Subject.Where(q=>q.JobId==jobId).ToList());
         }
-        public IActionResult CreateUpdateSubject(Models.Domain.Subject subject) {
+        public IActionResult CreateUpdateSubject(DomainClass.DomainClass.Subject subject) {
             if (subject.SubjectId > 0)
             {
                var oldSubject= _db.Subject.SingleOrDefault(q=>q.SubjectId==subject.SubjectId);

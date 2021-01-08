@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AdvanceMYS.Models.Domain;
+using DomainClass.DomainClass;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +13,8 @@ namespace AdvanceMYS.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly _5069_ManageYourSelfContext _db;
-        public AccountController(_5069_ManageYourSelfContext db)
+        private readonly _Context _db;
+        public AccountController(_Context db)
         {
             _db = db; 
         }
@@ -27,7 +28,7 @@ namespace AdvanceMYS.Controllers
             return View();
         }
             [HttpPost]
-        public IActionResult Authenticate(Models.Domain.User U)
+        public IActionResult Authenticate(User U)
         {
            var oldUser= _db.Users.SingleOrDefault(q => q.UserName == U.UserName && q.Password == U.Password);
             if (oldUser == null)

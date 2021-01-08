@@ -35,4 +35,8 @@
     <PackageReference Include="OfficeOpenXml.Core.ExcelPackage" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DomainClass\DomainClass.csproj" />
+  </ItemGroup>
+
 </Project>

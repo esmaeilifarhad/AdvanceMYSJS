@@ -14,9 +14,9 @@ namespace AdvanceMYS.Controllers
      
   
         Models.ADO.UIDSConnection U = new Models.ADO.UIDSConnection();
-        private readonly _5069_ManageYourSelfContext DB;
+        private readonly _Context DB;
         int UserId = 1;
-        public BookController(_5069_ManageYourSelfContext db)
+        public BookController(_Context db)
         {
             DB = db;
         }
@@ -31,10 +31,10 @@ namespace AdvanceMYS.Controllers
             DataTable DT = U.Select(@"exec [5069_ManageYourSelf].[5069_Esmaeili].findBookDsc " + UserId + " ");
             if (DT == null)
                 return Json("موردی یافت نشد");
-            Models.Domain.Book B = new Models.Domain.Book();
+            DomainClass.DomainClass.Book B = new DomainClass.DomainClass.Book();
             foreach (DataRow item in DT.Rows)
             {
-                Models.Domain.Cat C = new Models.Domain.Cat();
+                DomainClass.DomainClass.Cat C = new DomainClass.DomainClass.Cat();
                 B.Dsc = item["dsc"].ToString();
                 B.BookId = int.Parse(item["BookId"].ToString());
                 if (item["RepeatedNumber"].ToString() == "")
@@ -58,7 +58,7 @@ namespace AdvanceMYS.Controllers
         }
         public ActionResult CreateBook(string dsc, string time, string date)
         {
-            Models.Domain.Book B = new Models.Domain.Book();
+            DomainClass.DomainClass.Book B = new DomainClass.DomainClass.Book();
             B.Dsc = dsc;
             B.UserId = UserId;
             B.Time = time;
@@ -80,7 +80,7 @@ namespace AdvanceMYS.Controllers
         }
         public ActionResult EditBook(int BookId)
         {
-            Models.Domain.Book B = new Models.Domain.Book();
+            DomainClass.DomainClass.Book B = new DomainClass.DomainClass.Book();
             var oldBook = DB.Books.SingleOrDefault(q => q.BookId == BookId);
             B.Date = oldBook.Date;
             B.Dsc = oldBook.Date;
@@ -110,7 +110,7 @@ namespace AdvanceMYS.Controllers
                 {
 
 
-                    Models.Domain.Book newBook = new Models.Domain.Book();
+                    DomainClass.DomainClass.Book newBook = new DomainClass.DomainClass.Book();
                     newBook.Dsc = parts[i];
                     newBook.UserId = oldBook.UserId;
                     newBook.Date = oldBook.Date;

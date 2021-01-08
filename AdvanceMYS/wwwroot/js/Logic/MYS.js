@@ -363,7 +363,7 @@ async function CalSpendTimejob() {
     }
     else {
         $("#MasterModal .T_StartTime input").val(fromTime)
-        $("#MasterModal .T_EndTime input").val(fromTime)
+        $("#MasterModal .T_EndTime input").val()
         CalMinute()
     }
     

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AdvanceMYS.Models.ViewModels.Dictionary
 {
-    public class VMDictionary:Models.Domain.DicTbl
+    public class VMDictionary:DomainClass.DomainClass.DicTbl
     {
         // CountMoroor = ((int)W.UnSuccessCount + (int)W.SuccessCount)
         public int CountMoroor { get; set; }
@@ -21,6 +21,6 @@ namespace AdvanceMYS.Models.ViewModels.Dictionary
         /// </summary>
         public string UpOrDown { get; set; }
         public bool statusCheck { get; set; }
-        public List<Models.Domain.ExampleTbl> lstExample { get; set; }
+        public List<DomainClass.DomainClass.ExampleTbl> lstExample { get; set; }
     }
 }

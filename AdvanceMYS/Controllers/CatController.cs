@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AdvanceMYS.Models.Domain;
+using DomainClass.DomainClass;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdvanceMYS.Controllers
 {
     public class CatController : Controller
     {
-        private readonly _5069_ManageYourSelfContext _db;
-        public CatController(_5069_ManageYourSelfContext db)
+        private readonly _Context _db;
+        public CatController(_Context db)
         {
             _db = db;
         }
@@ -24,7 +25,7 @@ namespace AdvanceMYS.Controllers
             var res = _db.Cats.SingleOrDefault(q => q.CatId == CatId);
             return Json(res);
         }
-        public IActionResult CreateUpdateCat(Models.Domain.Cat Cat) {
+        public IActionResult CreateUpdateCat(Cat Cat) {
             //create
             if (Cat.CatId == 0)
             {

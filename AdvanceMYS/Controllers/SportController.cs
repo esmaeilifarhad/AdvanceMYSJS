@@ -14,10 +14,10 @@ namespace AdvanceMYS.Controllers
     {
 
         #region Initial
-        private readonly _5069_ManageYourSelfContext DB;
+        private readonly _Context DB;
             Models.ADO.UIDSConnection U = new Models.ADO.UIDSConnection();
         int UserId = 1;
-            public SportController(_5069_ManageYourSelfContext db)
+            public SportController(_Context db)
             {
             DB = db;
             }
@@ -82,7 +82,7 @@ namespace AdvanceMYS.Controllers
                 return PartialView(lstV);
             }
             [HttpPost]
-            public JsonResult Create(Models.Domain.Sport New, string StrTedad)
+            public JsonResult Create(DomainClass.DomainClass.Sport New, string StrTedad)
             {
                 New.Date = New.Date.ConvertDateToSqlFormat();
                 string result = "";
@@ -116,11 +116,11 @@ namespace AdvanceMYS.Controllers
                 return Json(result);
             }
             [HttpPost]
-            public JsonResult CreateNewSport(Models.Domain.Sport New)
+            public JsonResult CreateNewSport(DomainClass.DomainClass.Sport New)
             {
 
                 New.Date = New.Date.ConvertDateToSqlFormat();
-                List<Models.Domain.Sport> lstSport = DB.Sports.Where(q => q.CatId == New.CatId && q.Date == New.Date).ToList();
+                List<DomainClass.DomainClass.Sport> lstSport = DB.Sports.Where(q => q.CatId == New.CatId && q.Date == New.Date).ToList();
                 int Set = 0;
                 foreach (var item in lstSport)
                 {
@@ -149,7 +149,7 @@ namespace AdvanceMYS.Controllers
                 return PartialView(Old);
             }
             [HttpPost]
-            public ActionResult Update(Models.Domain.Sport New)
+            public ActionResult Update(DomainClass.DomainClass.Sport New)
             {
                 var Old = DB.Sports.SingleOrDefault(q => q.SportId == New.SportId);
                 Old.Date = New.Date;

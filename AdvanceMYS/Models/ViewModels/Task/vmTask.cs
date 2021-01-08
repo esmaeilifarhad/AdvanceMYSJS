@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace AdvanceMYS.Models.ViewModels.Task
 {
-    public class vmTask:Models.Domain.Task
+    public class vmTask:DomainClass.DomainClass.Task
     {
-        public List<Models.Domain.Cat> lstCat { get; set; }
-        public Models.Domain.Task Task { get; set; }
-        public List<Domain.ManageTime> lstManageTime { get; set; }
+        public List<DomainClass.DomainClass.Cat> lstCat { get; set; }
+        public DomainClass.DomainClass.Task Task { get; set; }
+        public List<DomainClass.DomainClass.ManageTime> lstManageTime { get; set; }
         public int Minute { get; set; }
         public int Hour { get; set; }
-        public Timing Timing { get; set; }
+        public DomainClass.DomainClass.Timing Timing { get; set; }
 
         public int TimingId { get; set; }
         public int ManageTimeId { get; set; }

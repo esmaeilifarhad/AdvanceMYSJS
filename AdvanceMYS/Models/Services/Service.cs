@@ -11,10 +11,10 @@ namespace AdvanceMYS.Models.Services
 {
     public class Service
     {
-        private readonly _5069_ManageYourSelfContext _db;
+        private readonly _Context _db;
         //_5069_ManageYourSelfContext s = new _5069_ManageYourSelfContext();
         MessageSender _messageSender = new MessageSender();
-        public Service(_5069_ManageYourSelfContext db)
+        public Service(_Context db)
         {
             _db = db;
         }

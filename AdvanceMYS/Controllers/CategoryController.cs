@@ -13,9 +13,9 @@ namespace AdvanceMYS.Controllers
 
     public class CategoryController : Controller
     {
-        private readonly _5069_ManageYourSelfContext _db;
+        private readonly _Context _db;
         int UserId = 1;
-        public CategoryController(_5069_ManageYourSelfContext db)
+        public CategoryController(_Context db)
         {
             _db = db;
         }
@@ -25,7 +25,7 @@ namespace AdvanceMYS.Controllers
             return Json(_db.Categories.ToList());
         }
     
-        public IActionResult CreateUpdatePost(Models.Domain.Category Category)
+        public IActionResult CreateUpdatePost(DomainClass.DomainClass.Category Category)
         {
             //create
             if (Category.CategoryId == 0)
@@ -78,7 +78,7 @@ namespace AdvanceMYS.Controllers
         {
             return Json(_db.Jobs.SingleOrDefault(q => q.JobId == Id));
         }
-        public IActionResult CreateUpdateJobPost(Models.Domain.Job job)
+        public IActionResult CreateUpdateJobPost(DomainClass.DomainClass.Job job)
         {
             //create
             if (job.JobId == 0)
@@ -115,7 +115,7 @@ namespace AdvanceMYS.Controllers
                 _db.PercentJobs.SingleOrDefault(q=>q.JobId==jobId && q.Date==today)
                 );
         }
-        public IActionResult PercentJobPost(Models.Domain.PercentJob newPercentJob)
+        public IActionResult PercentJobPost(DomainClass.DomainClass.PercentJob newPercentJob)
         {
             
             string today = Utility.ConvertDateToSqlFormat(Utility.shamsi_date());

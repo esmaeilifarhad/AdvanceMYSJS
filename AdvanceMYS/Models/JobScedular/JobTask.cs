@@ -33,7 +33,7 @@ namespace AdvanceMYS.Models.JobScedular
         {
             using (var scope2 = scopeFactory.CreateScope())
             {
-                var dbContext = scope2.ServiceProvider.GetRequiredService<_5069_ManageYourSelfContext>();
+                var dbContext = scope2.ServiceProvider.GetRequiredService<_Context>();
                 Models.Services.Service s = new Services.Service(dbContext);
                 s.SendTaskEmail();
             }

@@ -14,11 +14,11 @@ namespace AdvanceMYS.Controllers
     public class DictionaryController : Controller
     {
 
-        private readonly _5069_ManageYourSelfContext _db;
+        private readonly _Context _db;
        
         int _userId = 1;
         Models.ADO.UIDSConnection U = new Models.ADO.UIDSConnection();
-        public DictionaryController(_5069_ManageYourSelfContext db)
+        public DictionaryController(_Context db)
         {
             _db = db;
           
@@ -168,7 +168,7 @@ group by level
             //insert
             else
             {
-                Models.Domain.DicTbl D = new DicTbl();
+                DomainClass.DomainClass.DicTbl D = new DomainClass.DomainClass.DicTbl();
                 D.Level = 10;
                 D.Per = word.Per;
                 D.Eng = word.Eng;
@@ -188,7 +188,7 @@ group by level
                 return Json("خطایی در ثبت رخ داده است");
             }
         }
-        public IActionResult CreateUpdateExample(Models.Domain.ExampleTbl exampleNew)
+        public IActionResult CreateUpdateExample(DomainClass.DomainClass.ExampleTbl exampleNew)
         {
             string[] parts = new string[0];
             parts = exampleNew.Example.Split(new string[] { "@@" }, StringSplitOptions.None);
@@ -202,7 +202,7 @@ group by level
                 {
                     for (int i = 0; i < parts.Length; i++)
                     {
-                        Models.Domain.ExampleTbl e = new ExampleTbl();
+                        DomainClass.DomainClass.ExampleTbl e = new DomainClass.DomainClass.ExampleTbl();
                         e.IdDicTbl = exampleNew.IdDicTbl;
                         e.Example = parts[i];
                         _db.ExampleTbls.Add(e);
@@ -229,7 +229,7 @@ group by level
                 {
                     for (int i = 0; i < parts.Length; i++)
                     {
-                        Models.Domain.ExampleTbl e = new ExampleTbl();
+                        DomainClass.DomainClass.ExampleTbl e = new DomainClass.DomainClass.ExampleTbl();
                         e.IdDicTbl = exampleNew.IdDicTbl;
                         e.Example = parts[i];
                         _db.ExampleTbls.Add(e);
@@ -238,7 +238,7 @@ group by level
                 }
                 else
                 {
-                    Models.Domain.ExampleTbl e = new ExampleTbl();
+                    DomainClass.DomainClass.ExampleTbl e = new DomainClass.DomainClass.ExampleTbl();
                     e.IdDicTbl = exampleNew.IdDicTbl;
                     e.Example = exampleNew.Example;
                     _db.ExampleTbls.Add(e);

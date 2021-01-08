@@ -11,8 +11,8 @@ namespace AdvanceMYS.Controllers
 {
     public class KarkardController : Controller
     {
-        private readonly _5069_ManageYourSelfContext _db;
-        public KarkardController(_5069_ManageYourSelfContext db)
+        private readonly _Context _db;
+        public KarkardController(_Context db)
         {
             _db = db;
         }
@@ -20,7 +20,7 @@ namespace AdvanceMYS.Controllers
         {
             return View();
         }
-        public JsonResult Create(Models.Domain.KarKard New)
+        public JsonResult Create(DomainClass.DomainClass.KarKard New)
         {
 
         
@@ -35,7 +35,7 @@ namespace AdvanceMYS.Controllers
 
             }
 
-            List<Models.Domain.KarKard> lstKarkard = 
+            List<DomainClass.DomainClass.KarKard> lstKarkard = 
                 _db.KarKards.
                 Include(q=>q.Job).
                 Where(q => q.DayDate == New.DayDate &&  q.StartTime == New.StartTime && q.EndTime == New.EndTime).
@@ -53,7 +53,7 @@ namespace AdvanceMYS.Controllers
                 return Json(description);
             }
 
-            Models.Domain.KarKard oldKarkard = _db.KarKards.Include(q=>q.Job).SingleOrDefault(q => q.DayDate == New.DayDate && q.StartTime == New.StartTime);
+            DomainClass.DomainClass.KarKard oldKarkard = _db.KarKards.Include(q=>q.Job).SingleOrDefault(q => q.DayDate == New.DayDate && q.StartTime == New.StartTime);
             if (oldKarkard != null)
             {
                 if (oldKarkard.JobId != New.JobId)

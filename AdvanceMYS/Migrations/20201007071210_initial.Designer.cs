@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdvanceMYS.Migrations
 {
-    [DbContext(typeof(_5069_ManageYourSelfContext))]
+    [DbContext(typeof(_Context))]
     [Migration("20201007071210_initial")]
     partial class initial
     {
@@ -21,7 +21,7 @@ namespace AdvanceMYS.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0-rc.1.20451.13");
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Book", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Book", b =>
                 {
                     b.Property<int>("BookId")
                         .ValueGeneratedOnAdd()
@@ -67,7 +67,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Book", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Cat", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Cat", b =>
                 {
                     b.Property<int>("CatId")
                         .ValueGeneratedOnAdd()
@@ -97,7 +97,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Cat", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Category", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -119,7 +119,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Category", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.ContentTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.ContentTbl", b =>
                 {
                     b.Property<int>("ContentId")
                         .ValueGeneratedOnAdd()
@@ -145,7 +145,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("ContentTbl", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.DaysExercise", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.DaysExercise", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -170,7 +170,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("DaysExercise", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.DicTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.DicTbl", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -254,7 +254,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("dic_tbl", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.ExampleTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.ExampleTbl", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -278,7 +278,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("example_tbl", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Iodayly", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Iodayly", b =>
                 {
                     b.Property<int>("Ioid")
                         .ValueGeneratedOnAdd()
@@ -312,7 +312,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("IODayly", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Job", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Job", b =>
                 {
                     b.Property<int>("JobId")
                         .ValueGeneratedOnAdd()
@@ -340,7 +340,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Job", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.KarKard", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.KarKard", b =>
                 {
                     b.Property<int>("KarkardId")
                         .ValueGeneratedOnAdd()
@@ -374,7 +374,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("KarKard", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.LogTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.LogTbl", b =>
                 {
                     b.Property<int>("LogId")
                         .ValueGeneratedOnAdd()
@@ -404,7 +404,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("LogTBL", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.ManageTime", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.ManageTime", b =>
                 {
                     b.Property<int>("ManageTimeId")
                         .ValueGeneratedOnAdd()
@@ -424,7 +424,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("ManageTime", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.MasterDatum", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.MasterDatum", b =>
                 {
                     b.Property<int>("MasterDataId")
                         .ValueGeneratedOnAdd()
@@ -454,7 +454,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("MasterDatum", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Menu", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Menu", b =>
                 {
                     b.Property<int>("MenuId")
                         .ValueGeneratedOnAdd()
@@ -489,7 +489,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Menu", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Menuha", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Menuha", b =>
                 {
                     b.Property<int>("MenuhaId")
                         .ValueGeneratedOnAdd()
@@ -512,7 +512,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Menuha", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.MvchomeHeaderThree", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.MvchomeHeaderThree", b =>
                 {
                     b.Property<int>("MvchomeHeaderThreeId")
                         .ValueGeneratedOnAdd()
@@ -536,7 +536,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("MVCHomeHeaderThree", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Namad", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Namad", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -576,7 +576,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Namad", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.NamadDetail", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.NamadDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -609,7 +609,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("NamadDetail", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.PercentJob", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.PercentJob", b =>
                 {
                     b.Property<int>("PercentId")
                         .ValueGeneratedOnAdd()
@@ -635,7 +635,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("PercentJob", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Player", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Player", b =>
                 {
                     b.Property<int>("PlayersId")
                         .ValueGeneratedOnAdd()
@@ -659,7 +659,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Player", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.PlayerScore", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.PlayerScore", b =>
                 {
                     b.Property<int>("PlayerScoreId")
                         .ValueGeneratedOnAdd()
@@ -684,7 +684,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("PlayerScore", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Role", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Role", b =>
                 {
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
@@ -704,7 +704,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Role", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.RoutineJob", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.RoutineJob", b =>
                 {
                     b.Property<int>("RoutineJobId")
                         .ValueGeneratedOnAdd()
@@ -736,7 +736,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("RoutineJob", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.RoutineJobHa", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.RoutineJobHa", b =>
                 {
                     b.Property<int>("RoutineJobHa1")
                         .ValueGeneratedOnAdd()
@@ -765,7 +765,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("RoutineJobHa", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Setting", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Setting", b =>
                 {
                     b.Property<int>("SettingId")
                         .ValueGeneratedOnAdd()
@@ -802,7 +802,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Setting", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.ShowLastPercantageJob", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.ShowLastPercantageJob", b =>
                 {
                     b.Property<int?>("Jobid")
                         .HasColumnType("int")
@@ -819,7 +819,7 @@ namespace AdvanceMYS.Migrations
                     b.ToView("ShowLastPercantageJob");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.ShowSumLastPercantage", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.ShowSumLastPercantage", b =>
                 {
                     b.Property<int?>("Percantage")
                         .HasColumnType("int");
@@ -827,7 +827,7 @@ namespace AdvanceMYS.Migrations
                     b.ToView("ShowSumLastPercantage");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.SliderPhoto", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.SliderPhoto", b =>
                 {
                     b.Property<int>("SliderPhotoId")
                         .ValueGeneratedOnAdd()
@@ -854,7 +854,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("SliderPhoto", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Sport", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Sport", b =>
                 {
                     b.Property<int>("SportId")
                         .ValueGeneratedOnAdd()
@@ -882,7 +882,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Sport", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Taghvim", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Taghvim", b =>
                 {
                     b.Property<int>("TaghvimId")
                         .ValueGeneratedOnAdd()
@@ -903,7 +903,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Taghvim", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Task", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Task", b =>
                 {
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()
@@ -954,7 +954,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Task", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.TaskImage", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.TaskImage", b =>
                 {
                     b.Property<int>("TaskImageId")
                         .ValueGeneratedOnAdd()
@@ -979,7 +979,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("TaskImage", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Timing", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Timing", b =>
                 {
                     b.Property<int>("TimingId")
                         .ValueGeneratedOnAdd()
@@ -1001,7 +1001,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("Timing", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.TitleTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.TitleTbl", b =>
                 {
                     b.Property<int>("TitleId")
                         .ValueGeneratedOnAdd()
@@ -1027,7 +1027,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("TitleTbl", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.User", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -1069,7 +1069,7 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("User", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.UserRole", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.UserRole", b =>
                 {
                     b.Property<int>("UserRoleId")
                         .ValueGeneratedOnAdd()
@@ -1091,9 +1091,9 @@ namespace AdvanceMYS.Migrations
                     b.ToTable("UserRole", "5069_Esmaeili");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Book", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Book", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.User", "User")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.User", "User")
                         .WithMany("Books")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_Book_Users");
@@ -1101,9 +1101,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Category", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Category", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.User", "User")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.User", "User")
                         .WithMany("Categories")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_Category_Users")
@@ -1112,9 +1112,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.ContentTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.ContentTbl", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.TitleTbl", "Title")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.TitleTbl", "Title")
                         .WithMany("ContentTbls")
                         .HasForeignKey("TitleId")
                         .HasConstraintName("FK_ContentTbl_TitleTbl");
@@ -1122,9 +1122,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Title");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.DaysExercise", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.DaysExercise", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.DicTbl", "Word")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.DicTbl", "Word")
                         .WithMany("DaysExercises")
                         .HasForeignKey("WordId")
                         .HasConstraintName("FK_DaysExercise_dic_tbl")
@@ -1133,9 +1133,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Word");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.DicTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.DicTbl", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.User", "User")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.User", "User")
                         .WithMany("DicTbls")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_dic_tbl_Users")
@@ -1144,9 +1144,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.ExampleTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.ExampleTbl", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.DicTbl", "IdDicTblNavigation")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.DicTbl", "IdDicTblNavigation")
                         .WithMany("ExampleTbls")
                         .HasForeignKey("IdDicTbl")
                         .HasConstraintName("FK_example_tbl_dic_tbl")
@@ -1156,9 +1156,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("IdDicTblNavigation");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Job", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Job", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.Category", "Category")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Category", "Category")
                         .WithMany("Jobs")
                         .HasForeignKey("CategoryId")
                         .HasConstraintName("FK_Job_Category")
@@ -1167,9 +1167,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.KarKard", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.KarKard", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.Job", "Job")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Job", "Job")
                         .WithMany("KarKards")
                         .HasForeignKey("JobId")
                         .HasConstraintName("FK_KarKard_Job")
@@ -1178,9 +1178,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Job");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.NamadDetail", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.NamadDetail", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.Namad", "Namad")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Namad", "Namad")
                         .WithMany("NamadDetails")
                         .HasForeignKey("NamadId")
                         .HasConstraintName("FK_NamadDetail_Namad")
@@ -1189,9 +1189,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Namad");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.PercentJob", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.PercentJob", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.Job", "Job")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Job", "Job")
                         .WithMany("PercentJobs")
                         .HasForeignKey("JobId")
                         .HasConstraintName("FK_PercentJob_Job")
@@ -1201,16 +1201,16 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Job");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.PlayerScore", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.PlayerScore", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.Player", "Player")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Player", "Player")
                         .WithMany("PlayerScores")
                         .HasForeignKey("PlayerId")
                         .HasConstraintName("FK_PlayerScore_Players")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AdvanceMYS.Models.Domain.User", "User")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.User", "User")
                         .WithMany("PlayerScores")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_PlayerScore_Users")
@@ -1222,9 +1222,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.RoutineJob", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.RoutineJob", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.User", "User")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.User", "User")
                         .WithMany("RoutineJobs")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_RoutineJob_Users");
@@ -1232,9 +1232,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.RoutineJobHa", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.RoutineJobHa", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.RoutineJob", "RoutineJob")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.RoutineJob", "RoutineJob")
                         .WithMany("RoutineJobHas")
                         .HasForeignKey("RoutineJobId")
                         .HasConstraintName("FK_RoutineJobHa_RoutineJob")
@@ -1244,9 +1244,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("RoutineJob");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Sport", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Sport", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.Cat", "Cat")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Cat", "Cat")
                         .WithMany("Sports")
                         .HasForeignKey("CatId")
                         .HasConstraintName("FK_Sport_Cat")
@@ -1255,14 +1255,14 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Cat");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Task", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Task", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.Cat", "Cat")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Cat", "Cat")
                         .WithMany("Tasks")
                         .HasForeignKey("CatId")
                         .HasConstraintName("FK_Task_Cat");
 
-                    b.HasOne("AdvanceMYS.Models.Domain.User", "User")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.User", "User")
                         .WithMany("Tasks")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_Task_Users")
@@ -1274,9 +1274,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.TaskImage", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.TaskImage", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.Task", "Task")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Task", "Task")
                         .WithMany("TaskImages")
                         .HasForeignKey("TaskId")
                         .HasConstraintName("FK_TaskImage_Task");
@@ -1284,16 +1284,16 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Task");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Timing", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Timing", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.ManageTime", "ManageTime")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.ManageTime", "ManageTime")
                         .WithMany("Timings")
                         .HasForeignKey("ManageTimeId")
                         .HasConstraintName("FK_Timing_ManageTime")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AdvanceMYS.Models.Domain.Task", "Task")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Task", "Task")
                         .WithMany("Timings")
                         .HasForeignKey("TaskId")
                         .HasConstraintName("FK_Timing_Task")
@@ -1305,9 +1305,9 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Task");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.TitleTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.TitleTbl", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.Book", "Book")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Book", "Book")
                         .WithMany("TitleTbls")
                         .HasForeignKey("BookId")
                         .HasConstraintName("FK_TitleTbl_Book");
@@ -1315,16 +1315,16 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Book");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.UserRole", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.UserRole", b =>
                 {
-                    b.HasOne("AdvanceMYS.Models.Domain.Role", "Role")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .HasConstraintName("FK_UserRole_Role")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AdvanceMYS.Models.Domain.User", "User")
+                    b.HasOne("AdvanceMYS.DomainClass.DomainClass.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_UserRole_Users")
@@ -1336,75 +1336,75 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Book", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Book", b =>
                 {
                     b.Navigation("TitleTbls");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Cat", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Cat", b =>
                 {
                     b.Navigation("Sports");
 
                     b.Navigation("Tasks");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Category", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Category", b =>
                 {
                     b.Navigation("Jobs");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.DicTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.DicTbl", b =>
                 {
                     b.Navigation("DaysExercises");
 
                     b.Navigation("ExampleTbls");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Job", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Job", b =>
                 {
                     b.Navigation("KarKards");
 
                     b.Navigation("PercentJobs");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.ManageTime", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.ManageTime", b =>
                 {
                     b.Navigation("Timings");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Namad", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Namad", b =>
                 {
                     b.Navigation("NamadDetails");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Player", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Player", b =>
                 {
                     b.Navigation("PlayerScores");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Role", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.RoutineJob", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.RoutineJob", b =>
                 {
                     b.Navigation("RoutineJobHas");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.Task", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.Task", b =>
                 {
                     b.Navigation("TaskImages");
 
                     b.Navigation("Timings");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.TitleTbl", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.TitleTbl", b =>
                 {
                     b.Navigation("ContentTbls");
                 });
 
-            modelBuilder.Entity("AdvanceMYS.Models.Domain.User", b =>
+            modelBuilder.Entity("AdvanceMYS.DomainClass.DomainClass.User", b =>
                 {
                     b.Navigation("Books");
 

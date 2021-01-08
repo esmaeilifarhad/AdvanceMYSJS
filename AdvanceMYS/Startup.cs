@@ -39,14 +39,14 @@ namespace AdvanceMYS
             //192.168.1.105    home
             if (IpAddress == "172.31.195.125" )
             {
-                services.AddDbContext<Models.Domain._5069_ManageYourSelfContext>(options =>
+                services.AddDbContext<Models.Domain._Context>(options =>
         options.UseSqlServer(
             Configuration.GetConnectionString("MYS_ConnectionJob")));
                 Models.Connection.Connection._ConnectionString = Configuration.GetConnectionString("MYS_ConnectionJob");
             }
             else
             {
-                services.AddDbContext<Models.Domain._5069_ManageYourSelfContext>(options =>
+                services.AddDbContext<Models.Domain._Context>(options =>
             options.UseSqlServer(
                 Configuration.GetConnectionString("MYS_Connection")));
                 Models.Connection.Connection._ConnectionString = Configuration.GetConnectionString("MYS_Connection");

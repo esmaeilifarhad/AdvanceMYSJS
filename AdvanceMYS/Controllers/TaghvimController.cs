@@ -9,8 +9,8 @@ namespace AdvanceMYS.Controllers
 {
     public class TaghvimController : Controller
     {
-        private readonly _5069_ManageYourSelfContext _db;
-        public TaghvimController(_5069_ManageYourSelfContext db)
+        private readonly _Context _db;
+        public TaghvimController(_Context db)
         {
             _db = db;
         }
@@ -18,7 +18,7 @@ namespace AdvanceMYS.Controllers
         {
             return Json(_db.Taghvim.OrderByDescending(q=>q.Date).ToList());
         }
-        public IActionResult CreateUpdateTaghvimPost(Models.Domain.Taghvim Taghvim) {
+        public IActionResult CreateUpdateTaghvimPost(DomainClass.DomainClass.Taghvim Taghvim) {
             //create
             if (Taghvim.TaghvimId == 0)
             {
