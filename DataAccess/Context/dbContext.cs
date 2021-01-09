@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Context
 {
-    public partial class dbContext:DbContext
+    public  class dbContext:DbContext
     {
         public dbContext(DbContextOptions<dbContext> options) : base(options)
         {
 
         }
 
-
+        #region DbSet
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<Cat> Cats { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
@@ -57,6 +57,7 @@ namespace DataAccess.Context
         public virtual DbSet<TitleTbl> TitleTbls { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
+        #endregion
 
         //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //        {
@@ -72,7 +73,7 @@ namespace DataAccess.Context
 
 
 
-
+            #region FluentAPI
             modelBuilder.Entity<Book>(entity =>
             {
                 entity.ToTable("Book", "5069_Esmaeili");
@@ -720,11 +721,11 @@ namespace DataAccess.Context
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_UserRole_Users");
             });
-
-            OnModelCreatingPartial(modelBuilder);
+            #endregion
+            //OnModelCreatingPartial(modelBuilder);
         }
 
-        void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        //void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 
 }

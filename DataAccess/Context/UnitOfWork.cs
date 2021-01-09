@@ -7,7 +7,11 @@ namespace DataAccess.Context
 {
     public class UnitOfWork<TEntity> where TEntity : class/*, IDisposable*/
     {
-        dbContext db = new dbContext();
+       private readonly dbContext db ;
+        public UnitOfWork(dbContext db)
+        {
+            this.db = db;
+        }
         private GenericRepository<TEntity> repository;
         public GenericRepository<TEntity> Repository
         {
