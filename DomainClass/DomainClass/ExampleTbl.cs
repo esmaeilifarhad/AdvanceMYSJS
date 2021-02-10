@@ -10,6 +10,7 @@ namespace DomainClass.DomainClass
         public int Id { get; set; }
         public int IdDicTbl { get; set; }
         public string Example { get; set; }
+        public int GetFromExample { get; set; }
 
         public virtual DicTbl IdDicTblNavigation { get; set; }
     }

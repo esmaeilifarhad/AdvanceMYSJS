@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using AdvanceMYS.Models.Domain;
 using AdvanceMYS.Models.Utility;
 using Dapper;
@@ -160,7 +161,7 @@ group by level
                 oldword.CreateDateM = (oldword.CreateDateM == null ? DateTime.Now : oldword.CreateDateM);
 
 
-
+                AddExamples(oldword);
 
                 var res = _db.SaveChanges();
                 return Json(oldword);
@@ -183,11 +184,67 @@ group by level
                 D.UserId = _userId;
                 _db.DicTbls.Add(D);
 
+
                 if (_db.SaveChanges() > 0)
                     return Json("با موفقیت ثبت شد");
                 return Json("خطایی در ثبت رخ داده است");
             }
         }
+
+        private void AddExamples(DomainClass.DomainClass.DicTbl word)
+        {
+            
+         
+                 var oldExamples = _db.ExampleTbls.Where(q => q.IdDicTbl == word.Id);
+                 List<DomainClass.DomainClass.ExampleTbl> lstExample = new List<DomainClass.DomainClass.ExampleTbl>();
+                 //var newExamples = _db.ExampleTbls.Where(q=>q.Example.ToLower()==word.Eng.ToLower());
+                 //var newExamples2 = _db.ExampleTbls.Where(q => q.Example.ToLower().Contains(word.Eng.ToLower()));
+                 //var newExamples3 = _db.ExampleTbls.Where(q => q.Example.ToLower().StartsWith(word.Eng.ToLower()));
+
+                 string query = @"
+select * from example_tbl
+where example like '% " + word.Eng + " %'";
+                 using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
+                 {
+
+                     lstExample = DB.Query<DomainClass.DomainClass.ExampleTbl>(query).ToList();
+                 }
+
+                 foreach (var item in lstExample)
+                 {
+                     bool isDuplicate = false;
+                     if (oldExamples != null)
+                     {
+                         var res = oldExamples.SingleOrDefault(q => q.Example == item.Example || q.GetFromExample == item.Id);
+                         if (res != null)
+                         {
+                             isDuplicate = true;
+                         }
+                     }
+                     else
+                     {
+                         // isDuplicate = false;
+                     }
+
+                     if (isDuplicate == false)
+                     {
+                         var old = _db.ExampleTbls.SingleOrDefault(q => q.Id == item.Id);
+                         DomainClass.DomainClass.ExampleTbl newExample = new DomainClass.DomainClass.ExampleTbl()
+                         {
+                             Example = _db.DicTbls.SingleOrDefault(q => q.Id == old.IdDicTbl).Eng + " _Added : " + item.Example,
+                             IdDicTbl = word.Id,
+                             GetFromExample = item.Id
+                         };
+                         _db.ExampleTbls.Add(newExample);
+                     }
+                 }
+                 _db.SaveChanges();
+             
+          
+           
+        
+        }
+
         public IActionResult CreateUpdateExample(DomainClass.DomainClass.ExampleTbl exampleNew)
         {
             string[] parts = new string[0];
