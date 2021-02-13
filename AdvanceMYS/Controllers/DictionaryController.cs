@@ -203,7 +203,7 @@ group by level
 
                  string query = @"
 select * from example_tbl
-where example like '% " + word.Eng + " %'";
+where example like '% " + word.Eng + "%'";
                  using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
                  {
 
