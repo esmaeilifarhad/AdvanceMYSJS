@@ -4,6 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
+
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-4">
@@ -31,14 +35,83 @@
             <div class="ListKarkardNew" style="font-size:10px;"></div>
         </div>
     </div>
-    
+
     <div class="row">
-        
+
         <div class="col-lg-4">
-         
+
             <div class="ListTaskTomarow" style=" background-image: linear-gradient(45deg, #daab95, transparent);"></div>
         </div>
-            <div class="col-lg-4"></div>
-            <div class="col-lg-4"></div>
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div id="chartContainer1" style="height: 300px; width: 100%;"></div>
         </div>
+        <div class="col-lg-6">
+            <div id="chartContainer2" style="height: 300px; width: 100%;"></div>
+        </div>
+    </div>
 </div>
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript">
+    async function ChartDicLevel() {
+        var obj = {}
+        obj.url = "/Dictionary/ChartDicLevel"
+        obj.dataType = "json"
+        obj.type = "post"
+        //obj.data = {
+        //    TaskId: TaskId,
+        //    IsCheck: IsCheck,
+        //    DateEnd: DateEnd
+
+        //}
+        var results = await Promise.all([
+            service(obj)
+        ]);
+        var ListObj = results[0]
+
+        return ListObj
+    }
+
+
+
+
+
+
+
+    window.onload =async function () {
+        var data2 = await ChartDicLevel()
+        var chart2 = new CanvasJS.Chart("chartContainer2",
+            {
+                theme: "light2",
+                title: {
+                    text: "Gaming Consoles Sold in 2012"
+                },
+                data: [
+                    {
+                        type: "pie",
+                        showInLegend: true,
+                        toolTipContent: "{y} - #percent %",
+                        yValueFormatString: "#,##0,,.## Million",
+                        legendText: "{indexLabel}",
+                        dataPoints: data2
+                        //dataPoints: [
+                        //    { y: 4181563, indexLabel: "PlayStation 3" },
+                        //    { y: 2175498, indexLabel: "Wii" },
+                        //    { y: 3125844, indexLabel: "Xbox 360" },
+                        //    { y: 1176121, indexLabel: "Nintendo DS" },
+                        //    { y: 1727161, indexLabel: "PSP" },
+                        //    { y: 4303364, indexLabel: "Nintendo 3DS" },
+                        //    { y: 1717786, indexLabel: "PS Vita" }
+                        //]
+                    }
+                ]
+            });
+        chart2.render();
+    }
+
+    
+</script>

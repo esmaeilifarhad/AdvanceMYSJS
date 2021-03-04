@@ -10,7 +10,7 @@ namespace DomainClass.DomainClass
         public DicTbl()
         {
             DaysExercises = new HashSet<DaysExercise>();
-            ExampleTbls = new HashSet<ExampleTbl>();
+            //ExampleTbls = new HashSet<ExampleTbl>();
         }
 
         public int Id { get; set; }
@@ -33,6 +33,7 @@ namespace DomainClass.DomainClass
         public bool? LastIsTrueFalse { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<DaysExercise> DaysExercises { get; set; }
-        public virtual ICollection<ExampleTbl> ExampleTbls { get; set; }
+        //public virtual ICollection<ExampleTbl> ExampleTbls { get; set; }
+        public List<DicExamples>  dicExamples { get; set; }
     }
 }

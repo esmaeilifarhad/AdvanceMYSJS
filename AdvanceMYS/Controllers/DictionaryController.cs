@@ -67,7 +67,7 @@ group by level
             if (level == 80)
             {
                var today= Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
-                var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
+                var resDic = _db.DicTbls.Include(q => q.dicExamples).
                 Where(q => q.LastStatus == false  ).
                 OrderBy(q => q.DateRefresh).
                 ThenBy(q => q.Time).
@@ -82,7 +82,7 @@ group by level
             }
             else
             {
-                var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
+                var resDic = _db.DicTbls.Include(q => q.dicExamples).
                       Where(q => q.Level == level && q.IsArchieve == false).
                       OrderBy(q => q.DateRefresh).
                       ThenBy(q => q.Time).
@@ -373,7 +373,7 @@ group by eng,d.id,d.per,d.level,d.IsArchieve,d.date_refresh,d.date_s,d.SuccessCo
                 V.SuccessCount = int.Parse(item["SuccessCount"].ToString());
                 V.UnSuccessCount = int.Parse(item["UnSuccessCount"].ToString());
 
-                V.ExampleTbls = _db.ExampleTbls.Where(q => q.IdDicTbl == V.Id && q.Example.Contains(str)).ToList();
+                V.lstExample = _db.ExampleTbls.Where(q => q.IdDicTbl == V.Id && q.Example.Contains(str)).ToList();
                 lstV.Add(V);
             }
             return Json(lstV);
@@ -382,8 +382,26 @@ group by eng,d.id,d.per,d.level,d.IsArchieve,d.date_refresh,d.date_s,d.SuccessCo
         public  IActionResult SearchWord(string str) {
 
            
-            return   Json(_db.DicTbls.Include(q=>q.ExampleTbls).Where(q=>q.Eng.Contains(str)).ToList());
+            return   Json(_db.DicTbls.Include(q=>q.dicExamples).Where(q=>q.Eng.Contains(str)).ToList());
         }
+        public IActionResult ChartDicLevel() {
+            List<DictionaryVM> lst = new List<DictionaryVM>();
+            string query = @"
+SELECT level as label,count(*) y
+  FROM [5069_ManageYourSelf].[5069_Esmaeili].[dic_tbl]
+  group by level";
+            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
+            {
+
+                lst = DB.Query<DictionaryVM>(query).ToList();
+            }
+
+            return Json(lst);
+        }
+    }
+    public class DictionaryVM {
+        public int y { get; set; }
+        public string label { get; set; }
     }
 }
 

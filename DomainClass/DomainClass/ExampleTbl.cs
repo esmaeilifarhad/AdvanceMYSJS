@@ -12,6 +12,7 @@ namespace DomainClass.DomainClass
         public string Example { get; set; }
         public int GetFromExample { get; set; }
 
-        public virtual DicTbl IdDicTblNavigation { get; set; }
+        //public virtual DicTbl IdDicTblNavigation { get; set; }
+        public List<DicExamples> dicExamples { get; set; }
     }
 }

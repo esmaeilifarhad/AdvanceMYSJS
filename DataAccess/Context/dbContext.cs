@@ -243,10 +243,10 @@ namespace DataAccess.Context
 
                 entity.Property(e => e.IdDicTbl).HasColumnName("id_dic_tbl");
 
-                entity.HasOne(d => d.IdDicTblNavigation)
-                    .WithMany(p => p.ExampleTbls)
-                    .HasForeignKey(d => d.IdDicTbl)
-                    .HasConstraintName("FK_example_tbl_dic_tbl");
+                //entity.HasOne(d => d.IdDicTblNavigation)
+                //    .WithMany(p => p.ExampleTbls)
+                //    .HasForeignKey(d => d.IdDicTbl)
+                //    .HasConstraintName("FK_example_tbl_dic_tbl");
             });
 
 

@@ -22,7 +22,7 @@ namespace AdvanceMYS.Models.Services
             
             var today =Utility.Utility.ConvertDateToSqlFormat(Utility.Utility.shamsi_date());
 
-            var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
+            var resDic = _db.DicTbls.
             Where(q => q.LastStatus == false).
             OrderBy(q => q.DateRefresh).
             ThenBy(q => q.Time).
