@@ -92,7 +92,7 @@ async function ListWordLevel(level) {
     }
 }
 async function showListWordLevel(ListObj) {
-    debugger
+    
   //  var ListObj = await ListWordLevel(level)
 
     var styleWord = ""
@@ -369,6 +369,30 @@ async function levelUpDown(objectWord) {
     ListWordLevel(level)
 
 }
+async function SearchOldWord(thiss) {
+    
+    if (thiss.value.length < 3) return
+    var word = (thiss.value).trim()
+    var obj = {}
+    obj.url = "/Dictionary/SearchOldWord"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        str: word
+    }
+    var results = await Promise.all([
+        service(obj)
+        
+    ]);
+    var ListObj = results[0]
+    
+    $("#SearchOldWord").empty()
+    var table=""
+    for (var i = 0; i < ListObj.length; i++) {
+        table += "<p>" + ListObj[i].eng +' '+ ListObj[i].per+"</p>"
+    }
+    $("#SearchOldWord").append(table)
+}
 async function CreateUpdateWord(wordId) {
 
 
@@ -379,7 +403,7 @@ async function CreateUpdateWord(wordId) {
 
         var table = "<table class='table table-responsive'>" +
 
-            "<tr><td>انگلیسی</td><td><input type='text'  name='eng'  autocomplete='off' value=\"" + ListtObj.eng + "\"  /></td></tr>" +
+            "<tr><td>انگلیسی</td><td><input type='text'  name='eng'  autocomplete='off' value=\"" + ListtObj.eng + "\"  /><span id='SearchOldWord'></span></td></tr>" +
             "<tr><td>فارسی</td><td><textarea placehoder='توضیحات' name='per' class='form-control' rows='3'>" + ListtObj.per + "</textarea></td></tr>" +
 
 
@@ -395,7 +419,7 @@ async function CreateUpdateWord(wordId) {
     else {
         var table = "<table class='table table-responsive'>" +
 
-            "<tr><td>انگلیسی</td><td><input type='text'  name='eng'  autocomplete='off'   /></td></tr>" +
+            "<tr><td>انگلیسی</td><td><input type='text'  name='eng' onKeyup='SearchOldWord(this)'  autocomplete='off'   /><span id='SearchOldWord'></span></td></tr>" +
             "<tr><td>فارسی</td><td><textarea placehoder='توضیحات' name='per' class='form-control' rows='3'></textarea></td></tr>" +
 
 

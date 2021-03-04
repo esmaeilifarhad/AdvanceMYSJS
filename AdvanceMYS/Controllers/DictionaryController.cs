@@ -186,23 +186,38 @@ group by level
 
 
                 if (_db.SaveChanges() > 0)
+                {
+                    AddExamples(D);
                     return Json("با موفقیت ثبت شد");
+                }
                 return Json("خطایی در ثبت رخ داده است");
             }
         }
+        public IActionResult SearchOldWord(string str) {
+            List<DomainClass.DomainClass.DicTbl> lstWord = new List<DomainClass.DomainClass.DicTbl>();
+            string query = @"
+select * from [5069_ManageYourSelf].[5069_Esmaeili].[dic_tbl]
+where eng like '%" + str + "%'";
+            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
+            {
 
+                lstWord = DB.Query<DomainClass.DomainClass.DicTbl>(query).ToList();
+            }
+            return Json(lstWord);
+        }
         private void AddExamples(DomainClass.DomainClass.DicTbl word)
         {
             
          
                  var oldExamples = _db.ExampleTbls.Where(q => q.IdDicTbl == word.Id);
+
                  List<DomainClass.DomainClass.ExampleTbl> lstExample = new List<DomainClass.DomainClass.ExampleTbl>();
-                 //var newExamples = _db.ExampleTbls.Where(q=>q.Example.ToLower()==word.Eng.ToLower());
-                 //var newExamples2 = _db.ExampleTbls.Where(q => q.Example.ToLower().Contains(word.Eng.ToLower()));
-                 //var newExamples3 = _db.ExampleTbls.Where(q => q.Example.ToLower().StartsWith(word.Eng.ToLower()));
 
                  string query = @"
-select * from example_tbl
+select [id]
+      ,[id_dic_tbl] as IdDicTbl
+      ,[example]
+      ,[GetFromExample] from [5069_ManageYourSelf].[5069_Esmaeili].[example_tbl]
 where example like '% " + word.Eng + "%'";
                  using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
                  {
@@ -215,16 +230,22 @@ where example like '% " + word.Eng + "%'";
                      bool isDuplicate = false;
                      if (oldExamples != null)
                      {
-                         var res = oldExamples.SingleOrDefault(q => q.Example == item.Example || q.GetFromExample == item.Id);
+                         var res = oldExamples.FirstOrDefault(q => q.Example == item.Example || q.GetFromExample == item.Id || q.IdDicTbl==item.IdDicTbl);
                          if (res != null)
                          {
                              isDuplicate = true;
                          }
                      }
-                     else
-                     {
-                         // isDuplicate = false;
-                     }
+                if (item.GetFromExample != 0)
+                {
+
+                    isDuplicate = true;
+
+                }
+                else
+                {
+                    // isDuplicate = false;
+                }
 
                      if (isDuplicate == false)
                      {
@@ -236,12 +257,11 @@ where example like '% " + word.Eng + "%'";
                              GetFromExample = item.Id
                          };
                          _db.ExampleTbls.Add(newExample);
+                    
                      }
                  }
                  _db.SaveChanges();
              
-          
-           
         
         }
 
