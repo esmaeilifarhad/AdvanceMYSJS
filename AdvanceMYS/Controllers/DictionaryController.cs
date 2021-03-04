@@ -384,12 +384,16 @@ group by eng,d.id,d.per,d.level,d.IsArchieve,d.date_refresh,d.date_s,d.SuccessCo
            
             return   Json(_db.DicTbls.Include(q=>q.dicExamples).Where(q=>q.Eng.Contains(str)).ToList());
         }
+        #region Chart
         public IActionResult ChartDicLevel() {
             List<DictionaryVM> lst = new List<DictionaryVM>();
             string query = @"
-SELECT level as label,count(*) y
+
+  SELECT level as label,count(*) y
   FROM [5069_ManageYourSelf].[5069_Esmaeili].[dic_tbl]
-  group by level";
+  where  IsArchieve=0
+  group by level
+";
             using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
             {
 
@@ -398,6 +402,22 @@ SELECT level as label,count(*) y
 
             return Json(lst);
         }
+        public IActionResult ChartDicLevelPie()
+        {
+            List<DictionaryVM> lst = new List<DictionaryVM>();
+            string query = @"
+SELECT case IsArchieve when 0 then N'فعال' else N'آرشیو' end  label,count(*) y
+  FROM [5069_ManageYourSelf].[5069_Esmaeili].[dic_tbl]
+  group by IsArchieve";
+            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
+            {
+
+                lst = DB.Query<DictionaryVM>(query).ToList();
+            }
+
+            return Json(lst);
+        }
+        #endregion
     }
     public class DictionaryVM {
         public int y { get; set; }

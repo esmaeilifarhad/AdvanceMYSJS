@@ -404,5 +404,7 @@ async function CallAll() {
     var today = todayShamsy8char()
     ListTaskSeparate(today)
     RepeatedTaskForCheck()
+    CreateChart1()
+    CreateChart2()
 }
 

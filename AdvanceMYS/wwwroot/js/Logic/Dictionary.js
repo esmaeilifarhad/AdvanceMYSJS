@@ -563,3 +563,119 @@ async function DeleteWord(Id) {
     ListWordLevel(level)
     // $("#MasterModal").modal("toggle")
 }
+
+
+
+//------------------chart
+async function ChartDicLevel() {
+    var obj = {}
+    obj.url = "/Dictionary/ChartDicLevel"
+    obj.dataType = "json"
+    obj.type = "post"
+    //obj.data = {
+    //    TaskId: TaskId,
+    //    IsCheck: IsCheck,
+    //    DateEnd: DateEnd
+
+    //}
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+
+    return ListObj
+}
+
+async function ChartDicLevelPie() {
+    var obj = {}
+    obj.url = "/Dictionary/ChartDicLevelPie"
+    obj.dataType = "json"
+    obj.type = "post"
+    //obj.data = {
+    //    TaskId: TaskId,
+    //    IsCheck: IsCheck,
+    //    DateEnd: DateEnd
+
+    //}
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+
+    return ListObj
+}
+
+async function CreateChart1() {
+    
+    var data2 = await ChartDicLevelPie()
+    var chart2 = new CanvasJS.Chart("chartContainer2",
+        {
+            theme: "light2",
+            title: {
+                text: "Dictionaty By Level"
+            },
+            data: [
+                {
+                    type: "pie",
+                    showInLegend: true,
+                    toolTipContent: "{y} - #percent %",
+                    yValueFormatString: "#,##0,,.## Million",
+                    legendText: "{indexLabel}",
+                    dataPoints: data2
+                    //dataPoints: [
+                    //    { y: 4181563, indexLabel: "PlayStation 3" },
+                    //    { y: 2175498, indexLabel: "Wii" },
+                    //    { y: 3125844, indexLabel: "Xbox 360" },
+                    //    { y: 1176121, indexLabel: "Nintendo DS" },
+                    //    { y: 1727161, indexLabel: "PSP" },
+                    //    { y: 4303364, indexLabel: "Nintendo 3DS" },
+                    //    { y: 1717786, indexLabel: "PS Vita" }
+                    //]
+                }
+            ]
+        });
+    chart2.render();
+}
+async function CreateChart2() {
+    var dataCreateChart2 = await ChartDicLevel()
+    
+    var chart = new CanvasJS.Chart("chartContainer1", {
+        title: {
+            text: "Dictionary By Level"
+        },
+       // data: dataCreateChart2
+        data: [
+            {
+                // Change type to "doughnut", "line", "splineArea", etc.
+                type: "column",
+                dataPoints: dataCreateChart2
+            }
+        ]
+    });
+    chart.render();
+}
+
+
+
+//window.onload = function () {
+//    var chart = new CanvasJS.Chart("chartContainer", {
+//        title: {
+//            text: "My First Chart in CanvasJS"
+//        },
+//        data: [
+//            {
+//                // Change type to "doughnut", "line", "splineArea", etc.
+//                type: "column",
+//                dataPoints: [
+//                    { label: "apple", y: 10 },
+//                    { label: "orange", y: 15 },
+//                    { label: "banana", y: 25 },
+//                    { label: "mango", y: 30 },
+//                    { label: "grape", y: 28 }
+//                ]
+//            }
+//        ]
+//    });
+//    chart.render();
+//}
+
