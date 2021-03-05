@@ -61,7 +61,7 @@ namespace AdvanceMYS.Models.Domain
         public virtual DbSet<TitleTbl> TitleTbls { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
-        public virtual DbSet<DicExamples> DicExamples { get; set; }
+        //public virtual DbSet<DicExamples> DicExamples { get; set; }
 
         //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //        {
@@ -247,10 +247,10 @@ namespace AdvanceMYS.Models.Domain
 
                 entity.Property(e => e.IdDicTbl).HasColumnName("id_dic_tbl");
 
-                //entity.HasOne(d => d.IdDicTblNavigation)
-                //    .WithMany(p => p.ExampleTbls)
-                //    .HasForeignKey(d => d.IdDicTbl)
-                //    .HasConstraintName("FK_example_tbl_dic_tbl");
+                entity.HasOne(d => d.DicTbl)
+                    .WithMany(p => p.ExampleTbls)
+                    .HasForeignKey(d => d.IdDicTbl)
+                    .HasConstraintName("FK_example_tbl_dic_tbl");
             });
 
           

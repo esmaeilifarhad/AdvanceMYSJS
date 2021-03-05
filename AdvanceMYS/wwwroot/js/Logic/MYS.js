@@ -406,5 +406,6 @@ async function CallAll() {
     RepeatedTaskForCheck()
     CreateChart1()
     CreateChart2()
+    CreateChartKarKard()
 }
 

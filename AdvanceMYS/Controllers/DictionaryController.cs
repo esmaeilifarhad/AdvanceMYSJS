@@ -67,7 +67,7 @@ group by level
             if (level == 80)
             {
                var today= Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
-                var resDic = _db.DicTbls.Include(q => q.dicExamples).
+                var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
                 Where(q => q.LastStatus == false  ).
                 OrderBy(q => q.DateRefresh).
                 ThenBy(q => q.Time).
@@ -82,18 +82,40 @@ group by level
             }
             else
             {
-                var resDic = _db.DicTbls.Include(q => q.dicExamples).
-                      Where(q => q.Level == level && q.IsArchieve == false).
-                      OrderBy(q => q.DateRefresh).
-                      ThenBy(q => q.Time).
-                      Take(3).
-                      ToList();
-                return Json(resDic);
+                try
+                {
+                    var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
+                    Where(q => q.Level == level && q.IsArchieve == false).
+                    OrderBy(q => q.DateRefresh).
+                    ThenBy(q => q.Time).
+                    Take(3).
+                    ToList();
+                    return Json(resDic);
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+              
             }
         }
         public IActionResult FindExample(int exampleId)
         {
             return Json(_db.ExampleTbls.SingleOrDefault(q => q.Id == exampleId));
+        }
+        public IActionResult TranslateWordByWord(int exampleId) {
+          var example=  _db.ExampleTbls.SingleOrDefault(q => q.Id == exampleId);
+          var splitecample=  example.Example.Split(" ");
+          var   splitecamples= splitecample.Distinct();
+            List<DomainClass.DomainClass.DicTbl> lstWord = new List<DomainClass.DomainClass.DicTbl>();
+            foreach (var worlSplit in splitecamples)
+            {
+              var findWord=  _db.DicTbls.SingleOrDefault(q => q.Eng == worlSplit.Trim());
+                if (findWord != null)
+                    lstWord.Add(findWord);
+            }
+            return Json(lstWord);
         }
         public IActionResult FindWord(int wordId)
         {
@@ -382,46 +404,10 @@ group by eng,d.id,d.per,d.level,d.IsArchieve,d.date_refresh,d.date_s,d.SuccessCo
         public  IActionResult SearchWord(string str) {
 
            
-            return   Json(_db.DicTbls.Include(q=>q.dicExamples).Where(q=>q.Eng.Contains(str)).ToList());
+            return   Json(_db.DicTbls.Include(q=>q.ExampleTbls).Where(q=>q.Eng.Contains(str)).ToList());
         }
-        #region Chart
-        public IActionResult ChartDicLevel() {
-            List<DictionaryVM> lst = new List<DictionaryVM>();
-            string query = @"
-
-  SELECT level as label,count(*) y
-  FROM [5069_ManageYourSelf].[5069_Esmaeili].[dic_tbl]
-  where  IsArchieve=0
-  group by level
-";
-            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
-            {
-
-                lst = DB.Query<DictionaryVM>(query).ToList();
-            }
-
-            return Json(lst);
-        }
-        public IActionResult ChartDicLevelPie()
-        {
-            List<DictionaryVM> lst = new List<DictionaryVM>();
-            string query = @"
-SELECT case IsArchieve when 0 then N'فعال' else N'آرشیو' end  label,count(*) y
-  FROM [5069_ManageYourSelf].[5069_Esmaeili].[dic_tbl]
-  group by IsArchieve";
-            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
-            {
-
-                lst = DB.Query<DictionaryVM>(query).ToList();
-            }
-
-            return Json(lst);
-        }
-        #endregion
+      
     }
-    public class DictionaryVM {
-        public int y { get; set; }
-        public string label { get; set; }
-    }
+   
 }
 

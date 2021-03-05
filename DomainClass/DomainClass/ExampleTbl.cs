@@ -11,8 +11,9 @@ namespace DomainClass.DomainClass
         public int IdDicTbl { get; set; }
         public string Example { get; set; }
         public int GetFromExample { get; set; }
+    
 
-        //public virtual DicTbl IdDicTblNavigation { get; set; }
-        public List<DicExamples> dicExamples { get; set; }
+        public virtual DicTbl DicTbl { get; set; }
+        //public List<DicExamples> dicExamples { get; set; }
     }
 }

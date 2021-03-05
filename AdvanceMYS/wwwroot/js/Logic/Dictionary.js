@@ -72,7 +72,7 @@ async function showLevel(level) {
 
 }
 async function ListWordLevel(level) {
-
+    debugger
     var obj = {}
     obj.url = "/Dictionary/ListWordLevel"
     obj.dataType = "json"
@@ -157,11 +157,13 @@ async function showListWordLevel(ListObj) {
             table += "<tr hidden class='examples_" + ListObj[i].exampleTbls[j].idDicTbl + "'>"
             table += "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].exampleTbls[j].id + "'>" +
                 ListObj[i].exampleTbls[j].example +
-                "</div></br><input onclick='makeSoundExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='تلفظ'/> | " +
+                "</div>" +
+                "<div class='TranslateWordByWord_" + ListObj[i].exampleTbls[j].id + "'></div>"+
+                "</br > <input onclick='makeSoundExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='تلفظ' /> | " +
                 "<input onclick='CreateUpdateExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='ویرایش' /> | " +
                 "<input onclick='DeleteExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='حذف' /> | " +
-                "<a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + exampleForTranslate +"'>ترجمه</a>" +
-
+                "<a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + exampleForTranslate +"'>ترجمه</a> | " +
+                "<input class='btn btn-info' onclick='TranslateWordByWord(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='ترجمه لغات' />  " +
                 "</td>"
             table += "</tr>"
         }
@@ -262,6 +264,29 @@ async function FindExample(exampleId) {
     var ListObj = results[0]
     return ListObj
 
+}
+async function TranslateWordByWord(exampleId) {
+    
+    var obj = {}
+    obj.url = "/Dictionary/TranslateWordByWord"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        exampleId: exampleId,
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    
+   // return ListObj
+    var table="<hr>"
+    for (var i = 0; i < ListObj.length; i++) {
+        table += "<p><span>" + ListObj[i].eng + "</span>  <span>" + ListObj[i].per +"</span></p>"
+    }
+    $(".TranslateWordByWord_" + exampleId).empty()
+    $(".TranslateWordByWord_" + exampleId).append(table)
+    
 }
 async function FindWord(wordId) {
 
@@ -569,7 +594,7 @@ async function DeleteWord(Id) {
 //------------------chart
 async function ChartDicLevel() {
     var obj = {}
-    obj.url = "/Dictionary/ChartDicLevel"
+    obj.url = "/Report/ChartDicLevel"
     obj.dataType = "json"
     obj.type = "post"
     //obj.data = {
@@ -588,7 +613,7 @@ async function ChartDicLevel() {
 
 async function ChartDicLevelPie() {
     var obj = {}
-    obj.url = "/Dictionary/ChartDicLevelPie"
+    obj.url = "/Report/ChartDicLevelPie"
     obj.dataType = "json"
     obj.type = "post"
     //obj.data = {
@@ -652,6 +677,54 @@ async function CreateChart2() {
             }
         ]
     });
+    chart.render();
+}
+
+
+async function ChartKarKard(date) {
+    var obj = {}
+    obj.url = "/Report/ChartKarKard"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        Date: date
+
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+
+    return ListObj
+}
+async function CreateChartKarKard(thiss) {
+    var today = todayShamsy()
+   
+    if (thiss == undefined)
+        var month = convertDateToslashless(today).substr(0, 6)
+    else
+        var month = thiss.value
+    debugger
+    var data = await ChartKarKard(month)
+    
+    var chart = new CanvasJS.Chart("CreateChartKarKard",
+        {
+            theme: "light2",
+            title: {
+                text: "Dictionaty By Level"
+            },
+            data: [
+                {
+                    type: "pie",
+                    showInLegend: true,
+                    toolTipContent: "{y} - #percent %",
+                    yValueFormatString: "{label} - minute",
+                    legendText: "{indexLabel}",
+                    dataPoints: data
+
+                }
+            ]
+        });
     chart.render();
 }
 

@@ -33,7 +33,7 @@ namespace DomainClass.DomainClass
         public bool? LastIsTrueFalse { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<DaysExercise> DaysExercises { get; set; }
-        //public virtual ICollection<ExampleTbl> ExampleTbls { get; set; }
-        public List<DicExamples>  dicExamples { get; set; }
+        public virtual ICollection<ExampleTbl> ExampleTbls { get; set; }
+        //public List<DicExamples>  dicExamples { get; set; }
     }
 }

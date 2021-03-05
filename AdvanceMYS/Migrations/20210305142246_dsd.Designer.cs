@@ -4,14 +4,16 @@ using AdvanceMYS.Models.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdvanceMYS.Migrations
 {
     [DbContext(typeof(_Context))]
-    partial class _5069_ManageYourSelfContextModelSnapshot : ModelSnapshot
+    [Migration("20210305142246_dsd")]
+    partial class dsd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,9 +282,6 @@ namespace AdvanceMYS.Migrations
                     b.Property<int>("IdDicTbl")
                         .HasColumnType("int")
                         .HasColumnName("id_dic_tbl");
-
-                    b.Property<int>("testt")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1220,11 +1219,9 @@ namespace AdvanceMYS.Migrations
 
             modelBuilder.Entity("DomainClass.DomainClass.ExampleTbl", b =>
                 {
-                    b.HasOne("DomainClass.DomainClass.DicTbl", "DicTbl")
+                    b.HasOne("DomainClass.DomainClass.DicTbl", null)
                         .WithMany("ExampleTbls")
                         .HasForeignKey("DicTblId");
-
-                    b.Navigation("DicTbl");
                 });
 
             modelBuilder.Entity("DomainClass.DomainClass.Job", b =>
