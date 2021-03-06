@@ -680,6 +680,9 @@ async function ChartDicLevelPie() {
     return ListObj
 }
 
+
+
+
 async function CreateChart1() {
     
     var data2 = await ChartDicLevelPie()
@@ -776,6 +779,63 @@ async function CreateChartKarKard(thiss) {
             ]
         });
     chart.render();
+}
+
+//LineChartKarKard
+async function DataLineChartKarKard(ndays) {
+    var date = addDayReturnDate(ndays)
+    debugger
+    var obj = {}
+    obj.url = "/Report/LineChartKarKard"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        date: date,
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+
+    return ListObj
+}
+async function ReportLineChartKarKard(ndays) {
+    
+    var data = await DataLineChartKarKard(ndays)
+    debugger
+
+        var chart = new CanvasJS.Chart("ReportLineChartKarKard",
+            {
+
+                title: {
+                    text: "Earthquakes - per month"
+                },
+                data: [
+                    {
+                        type: "line",
+                        dataPoints:data
+                        //dataPoints: [
+                        //    { x: new Date(2012, 00, 1), y: 450 },
+                        //    { x: new Date(2012, 01, 1), y: 414 },
+                        //    { x: new Date(2012, 02, 1), y: 520 },
+                        //    { x: new Date(2012, 03, 1), y: 460 },
+                        //    { x: new Date(2012, 04, 1), y: 450 },
+                        //    { x: new Date(2012, 05, 1), y: 500 },
+                        //    { x: new Date(2012, 06, 1), y: 480 },
+                        //    { x: new Date(2012, 07, 1), y: 480 },
+                        //    { x: new Date(2012, 08, 1), y: 410 },
+                        //    { x: new Date(2012, 09, 1), y: 500 },
+                        //    { x: new Date(2012, 10, 1), y: 480 },
+                        //    { x: new Date(2012, 11, 1), y: 510 }
+                        //]
+                    }
+                ]
+            }
+        );
+
+        chart.render();
+  
+
 }
 
 

@@ -78,6 +78,26 @@ group by JobId
 
             return Json(lst);
         }
+
+
+        public IActionResult LineChartKarKard(string date)
+        {
+            List<DictionaryVM> lst = new List<DictionaryVM>();
+            string query = @"
+select DayDate label,sum(SpendTimeMinute)/60 y 
+from karkard
+where DayDate>"+ date + @"
+group by DayDate
+order by DayDate
+";
+            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
+            {
+
+                lst = DB.Query<DictionaryVM>(query).ToList();
+            }
+
+            return Json(lst);
+        }
         #endregion
     }
     public class DictionaryVM

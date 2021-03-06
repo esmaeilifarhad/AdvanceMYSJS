@@ -306,6 +306,13 @@ function todayShamsy8char() {
     today = "13" + year + "" + mounth + "" + rooz
     return today
 }
+function addDayReturnDate(nDays) {
+    const m = moment();
+    m.add(nDays, 'day')
+    var newDate = m.format('jYYYY/jM/jD')
+    newDate = convertDateToslashless(newDate)
+    return newDate
+}
 function NewOldDate(str) {
     
     const m = moment();

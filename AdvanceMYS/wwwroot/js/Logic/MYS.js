@@ -407,5 +407,6 @@ async function CallAll() {
     CreateChart1()
     CreateChart2()
     CreateChartKarKard()
+    ReportLineChartKarKard(-90)
 }
 
