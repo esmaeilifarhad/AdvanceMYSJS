@@ -170,7 +170,7 @@ async function CreateUpdateCat(CatId) {
     var ListtObj = results[0]
     $("#MasterModal").modal("toggle")
     showAlert(ListtObj, 2000);
-    debugger
+    
     ShowListCat(Code)
 
     // return ListtObj;

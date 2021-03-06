@@ -51,7 +51,7 @@ async function ShowListTaghvim() {
 }
 
 async function CreateUpdateTaghvim(TaghvimId) {
-    debugger
+    
     if (TaghvimId > 0) {
         var obj = {}
         obj.url = "/Taghvim/Find"

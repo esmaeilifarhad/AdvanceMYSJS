@@ -65,9 +65,9 @@ SELECT case IsArchieve when 0 then N'فعال' else N'آرشیو' end  label,cou
             List<DictionaryVM> lst = new List<DictionaryVM>();
             string query = @"
 
-select (select top 1 Name from Job where JobId=karkard.JobId) label,sum(SpendTimeMinute)/(60*1) y 
-from karkard
-where Left(DayDate,6)="+ Date + @"
+select (select top 1 Name from [5069_ManageYourSelf].[5069_Esmaeili].Job where JobId=karkard.JobId) label,sum(SpendTimeMinute)/(60*1) y 
+from [5069_ManageYourSelf].[5069_Esmaeili].karkard
+where Left(DayDate,6)=" + Date + @"
 group by JobId
 ";
             using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))

@@ -16,14 +16,14 @@
 }
 async function Setting(className) {
     var listObj = await getDataSetting()
-    debugger
+    
     var grid = gridSetting(listObj)
     $("." + className).empty()
     $("." + className).append(grid)
 }
 function gridSetting(listObj) {
     var table = tableReturn();
-    debugger
+    
     for (var i = 0; i < listObj.length; i++) {
         
         table += "<tr>"

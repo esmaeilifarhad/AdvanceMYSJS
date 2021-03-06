@@ -16,14 +16,14 @@ namespace AdvanceMYS.Controllers
     {
 
         private readonly _Context _db;
-       
+
         int _userId = 1;
         Models.ADO.UIDSConnection U = new Models.ADO.UIDSConnection();
         public DictionaryController(_Context db)
         {
             _db = db;
-          
-          
+
+
         }
 
         public IActionResult ListLevel()
@@ -66,17 +66,17 @@ group by level
         {
             if (level == 80)
             {
-               var today= Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
+                var today = Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
                 var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
-                Where(q => q.LastStatus == false  ).
+                Where(q => q.LastStatus == false).
                 OrderBy(q => q.DateRefresh).
                 ThenBy(q => q.Time).
                 Take(1000).
                 ToList().
                 AsEnumerable().Where(
-                    q =>(q.DateRefresh != today) ||
-                (q.DateRefresh == today  && (int.Parse(DateTime.Now.ToString("HH:mm:ss").Split(":")[0]) - int.Parse(q.Time.Split(":")[0]))>2 ) ||
-                 (q.LastIsTrueFalse == false ) 
+                    q => (q.DateRefresh != today) ||
+                (q.DateRefresh == today && (int.Parse(DateTime.Now.ToString("HH:mm:ss").Split(":")[0]) - int.Parse(q.Time.Split(":")[0])) > 2) ||
+                 (q.LastIsTrueFalse == false)
                 ).ToList();
                 return Json(resDic);
             }
@@ -97,21 +97,23 @@ group by level
 
                     throw;
                 }
-              
+
             }
         }
         public IActionResult FindExample(int exampleId)
         {
             return Json(_db.ExampleTbls.SingleOrDefault(q => q.Id == exampleId));
         }
-        public IActionResult TranslateWordByWord(int exampleId) {
-          var example=  _db.ExampleTbls.SingleOrDefault(q => q.Id == exampleId);
-          var splitecample=  example.Example.Split(" ");
-          var   splitecamples= splitecample.Distinct();
+        public IActionResult TranslateWordByWord(int exampleId)
+        {
+            var example = _db.ExampleTbls.SingleOrDefault(q => q.Id == exampleId);
+            var str = example.Example.Replace(".", " ");
+            var splitecample = str.Split(" ");
+            var splitecamples = splitecample.Distinct();
             List<DomainClass.DomainClass.DicTbl> lstWord = new List<DomainClass.DomainClass.DicTbl>();
             foreach (var worlSplit in splitecamples)
             {
-              var findWord=  _db.DicTbls.SingleOrDefault(q => q.Eng == worlSplit.Trim());
+                var findWord = _db.DicTbls.SingleOrDefault(q => q.Eng == worlSplit.Trim());
                 if (findWord != null)
                     lstWord.Add(findWord);
             }
@@ -183,7 +185,7 @@ group by level
                 oldword.CreateDateM = (oldword.CreateDateM == null ? DateTime.Now : oldword.CreateDateM);
 
 
-                AddExamples(oldword);
+                // AddExamples(oldword);
 
                 var res = _db.SaveChanges();
                 return Json(oldword);
@@ -209,13 +211,14 @@ group by level
 
                 if (_db.SaveChanges() > 0)
                 {
-                    AddExamples(D);
+                    // AddExamples(D);
                     return Json("با موفقیت ثبت شد");
                 }
                 return Json("خطایی در ثبت رخ داده است");
             }
         }
-        public IActionResult SearchOldWord(string str) {
+        public IActionResult SearchOldWord(string str)
+        {
             List<DomainClass.DomainClass.DicTbl> lstWord = new List<DomainClass.DomainClass.DicTbl>();
             string query = @"
 select * from [5069_ManageYourSelf].[5069_Esmaeili].[dic_tbl]
@@ -227,64 +230,65 @@ where eng like '%" + str + "%'";
             }
             return Json(lstWord);
         }
-        private void AddExamples(DomainClass.DomainClass.DicTbl word)
+        public IActionResult AddExamples(string eng)
         {
-            
-         
-                 var oldExamples = _db.ExampleTbls.Where(q => q.IdDicTbl == word.Id);
 
-                 List<DomainClass.DomainClass.ExampleTbl> lstExample = new List<DomainClass.DomainClass.ExampleTbl>();
 
-                 string query = @"
+            //var oldExamples = _db.ExampleTbls.Where(q => q.IdDicTbl == word.Id);
+
+            List<DomainClass.DomainClass.ExampleTbl> lstExample = new List<DomainClass.DomainClass.ExampleTbl>();
+
+            string query = @"
 select [id]
       ,[id_dic_tbl] as IdDicTbl
       ,[example]
       ,[GetFromExample] from [5069_ManageYourSelf].[5069_Esmaeili].[example_tbl]
-where example like '% " + word.Eng + "%'";
-                 using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
-                 {
+where example like '% " + eng + "%'";
+            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
+            {
 
-                     lstExample = DB.Query<DomainClass.DomainClass.ExampleTbl>(query).ToList();
-                 }
+                lstExample = DB.Query<DomainClass.DomainClass.ExampleTbl>(query).ToList();
+            }
+            /*
+            foreach (var item in lstExample)
+            {
+                bool isDuplicate = false;
+                //if (oldExamples != null)
+                //{
+                //    var res = oldExamples.FirstOrDefault(q => q.Example == item.Example || q.GetFromExample == item.Id || q.IdDicTbl==item.IdDicTbl);
+                //    if (res != null)
+                //    {
+                //        isDuplicate = true;
+                //    }
+                //}
+           if (item.GetFromExample != 0)
+           {
 
-                 foreach (var item in lstExample)
-                 {
-                     bool isDuplicate = false;
-                     if (oldExamples != null)
-                     {
-                         var res = oldExamples.FirstOrDefault(q => q.Example == item.Example || q.GetFromExample == item.Id || q.IdDicTbl==item.IdDicTbl);
-                         if (res != null)
-                         {
-                             isDuplicate = true;
-                         }
-                     }
-                if (item.GetFromExample != 0)
+               isDuplicate = true;
+
+           }
+           else
+           {
+               // isDuplicate = false;
+           }
+
+                if (isDuplicate == false)
                 {
-
-                    isDuplicate = true;
+                    var old = _db.ExampleTbls.SingleOrDefault(q => q.Id == item.Id);
+                    DomainClass.DomainClass.ExampleTbl newExample = new DomainClass.DomainClass.ExampleTbl()
+                    {
+                        Example = _db.DicTbls.SingleOrDefault(q => q.Id == old.IdDicTbl).Eng + " _Added : " + item.Example,
+                        //IdDicTbl = word.Id,
+                        GetFromExample = item.Id
+                    };
+                    _db.ExampleTbls.Add(newExample);
 
                 }
-                else
-                {
-                    // isDuplicate = false;
-                }
+            }
+            */
+            // _db.SaveChanges();
 
-                     if (isDuplicate == false)
-                     {
-                         var old = _db.ExampleTbls.SingleOrDefault(q => q.Id == item.Id);
-                         DomainClass.DomainClass.ExampleTbl newExample = new DomainClass.DomainClass.ExampleTbl()
-                         {
-                             Example = _db.DicTbls.SingleOrDefault(q => q.Id == old.IdDicTbl).Eng + " _Added : " + item.Example,
-                             IdDicTbl = word.Id,
-                             GetFromExample = item.Id
-                         };
-                         _db.ExampleTbls.Add(newExample);
-                    
-                     }
-                 }
-                 _db.SaveChanges();
-             
-        
+            return Json(lstExample);
         }
 
         public IActionResult CreateUpdateExample(DomainClass.DomainClass.ExampleTbl exampleNew)
@@ -317,13 +321,13 @@ where example like '% " + word.Eng + "%'";
                     _db.SaveChanges();
                     return Json("با موفقیت ویرایش شد");
                 }
-               
+
 
             }
             //insert
             else
             {
-                
+
                 if (parts.Length > 1)
                 {
                     for (int i = 0; i < parts.Length; i++)
@@ -345,13 +349,14 @@ where example like '% " + word.Eng + "%'";
                 }
                 return Json("با موفقیت ثبت شد");
             }
-           
+
         }
-        public IActionResult DeleteExample(int Id) {
-           var res= _db.ExampleTbls.SingleOrDefault(q => q.Id == Id);
+        public IActionResult DeleteExample(int Id)
+        {
+            var res = _db.ExampleTbls.SingleOrDefault(q => q.Id == Id);
             _db.ExampleTbls.Remove(res);
-            if(_db.SaveChanges()>0)
-            return Json("با موفقیت حذف شد");
+            if (_db.SaveChanges() > 0)
+                return Json("با موفقیت حذف شد");
             return Json("خطا در حذف");
         }
         public IActionResult DeleteWord(int Id)
@@ -363,7 +368,8 @@ where example like '% " + word.Eng + "%'";
             return Json("خطا در حذف");
         }
 
-        public IActionResult SearchExample(string str) {
+        public IActionResult SearchExample(string str)
+        {
 
             List<Models.ViewModels.Dictionary.VMDictionary> lstV = new List<Models.ViewModels.Dictionary.VMDictionary>();
             DataTable DT = U.Select(@"
@@ -384,7 +390,7 @@ group by eng,d.id,d.per,d.level,d.IsArchieve,d.date_refresh,d.date_s,d.SuccessCo
 ");
             foreach (DataRow item in DT.Rows)
             {
-               Models.ViewModels.Dictionary.VMDictionary V =new Models.ViewModels.Dictionary.VMDictionary();
+                Models.ViewModels.Dictionary.VMDictionary V = new Models.ViewModels.Dictionary.VMDictionary();
                 V.Id = int.Parse(item["id"].ToString());
                 V.Eng = item["eng"].ToString();
                 V.Per = item["per"].ToString();
@@ -401,13 +407,14 @@ group by eng,d.id,d.per,d.level,d.IsArchieve,d.date_refresh,d.date_s,d.SuccessCo
             return Json(lstV);
 
         }
-        public  IActionResult SearchWord(string str) {
+        public IActionResult SearchWord(string str)
+        {
 
-           
-            return   Json(_db.DicTbls.Include(q=>q.ExampleTbls).Where(q=>q.Eng.Contains(str)).ToList());
+
+            return Json(_db.DicTbls.Include(q => q.ExampleTbls).Where(q => q.Eng.Contains(str)).ToList());
         }
-      
+
     }
-   
+
 }
 

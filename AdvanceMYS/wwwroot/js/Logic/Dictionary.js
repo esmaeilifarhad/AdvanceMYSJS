@@ -1,4 +1,5 @@
-﻿async function ListLevel() {
+﻿
+async function ListLevel() {
     $.LoadingOverlay("show");
     var obj = {}
     obj.url = "/Dictionary/ListLevel"
@@ -72,7 +73,7 @@ async function showLevel(level) {
 
 }
 async function ListWordLevel(level) {
-    debugger
+    
     var obj = {}
     obj.url = "/Dictionary/ListWordLevel"
     obj.dataType = "json"
@@ -108,11 +109,11 @@ async function showListWordLevel(ListObj) {
         // alert("web")
     }
     // header th table
-    table += "<tr><th>english</th><th>Persian</th><th>up</th><th>down</th><th>مثال</th><th>ویرایش</th><th>تعداد بار</th><th>نرخ</th><th>تعداد روز</th><th>DateRefresh</th><th>روز هفته</th><th>زمان</th><th>English</th><th>ترجمه</th><th>مثال جدید</th><th>حذف</th></tr>"
+    table += "<tr  ><th>english</th><th>Persian</th><th>up</th><th>down</th><th>مثال</th><th>ویرایش</th><th>تعداد بار</th><th>نرخ</th><th>تعداد روز</th><th>DateRefresh</th><th>روز هفته</th><th>زمان</th><th>English</th><th>ترجمه</th><th>مثال جدید</th><th>حذف</th></tr>"
     for (var i = 0; i < ListObj.length; i++) {
         if (i % 2 == 0)
             styleWord = 'color:red;background-image: linear-gradient(45deg, black, transparent);'
-        table += "<tr style='" + styleWord + "'>"
+        table += "<tr class='englishword_" + ListObj[i].id +"' style='" + styleWord + "'>"
         table += "<td onclick='makeSound(\"" + ListObj[i].eng + "\")'>" + ListObj[i].eng + "</td>" +
             "<td onclick='ShowAndHiddenPersian(" + ListObj[i].id + ",\"" + ListObj[i].eng + "\")'><span hidden class='per_" + ListObj[i].id + "' style='white-space: nowrap;'>" + ListObj[i].per + "</span></td>" +
 
@@ -121,12 +122,14 @@ async function showListWordLevel(ListObj) {
             "<td><input type='button' style='background-color:red' value='غلط' onclick='levelUpDown({status:false,wordId:" + ListObj[i].id + "})'/></td>" +
             "<td><input type='button' style='background-color:green' value='درست' onclick='levelUpDown({status:true,wordId:" + ListObj[i].id + "})'/></td>"
       
-
+        
         if (ListObj[i].exampleTbls.length > 0) {
             table += "<td><input type='button' value='نمایش " + ListObj[i].exampleTbls.length + "' onclick='showHiddenExample(" + ListObj[i].id + ",\"" + ListObj[i].eng + "\")'/></td>"
         }
         else {
-            table += "<td><input onclick='CreateUpdateExample(0,\"" + ListObj[i].eng + "\"," + ListObj[i].id + ")' type='button' value='مثال جدید'/></td>"
+            //table += "<td><input onclick='CreateUpdateExample(0,\"" + ListObj[i].eng + "\"," + ListObj[i].id + ")' type='button' value='مثال جدید'/></td>"
+            table += "<td><input type='button' value='بدون مثال " + ListObj[i].exampleTbls.length + "' onclick='showHiddenExample(" + ListObj[i].id + ",\"" + ListObj[i].eng + "\")'/></td>"
+
         }
 
         table +="<td><input type='button'  value='ویرایش' onclick='CreateUpdateWord(" + ListObj[i].id + ")'/></td>" 
@@ -150,14 +153,13 @@ async function showListWordLevel(ListObj) {
 
             
             var exampleForTranslate = ListObj[i].exampleTbls[j].example
-            //exampleForTranslate = exampleForTranslate.replace(/\r/g, "").replace(/\n/g, "")
-            //exampleForTranslate= exampleForTranslate.replace(/[0-9`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
             exampleForTranslate = exampleForTranslate.replace(/'/g, ',')
             
             table += "<tr hidden class='examples_" + ListObj[i].exampleTbls[j].idDicTbl + "'>"
             table += "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].exampleTbls[j].id + "'>" +
                 ListObj[i].exampleTbls[j].example +
                 "</div>" +
+                //"<div class='AddExamples_" + ListObj[i].exampleTbls[j].id + "'></div>" +
                 "<div class='TranslateWordByWord_" + ListObj[i].exampleTbls[j].id + "'></div>"+
                 "</br > <input onclick='makeSoundExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='تلفظ' /> | " +
                 "<input onclick='CreateUpdateExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='ویرایش' /> | " +
@@ -179,7 +181,10 @@ async function showListWordLevel(ListObj) {
 
 }
 function showHiddenExample(id, eng) {
+    
     makeSound(eng)
+    
+    AddExamples(eng, id);
     //-----------
     var res = $(".examples_" + id).attr("hidden");
     if (res == "hidden") {
@@ -208,6 +213,51 @@ function showHiddenExample(id, eng) {
             new RegExp(eng, 'g'), '<span style="color:blue">' + eng + '</span>'
         ));
     });
+    
+
+}
+
+async function AddExamples(eng, idWord) {
+    
+    var obj = {}
+    obj.url = "/Dictionary/AddExamples"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        eng: eng,
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+
+    debugger
+    var newContent = ""
+    for (var i = 0; i < ListObj.length; i++) {
+
+        var exampleForTranslate = ListObj[i].example
+        exampleForTranslate = exampleForTranslate.replace(/'/g, ',')
+        debugger
+        newContent += "<tr style='text-align: left; direction: ltr; white-space: pre;'>" +
+            "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].id + "'>* Find this Word By Search *<br>" +
+            ListObj[i].example +
+                "</div>" +
+                "<div class='AddExamples_" + ListObj[i].id + "'></div>" +
+                "<div class='TranslateWordByWord_" + ListObj[i].id + "'></div>"+
+                "</br > <input onclick='makeSoundExample(" + ListObj[i].id + ")' type='button' value='تلفظ' /> | " +
+        "<input onclick='CreateUpdateExample(" + ListObj[i].id + ")' type='button' value='ویرایش' /> | " +
+            "<input onclick='DeleteExample(" + ListObj[i].id + ")' type='button' value='حذف' /> | " +
+            "<a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + exampleForTranslate + "'>ترجمه</a> | " +
+            "<input class='btn btn-info' onclick='TranslateWordByWord(" + ListObj[i].id + ")' type='button' value='ترجمه لغات' />  " +
+            "</td>"+
+        "</tr > "
+    }
+   
+    //$(".examples_" + idExample).empty()
+    $(".englishword_" + idWord).after(newContent)
+
+    return ListObj
+
 
 }
 function ShowAndHiddenPersian(id, eng) {
@@ -704,7 +754,7 @@ async function CreateChartKarKard(thiss) {
         var month = convertDateToslashless(today).substr(0, 6)
     else
         var month = thiss.value
-    debugger
+    
     var data = await ChartKarKard(month)
     
     var chart = new CanvasJS.Chart("CreateChartKarKard",
@@ -730,25 +780,5 @@ async function CreateChartKarKard(thiss) {
 
 
 
-//window.onload = function () {
-//    var chart = new CanvasJS.Chart("chartContainer", {
-//        title: {
-//            text: "My First Chart in CanvasJS"
-//        },
-//        data: [
-//            {
-//                // Change type to "doughnut", "line", "splineArea", etc.
-//                type: "column",
-//                dataPoints: [
-//                    { label: "apple", y: 10 },
-//                    { label: "orange", y: 15 },
-//                    { label: "banana", y: 25 },
-//                    { label: "mango", y: 30 },
-//                    { label: "grape", y: 28 }
-//                ]
-//            }
-//        ]
-//    });
-//    chart.render();
-//}
+
 
