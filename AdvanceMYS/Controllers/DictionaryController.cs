@@ -108,6 +108,8 @@ group by level
         {
             var example = _db.ExampleTbls.SingleOrDefault(q => q.Id == exampleId);
             var str = example.Example.Replace(".", " ");
+             str = str.Replace("*", " ");
+
             var splitecample = str.Split(" ");
             var splitecamples = splitecample.Distinct();
             List<DomainClass.DomainClass.DicTbl> lstWord = new List<DomainClass.DomainClass.DicTbl>();
@@ -233,7 +235,7 @@ where eng like '%" + str + "%'";
         public IActionResult AddExamples(string eng)
         {
 
-
+           var oldWord= _db.DicTbls.FirstOrDefault(q=>q.Eng==eng);
             //var oldExamples = _db.ExampleTbls.Where(q => q.IdDicTbl == word.Id);
 
             List<DomainClass.DomainClass.ExampleTbl> lstExample = new List<DomainClass.DomainClass.ExampleTbl>();
@@ -249,6 +251,21 @@ where example like '% " + eng + "%'";
 
                 lstExample = DB.Query<DomainClass.DomainClass.ExampleTbl>(query).ToList();
             }
+
+            List<DomainClass.DomainClass.ExampleTbl> lst = new List<DomainClass.DomainClass.ExampleTbl>();
+            foreach (var item in lstExample)
+            {
+                if (item.IdDicTbl == oldWord.Id)
+                {
+                    //Duplicate Examples
+
+                }
+                else
+                {
+                    lst.Add(item);
+                }
+            }
+         
             /*
             foreach (var item in lstExample)
             {
@@ -288,7 +305,7 @@ where example like '% " + eng + "%'";
             */
             // _db.SaveChanges();
 
-            return Json(lstExample);
+            return Json(lst);
         }
 
         public IActionResult CreateUpdateExample(DomainClass.DomainClass.ExampleTbl exampleNew)
@@ -401,7 +418,7 @@ group by eng,d.id,d.per,d.level,d.IsArchieve,d.date_refresh,d.date_s,d.SuccessCo
                 V.SuccessCount = int.Parse(item["SuccessCount"].ToString());
                 V.UnSuccessCount = int.Parse(item["UnSuccessCount"].ToString());
 
-                V.lstExample = _db.ExampleTbls.Where(q => q.IdDicTbl == V.Id && q.Example.Contains(str)).ToList();
+                V.exampleTbls = _db.ExampleTbls.Where(q => q.IdDicTbl == V.Id && q.Example.Contains(str)).ToList();
                 lstV.Add(V);
             }
             return Json(lstV);

@@ -21,6 +21,6 @@ namespace AdvanceMYS.Models.ViewModels.Dictionary
         /// </summary>
         public string UpOrDown { get; set; }
         public bool statusCheck { get; set; }
-        public List<DomainClass.DomainClass.ExampleTbl> lstExample { get; set; }
+        public List<DomainClass.DomainClass.ExampleTbl> exampleTbls { get; set; }
     }
 }

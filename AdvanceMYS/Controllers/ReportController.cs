@@ -85,8 +85,8 @@ group by JobId
             List<DictionaryVM> lst = new List<DictionaryVM>();
             string query = @"
 select DayDate label,sum(SpendTimeMinute)/60 y 
-from karkard
-where DayDate>"+ date + @"
+from [5069_ManageYourSelf].[5069_Esmaeili].karkard
+where DayDate>" + date + @"
 group by DayDate
 order by DayDate
 ";

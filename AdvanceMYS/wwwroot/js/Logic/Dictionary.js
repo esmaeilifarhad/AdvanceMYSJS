@@ -121,7 +121,7 @@ async function showListWordLevel(ListObj) {
            
             "<td><input type='button' style='background-color:red' value='غلط' onclick='levelUpDown({status:false,wordId:" + ListObj[i].id + "})'/></td>" +
             "<td><input type='button' style='background-color:green' value='درست' onclick='levelUpDown({status:true,wordId:" + ListObj[i].id + "})'/></td>"
-      
+      debugger
         
         if (ListObj[i].exampleTbls.length > 0) {
             table += "<td><input type='button' value='نمایش " + ListObj[i].exampleTbls.length + "' onclick='showHiddenExample(" + ListObj[i].id + ",\"" + ListObj[i].eng + "\")'/></td>"
