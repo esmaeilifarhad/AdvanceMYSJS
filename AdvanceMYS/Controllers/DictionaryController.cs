@@ -109,6 +109,7 @@ group by level
             var example = _db.ExampleTbls.SingleOrDefault(q => q.Id == exampleId);
             var str = example.Example.Replace(".", " ");
              str = str.Replace("*", " ");
+            str = str.Replace(",", " ");
 
             var splitecample = str.Split(" ");
             var splitecamples = splitecample.Distinct();
