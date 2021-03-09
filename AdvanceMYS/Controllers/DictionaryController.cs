@@ -107,16 +107,25 @@ group by level
         public IActionResult TranslateWordByWord(int exampleId)
         {
             var example = _db.ExampleTbls.SingleOrDefault(q => q.Id == exampleId);
-            var str = example.Example.Replace(".", " ");
-             str = str.Replace("*", " ");
-            str = str.Replace(",", " ");
+            //var str = example.Example.Replace(".", " ");
+            //str = str.Replace("*", " ");
+            //str = str.Replace(",", " ");
 
-            var splitecample = str.Split(" ");
+
+            var splitecample = example.Example.Split(" ");
             var splitecamples = splitecample.Distinct();
             List<DomainClass.DomainClass.DicTbl> lstWord = new List<DomainClass.DomainClass.DicTbl>();
             foreach (var worlSplit in splitecamples)
             {
-                var findWord = _db.DicTbls.SingleOrDefault(q => q.Eng == worlSplit.Trim());
+                var findWord = _db.DicTbls.SingleOrDefault(q => q.Eng == worlSplit.Trim() ||
+                q.Eng == worlSplit.Trim() + "s" ||
+                 q.Eng == worlSplit.Trim() + "*" ||
+                  q.Eng == worlSplit.Trim() + "," ||
+                   q.Eng == worlSplit.Trim() + "." ||
+                q.Eng == worlSplit.Trim() + "es" ||
+                q.Eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "es" ||
+                q.Eng == worlSplit.Trim() + "'s"
+                );
                 if (findWord != null)
                     lstWord.Add(findWord);
             }
@@ -236,7 +245,7 @@ where eng like '%" + str + "%'";
         public IActionResult AddExamples(string eng)
         {
 
-           var oldWord= _db.DicTbls.FirstOrDefault(q=>q.Eng==eng);
+            var oldWord = _db.DicTbls.FirstOrDefault(q => q.Eng == eng);
             //var oldExamples = _db.ExampleTbls.Where(q => q.IdDicTbl == word.Id);
 
             List<DomainClass.DomainClass.ExampleTbl> lstExample = new List<DomainClass.DomainClass.ExampleTbl>();
@@ -266,7 +275,7 @@ where example like '% " + eng + "%'";
                     lst.Add(item);
                 }
             }
-         
+
             /*
             foreach (var item in lstExample)
             {
