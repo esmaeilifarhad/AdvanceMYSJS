@@ -109,7 +109,7 @@ group by level
         {
             var example = _db.ExampleTbls.SingleOrDefault(q => q.Id == exampleId);
             var str = example.Example.Replace(".", " ");
-            //str = str.Replace("*", " ");
+            str = str.Replace("*", " ");
             //str = str.Replace(",", " ");
             str = str.Replace("\n", " ");
 
@@ -131,6 +131,10 @@ group by level
                   q.Eng == worlSplit.Trim() + "al" ||
                    q.Eng + "ly" == worlSplit.Trim() ||
                   q.Eng + "al" == worlSplit.Trim() ||
+                   q.Eng + "s" == worlSplit.Trim() ||
+                    q.Eng + "es" == worlSplit.Trim() ||
+                      q.Eng + "ing" == worlSplit.Trim() ||
+                        q.Eng + "ion" == worlSplit.Trim() ||
                  q.Eng == worlSplit.Trim() + "*" ||
                   q.Eng == worlSplit.Trim() + "," ||
                    q.Eng == worlSplit.Trim() + "." ||
