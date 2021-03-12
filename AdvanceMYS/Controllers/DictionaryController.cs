@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AdvanceMYS.Models.Domain;
 using AdvanceMYS.Models.Utility;
@@ -107,27 +108,46 @@ group by level
         public IActionResult TranslateWordByWord(int exampleId)
         {
             var example = _db.ExampleTbls.SingleOrDefault(q => q.Id == exampleId);
-            //var str = example.Example.Replace(".", " ");
+            var str = example.Example.Replace(".", " ");
             //str = str.Replace("*", " ");
             //str = str.Replace(",", " ");
+            str = str.Replace("\n", " ");
 
 
-            var splitecample = example.Example.Split(" ");
+            var splitecample = str.Split(" ");
+             
             var splitecamples = splitecample.Distinct();
             List<DomainClass.DomainClass.DicTbl> lstWord = new List<DomainClass.DomainClass.DicTbl>();
             foreach (var worlSplit in splitecamples)
             {
-                var findWord = _db.DicTbls.SingleOrDefault(q => q.Eng == worlSplit.Trim() ||
+               
+                if (worlSplit.Length < 2) continue;
+                if (worlSplit == "") continue;
+                if (!Regex.IsMatch(worlSplit, "^[a-zA-Z]*$")) continue;
+
+                    var findWord = _db.DicTbls.SingleOrDefault(q => q.Eng == worlSplit.Trim() ||
                 q.Eng == worlSplit.Trim() + "s" ||
+                 q.Eng == worlSplit.Trim() + "ly" ||
+                  q.Eng == worlSplit.Trim() + "al" ||
+                   q.Eng + "ly" == worlSplit.Trim() ||
+                  q.Eng + "al" == worlSplit.Trim() ||
                  q.Eng == worlSplit.Trim() + "*" ||
                   q.Eng == worlSplit.Trim() + "," ||
                    q.Eng == worlSplit.Trim() + "." ||
                 q.Eng == worlSplit.Trim() + "es" ||
                 q.Eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "es" ||
-                q.Eng == worlSplit.Trim() + "'s"
+                 q.Eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ing" ||
+                 q.Eng == worlSplit.Trim() + "ing" ||
+                  q.Eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ion" ||
+                q.Eng == worlSplit.Trim() + "'s" 
+               
                 );
                 if (findWord != null)
+                {
+                    var res = lstWord.Find(q => q.Eng == findWord.Eng);
+                        if(res==null)
                     lstWord.Add(findWord);
+                }
             }
             return Json(lstWord);
         }
