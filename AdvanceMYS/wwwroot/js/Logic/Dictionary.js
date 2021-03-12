@@ -121,7 +121,7 @@ async function showListWordLevel(ListObj) {
            
             "<td><input type='button' style='background-color:red' value='غلط' onclick='levelUpDown({status:false,wordId:" + ListObj[i].id + "})'/></td>" +
             "<td><input type='button' style='background-color:green' value='درست' onclick='levelUpDown({status:true,wordId:" + ListObj[i].id + "})'/></td>"
-      debugger
+      
         
         if (ListObj[i].exampleTbls.length > 0) {
             table += "<td><input type='button' value='نمایش " + ListObj[i].exampleTbls.length + "' onclick='showHiddenExample(" + ListObj[i].id + ",\"" + ListObj[i].eng + "\")'/></td>"
@@ -316,7 +316,7 @@ async function FindExample(exampleId) {
 
 }
 async function TranslateWordByWord(exampleId) {
-    
+    $.LoadingOverlay("show");
     var obj = {}
     obj.url = "/Dictionary/TranslateWordByWord"
     obj.dataType = "json"
@@ -330,13 +330,24 @@ async function TranslateWordByWord(exampleId) {
     var ListObj = results[0]
     
    // return ListObj
-    var table="<hr>"
+    var table = "<hr><br>"
+    table += "<input onclick='CreateUpdateWord()' type='button' class='btn btn-warning' value='جدید'>"
+    table += "<table>"
+    debugger
     for (var i = 0; i < ListObj.length; i++) {
-        table += "<p><span>" + ListObj[i].eng + "</span>  <span>" + ListObj[i].per +"</span></p>"
+        table += "<tr>"
+        table += "<td>" + ListObj[i].eng + "</td> <td>" + ListObj[i].per + "</td>" +
+            "<td>" + ListObj[i].level + "</td>" +
+            "<td><input type='button' style='background-color:red' value='False' onclick='levelUpDown2({status:false,wordId:" + ListObj[i].id + ",exampleId:" + exampleId+"})'></td> " +
+            "<td><input type='button' style='background-color:green' value='True' onclick='levelUpDown2({status:true,wordId:" + ListObj[i].id + ",exampleId:" + exampleId + "})'></td>"+
+            "<td><input type='button' style='background-color:blue' value='Edit' onclick='CreateUpdateWord(" + ListObj[i].id + ")'></td>" +
+            "<td><input type='button' style='background-color:gray' value='Sound'  onclick='makeSound(\"" + ListObj[i].eng + "\")'></td>"
+        table += "</tr>"
     }
+    table += "</table>"
     $(".TranslateWordByWord_" + exampleId).empty()
     $(".TranslateWordByWord_" + exampleId).append(table)
-    
+    $.LoadingOverlay("hide");
 }
 async function FindWord(wordId) {
 
@@ -442,6 +453,27 @@ async function levelUpDown(objectWord) {
     showLevel(level)
     //showAlert(ListObj, 2000)
     ListWordLevel(level)
+
+}
+async function levelUpDown2(objectWord) {
+
+
+    var obj = {}
+    obj.url = "/Dictionary/UpdateDicWord"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        UpOrDown: objectWord.status,
+        Id: objectWord.wordId
+
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    //var level = $("input[name='rdbLevel']:checked").val()
+
+    TranslateWordByWord(objectWord.exampleId)
 
 }
 async function SearchOldWord(thiss) {

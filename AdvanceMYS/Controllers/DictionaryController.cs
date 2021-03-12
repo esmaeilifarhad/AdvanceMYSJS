@@ -125,7 +125,7 @@ group by level
                 if (worlSplit == "") continue;
                 if (!Regex.IsMatch(worlSplit, "^[a-zA-Z]*$")) continue;
 
-                    var findWord = _db.DicTbls.SingleOrDefault(q => q.Eng == worlSplit.Trim() ||
+                    var findWord = _db.DicTbls.Where(q => q.Eng == worlSplit.Trim() ||
                 q.Eng == worlSplit.Trim() + "s" ||
                  q.Eng == worlSplit.Trim() + "ly" ||
                   q.Eng == worlSplit.Trim() + "al" ||
@@ -144,9 +144,13 @@ group by level
                 );
                 if (findWord != null)
                 {
-                    var res = lstWord.Find(q => q.Eng == findWord.Eng);
-                        if(res==null)
-                    lstWord.Add(findWord);
+                    foreach (var item in findWord)
+                    {
+                        var res = lstWord.Find(q => q.Eng == item.Eng);
+                        if (res == null)
+                            lstWord.Add(item);
+                    }
+                   
                 }
             }
             return Json(lstWord);
