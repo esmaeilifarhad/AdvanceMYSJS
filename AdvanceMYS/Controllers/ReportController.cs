@@ -58,6 +58,23 @@ SELECT case IsArchieve when 0 then N'فعال' else N'آرشیو' end  label,cou
 
             return Json(lst);
         }
+
+        public IActionResult DicByDateMonthDateRefresh()
+        {
+            List<DictionaryVM> lst = new List<DictionaryVM>();
+            string query = @"
+select left(date_refresh,6) label,count(*) y from dic_tbl
+group by left(date_refresh,6)
+order by left(date_refresh,6)
+";
+            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
+            {
+
+                lst = DB.Query<DictionaryVM>(query).ToList();
+            }
+
+            return Json(lst);
+        }
         #endregion
         #region Karjard
         public IActionResult ChartKarKard(string Date="139910")

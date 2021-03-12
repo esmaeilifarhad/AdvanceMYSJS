@@ -453,6 +453,7 @@ async function levelUpDown(objectWord) {
     showLevel(level)
     //showAlert(ListObj, 2000)
     ListWordLevel(level)
+    ReportDicByDateMonthDateRefresh()
 
 }
 async function levelUpDown2(objectWord) {
@@ -834,8 +835,8 @@ async function DataLineChartKarKard(ndays) {
 async function ReportLineChartKarKard(ndays) {
     
     var data = await DataLineChartKarKard(ndays)
+    
     debugger
-
         var chart = new CanvasJS.Chart("ReportLineChartKarKard",
             {
 
@@ -867,6 +868,47 @@ async function ReportLineChartKarKard(ndays) {
 
         chart.render();
   
+
+}
+
+//----------DicByDateMonthDateRefresh
+async function DataDicByDateMonthDateRefresh() {
+    var obj = {}
+    obj.url = "/Report/DicByDateMonthDateRefresh"
+    obj.dataType = "json"
+    obj.type = "post"
+    //obj.data = {
+    //    date: date,
+    //}
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+
+    return ListObj
+}
+async function ReportDicByDateMonthDateRefresh() {
+
+    var data = await DataDicByDateMonthDateRefresh()
+
+
+    var chart = new CanvasJS.Chart("DicByDateMonthDateRefresh",
+        {
+
+            title: {
+                text: "DicByDateMonthDateRefresh"
+            },
+            data: [
+                {
+                    type: "line",
+                    dataPoints: data
+                }
+            ]
+        }
+    );
+
+    chart.render();
+
 
 }
 

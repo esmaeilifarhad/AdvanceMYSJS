@@ -20,6 +20,7 @@
         "<div class='showLevel' ></div>" +
         " </div > " +
         " </div > " +
+
         "<div class='row'>" +
         "<div class='col-lg-12'>" +
         "<input onchange='SearchExample(this)' onclick='SearchExample(this)'  type='text' name='searchExample'  placeholder='seach in example' />" +
@@ -27,6 +28,13 @@
         "<div class='showListWordLevel' ></div>" +
         " </div > " +
         " </div > " +
+
+        "<div class='row'>" +
+        "<div class='col-lg-12'>" +
+        "<div id='DicByDateMonthDateRefresh'></div>" +
+        " </div > " +
+        " </div > " +
+
         "</div>"
 
     $("#MasterPage").append(table)
@@ -35,6 +43,7 @@
 
     showLevel(10)
     ListWordLevel(10)
+    ReportDicByDateMonthDateRefresh()
 }
 function Sport() {
     $("#MasterPage").empty()
@@ -408,5 +417,6 @@ async function CallAll() {
     CreateChart2()
     CreateChartKarKard()
     ReportLineChartKarKard(-90)
+    ReportDicByDateMonthDateRefresh()
 }
 
