@@ -279,18 +279,29 @@ where eng like '%" + str + "%'";
             var oldWord = _db.DicTbls.FirstOrDefault(q => q.Eng == eng);
             //var oldExamples = _db.ExampleTbls.Where(q => q.IdDicTbl == word.Id);
 
-            List<DomainClass.DomainClass.ExampleTbl> lstExample = new List<DomainClass.DomainClass.ExampleTbl>();
+            List<DomainClass.DomainClass.ExampleTblVM> lstExample = new List<DomainClass.DomainClass.ExampleTblVM>();
 
-            string query = @"
-select [id]
+            //            string query = @"
+            //select [id]
+            //      ,[id_dic_tbl] as IdDicTbl
+            //      ,[example]
+            //      ,[GetFromExample] from [5069_ManageYourSelf].[5069_Esmaeili].[example_tbl]
+            //where example like '% " + eng + "%'";
+
+          string  query = @"
+select ex.id
+,di.eng
       ,[id_dic_tbl] as IdDicTbl
       ,[example]
-      ,[GetFromExample] from [5069_ManageYourSelf].[5069_Esmaeili].[example_tbl]
+      ,[GetFromExample] from [5069_ManageYourSelf].[5069_Esmaeili].[example_tbl] ex
+	  inner join [5069_ManageYourSelf].[5069_Esmaeili].dic_tbl di
+	  on ex.id_dic_tbl=di.id
 where example like '% " + eng + "%'";
+
             using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
             {
 
-                lstExample = DB.Query<DomainClass.DomainClass.ExampleTbl>(query).ToList();
+                lstExample = DB.Query<DomainClass.DomainClass.ExampleTblVM>(query).ToList();
             }
 
             List<DomainClass.DomainClass.ExampleTbl> lst = new List<DomainClass.DomainClass.ExampleTbl>();

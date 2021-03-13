@@ -234,12 +234,12 @@ async function AddExamples(eng, idWord) {
     
     var newContent = ""
     for (var i = 0; i < ListObj.length; i++) {
-
+        debugger
         var exampleForTranslate = ListObj[i].example
         exampleForTranslate = exampleForTranslate.replace(/'/g, ',')
         
         newContent += "<tr style='text-align: left; direction: ltr; white-space: pre;'>" +
-            "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].id + "'>* Find this Word By Search *<br>" +
+            "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].id + "'>" + ListObj[i].eng +" : <br>" +
             ListObj[i].example +
                 "</div>" +
                 "<div class='AddExamples_" + ListObj[i].id + "'></div>" +
@@ -258,7 +258,7 @@ async function AddExamples(eng, idWord) {
 
 
     //------------------------------
-    debugger
+    
     /*
     var eng = eng.toLowerCase();
     $(".examples_" + idWord + " div").each(function () {
@@ -298,6 +298,7 @@ function ShowAndHiddenPersian(id, eng) {
 
 
 }
+
 function makeSound(str) {
 
     var x = 10;// varx = $("Body input[name='SpeedSpeach']").val();
@@ -362,10 +363,11 @@ async function TranslateWordByWord(exampleId) {
         table += "<tr>"
         table += "<td>" + ListObj[i].eng + "</td> <td>" + ListObj[i].per + "</td>" +
             "<td>" + ListObj[i].level + "</td>" +
-            "<td><input type='button' style='background-color:red' value='False' onclick='levelUpDown2({status:false,wordId:" + ListObj[i].id + ",exampleId:" + exampleId+"})'></td> " +
-            "<td><input type='button' style='background-color:green' value='True' onclick='levelUpDown2({status:true,wordId:" + ListObj[i].id + ",exampleId:" + exampleId + "})'></td>"+
+            "<td><input type='button' style='background-color:green' value='True' onclick='levelUpDown2({status:true,wordId:" + ListObj[i].id + ",exampleId:" + exampleId + "})'></td>" +
+            "<td><input type='button' style='background-color:red' value='False' onclick='levelUpDown2({status:false,wordId:" + ListObj[i].id + ",exampleId:" + exampleId + "})'></td> " +
             "<td><input type='button' style='background-color:blue' value='Edit' onclick='CreateUpdateWord(" + ListObj[i].id + ")'></td>" +
-            "<td><input type='button' style='background-color:gray' value='Sound'  onclick='makeSound(\"" + ListObj[i].eng + "\")'></td>"
+            "<td><input type='button' style='background-color:gray' value='Sound'  onclick='makeSound(\"" + ListObj[i].eng + "\")'></td>" +
+            "<td><a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + ListObj[i].eng + "'>ترجمه</a></td>" 
         table += "</tr>"
     }
     table += "</table>"
