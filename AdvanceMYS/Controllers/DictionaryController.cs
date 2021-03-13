@@ -125,6 +125,7 @@ group by level
                 if (worlSplit == "") continue;
                 if (!Regex.IsMatch(worlSplit, "^[a-zA-Z]*$")) continue;
 
+
                     var findWord = _db.DicTbls.Where(q => q.Eng == worlSplit.Trim() ||
                 q.Eng == worlSplit.Trim() + "s" ||
                  q.Eng == worlSplit.Trim() + "ly" ||
@@ -135,6 +136,8 @@ group by level
                     q.Eng + "es" == worlSplit.Trim() ||
                       q.Eng + "ing" == worlSplit.Trim() ||
                         q.Eng + "ion" == worlSplit.Trim() ||
+                         q.Eng + "d" == worlSplit.Trim() ||
+                          q.Eng + "ed" == worlSplit.Trim() ||
                  q.Eng == worlSplit.Trim() + "*" ||
                   q.Eng == worlSplit.Trim() + "," ||
                    q.Eng == worlSplit.Trim() + "." ||
@@ -300,50 +303,73 @@ where example like '% " + eng + "%'";
                 }
                 else
                 {
+                    bool res = checkExactMatchWord(item, eng);
+                    if(res==true)
                     lst.Add(item);
                 }
             }
 
-            /*
-            foreach (var item in lstExample)
-            {
-                bool isDuplicate = false;
-                //if (oldExamples != null)
-                //{
-                //    var res = oldExamples.FirstOrDefault(q => q.Example == item.Example || q.GetFromExample == item.Id || q.IdDicTbl==item.IdDicTbl);
-                //    if (res != null)
-                //    {
-                //        isDuplicate = true;
-                //    }
-                //}
-           if (item.GetFromExample != 0)
-           {
-
-               isDuplicate = true;
-
-           }
-           else
-           {
-               // isDuplicate = false;
-           }
-
-                if (isDuplicate == false)
-                {
-                    var old = _db.ExampleTbls.SingleOrDefault(q => q.Id == item.Id);
-                    DomainClass.DomainClass.ExampleTbl newExample = new DomainClass.DomainClass.ExampleTbl()
-                    {
-                        Example = _db.DicTbls.SingleOrDefault(q => q.Id == old.IdDicTbl).Eng + " _Added : " + item.Example,
-                        //IdDicTbl = word.Id,
-                        GetFromExample = item.Id
-                    };
-                    _db.ExampleTbls.Add(newExample);
-
-                }
-            }
-            */
-            // _db.SaveChanges();
+            
 
             return Json(lst);
+        }
+
+        private bool checkExactMatchWord(DomainClass.DomainClass.ExampleTbl item, string eng)
+        {
+           // bool IsResult = false;
+            var str = item.Example.Replace(".", " ");
+            str = str.Replace("*", " ");
+            //str = str.Replace(",", " ");
+            str = str.Replace("\n", " ");
+            str = str.Replace(")", " ");
+            str = str.Replace("(", " ");
+            str = str.Replace("/", " ");
+
+
+            var splitecample = str.Split(" ");
+
+            var splitecamples = splitecample.Distinct();
+            List<DomainClass.DomainClass.DicTbl> lstWord = new List<DomainClass.DomainClass.DicTbl>();
+            foreach (var worlSplit in splitecamples)
+            {
+
+                if (worlSplit.Length < 2) continue;
+                if (worlSplit == "") continue;
+                if (!Regex.IsMatch(worlSplit, "^[a-zA-Z]*$")) continue;
+
+
+                if (eng == worlSplit.Trim() ||
+            eng == worlSplit.Trim() + "s" ||
+             eng == worlSplit.Trim() + "ly" ||
+              eng == worlSplit.Trim() + "al" ||
+               eng + "ly" == worlSplit.Trim() ||
+              eng + "al" == worlSplit.Trim() ||
+               eng + "s" == worlSplit.Trim() ||
+                eng + "es" == worlSplit.Trim() ||
+                  eng + "ing" == worlSplit.Trim() ||
+                    eng + "ion" == worlSplit.Trim() ||
+                     eng + "d" == worlSplit.Trim() ||
+                      eng + "ed" == worlSplit.Trim() ||
+             eng == worlSplit.Trim() + "*" ||
+              eng == worlSplit.Trim() + "," ||
+               eng == worlSplit.Trim() + "." ||
+            eng == worlSplit.Trim() + "es" ||
+            eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "es" ||
+             eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ing" ||
+             eng == worlSplit.Trim() + "ing" ||
+              eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ion" ||
+            eng == worlSplit.Trim() + "'s"
+            )
+                {
+                    return true;
+
+                }
+                else
+                {
+                   // return false;
+                }
+            }
+            return false;
         }
 
         public IActionResult CreateUpdateExample(DomainClass.DomainClass.ExampleTbl exampleNew)

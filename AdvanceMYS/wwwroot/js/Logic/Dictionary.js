@@ -231,13 +231,13 @@ async function AddExamples(eng, idWord) {
     ]);
     var ListObj = results[0]
 
-    debugger
+    
     var newContent = ""
     for (var i = 0; i < ListObj.length; i++) {
 
         var exampleForTranslate = ListObj[i].example
         exampleForTranslate = exampleForTranslate.replace(/'/g, ',')
-        debugger
+        
         newContent += "<tr style='text-align: left; direction: ltr; white-space: pre;'>" +
             "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].id + "'>* Find this Word By Search *<br>" +
             ListObj[i].example +
@@ -256,6 +256,30 @@ async function AddExamples(eng, idWord) {
     //$(".examples_" + idExample).empty()
     $(".englishword_" + idWord).after(newContent)
 
+
+    //------------------------------
+    debugger
+    /*
+    var eng = eng.toLowerCase();
+    $(".examples_" + idWord + " div").each(function () {
+
+        $(this).html($(this).html().replace(
+            new RegExp(eng, 'g'), '<span style="color:red">' + eng + '</span>'
+        ));
+    });
+
+
+    var eng = $("input[name='searchExample']").val()
+    eng = eng.toLowerCase();
+    if (eng.length < 1) return
+    $(".examples_" + idWord + " div").each(function () {
+
+        $(this).html($(this).html().replace(
+            new RegExp(eng, 'g'), '<span style="color:blue">' + eng + '</span>'
+        ));
+    });
+    */
+    //-----------------------------
     return ListObj
 
 
