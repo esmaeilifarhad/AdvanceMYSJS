@@ -112,7 +112,7 @@ group by level
             str = str.Replace("*", " ");
             //str = str.Replace(",", " ");
             str = str.Replace("\n", " ");
-
+            str = str.ToLower();
 
             var splitecample = str.Split(" ");
              
@@ -126,27 +126,27 @@ group by level
                 if (!Regex.IsMatch(worlSplit, "^[a-zA-Z]*$")) continue;
 
 
-                    var findWord = _db.DicTbls.Where(q => q.Eng == worlSplit.Trim() ||
-                q.Eng == worlSplit.Trim() + "s" ||
-                 q.Eng == worlSplit.Trim() + "ly" ||
-                  q.Eng == worlSplit.Trim() + "al" ||
-                   q.Eng + "ly" == worlSplit.Trim() ||
-                  q.Eng + "al" == worlSplit.Trim() ||
-                   q.Eng + "s" == worlSplit.Trim() ||
-                    q.Eng + "es" == worlSplit.Trim() ||
-                      q.Eng + "ing" == worlSplit.Trim() ||
-                        q.Eng + "ion" == worlSplit.Trim() ||
-                         q.Eng + "d" == worlSplit.Trim() ||
-                          q.Eng + "ed" == worlSplit.Trim() ||
-                 q.Eng == worlSplit.Trim() + "*" ||
-                  q.Eng == worlSplit.Trim() + "," ||
-                   q.Eng == worlSplit.Trim() + "." ||
-                q.Eng == worlSplit.Trim() + "es" ||
-                q.Eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "es" ||
-                 q.Eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ing" ||
-                 q.Eng == worlSplit.Trim() + "ing" ||
-                  q.Eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ion" ||
-                q.Eng == worlSplit.Trim() + "'s" 
+                    var findWord = _db.DicTbls.Where(q => q.Eng.ToLower() == worlSplit.Trim() ||
+                q.Eng.ToLower() == worlSplit.Trim() + "s" ||
+                 q.Eng.ToLower() == worlSplit.Trim() + "ly" ||
+                  q.Eng.ToLower() == worlSplit.Trim() + "al" ||
+                   q.Eng.ToLower() + "ly" == worlSplit.Trim() ||
+                  q.Eng.ToLower() + "al" == worlSplit.Trim() ||
+                   q.Eng.ToLower() + "s" == worlSplit.Trim() ||
+                    q.Eng.ToLower() + "es" == worlSplit.Trim() ||
+                      q.Eng.ToLower() + "ing" == worlSplit.Trim() ||
+                        q.Eng.ToLower() + "ion" == worlSplit.Trim() ||
+                         q.Eng.ToLower() + "d" == worlSplit.Trim() ||
+                          q.Eng.ToLower() + "ed" == worlSplit.Trim() ||
+                 q.Eng.ToLower() == worlSplit.Trim() + "*" ||
+                  q.Eng.ToLower() == worlSplit.Trim() + "," ||
+                   q.Eng.ToLower() == worlSplit.Trim() + "." ||
+                q.Eng.ToLower() == worlSplit.Trim() + "es" ||
+                q.Eng.ToLower() == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "es" ||
+                 q.Eng.ToLower() == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ing" ||
+                 q.Eng.ToLower() == worlSplit.Trim() + "ing" ||
+                  q.Eng.ToLower() == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ion" ||
+                q.Eng.ToLower() == worlSplit.Trim() + "'s" 
                
                 );
                 if (findWord != null)
@@ -327,15 +327,16 @@ where example like '% " + eng + "%'";
 
         private bool checkExactMatchWord(DomainClass.DomainClass.ExampleTbl item, string eng)
         {
+           eng= eng.ToLower();
            // bool IsResult = false;
             var str = item.Example.Replace(".", " ");
             str = str.Replace("*", " ");
-            //str = str.Replace(",", " ");
+            str = str.Replace(",", "");
             str = str.Replace("\n", " ");
             str = str.Replace(")", " ");
             str = str.Replace("(", " ");
             str = str.Replace("/", " ");
-
+            str = str.ToLower();
 
             var splitecample = str.Split(" ");
 
