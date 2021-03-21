@@ -1,7 +1,7 @@
 ﻿//************************************Task*****************************************************
 async function TabShowListTask() {
 
-    ListTask();
+    ShowTypeOfTask()
     $(".ListTask").append(" <input type='text' placeholder='جستجو' onKeyup='ListTask(this)'/>")
 }
 async function ListTask(stringSerach) {
@@ -195,7 +195,7 @@ async function transferDate(str) {
         }
 
         if (count == i) {
-            ListTask();
+            ShowTypeOfTask()
 
             $.LoadingOverlay("hide");
             // resolve("finish")
@@ -755,7 +755,7 @@ async function Calender(status) {
 
 //نمایش تقویم تسک ها 
 async function CalenderListTagh(status) {
-
+    
     var today = todayShamsy()
     var splitdate = today.split('/');
     var year = ""
@@ -1392,7 +1392,7 @@ function RefreshTask() {
        
     }
     else {
-        ListTask();
+        ShowTypeOfTask()
     }
     ListTimingForListTask();
     ListTaskAnjamShode()
@@ -1477,6 +1477,35 @@ function showTaskSeparate(ListObj) {
 
 
     return table
+}
+
+//---------------
+async function ShowTypeOfTask(type) {
+    debugger
+    // Store
+    if (type != undefined)
+    localStorage.setItem("ShowTypeOfTask", type);
+
+    if (type == undefined )
+    var type = localStorage.getItem("ShowTypeOfTask");
+
+    if (type == 1) {
+        
+
+        var today = todayShamsy8char()
+        //نمایش تسک ها بصورت جدا شده
+
+        var ListObj = await GetTaskByDate(today)
+        var body = showTaskSeparate(ListObj)
+        $(".ListTask").empty()
+        $(".ListTask").append(body)
+    }
+    else {
+        ListTask()
+    }
+   
+  
+
 }
 
 
