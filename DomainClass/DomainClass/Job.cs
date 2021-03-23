@@ -23,5 +23,6 @@ namespace DomainClass.DomainClass
         public virtual ICollection<KarKard> KarKards { get; set; }
         public virtual ICollection<PercentJob> PercentJobs { get; set; }
         public virtual  ICollection<Subject> Subjects { get; set; }
+        public virtual ICollection<Planing> Planing { get; set; }
     }
 }

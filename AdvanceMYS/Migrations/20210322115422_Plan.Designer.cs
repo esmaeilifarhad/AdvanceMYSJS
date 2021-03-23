@@ -4,14 +4,16 @@ using AdvanceMYS.Models.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdvanceMYS.Migrations
 {
     [DbContext(typeof(_Context))]
-    partial class _5069_ManageYourSelfContextModelSnapshot : ModelSnapshot
+    [Migration("20210322115422_Plan")]
+    partial class Plan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -680,25 +682,6 @@ namespace AdvanceMYS.Migrations
                     b.HasIndex("JobId");
 
                     b.ToTable("PercentJob", "5069_Esmaeili");
-                });
-
-            modelBuilder.Entity("DomainClass.DomainClass.Planing", b =>
-                {
-                    b.Property<int>("PlaningId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PlaningId");
-
-                    b.ToTable("Planing");
                 });
 
             modelBuilder.Entity("DomainClass.DomainClass.Player", b =>

@@ -38,7 +38,7 @@ namespace AdvanceMYS.Controllers
             var s = User;
         }
 
-
+       
         public IActionResult Index()
         {
             var res = _db.Tasks.ToList();

@@ -192,7 +192,7 @@ async function ListAllJob() {
         "<th>ویرایش</th>" +
         "<th>حذف</th>" +
         "<th>درصد</th>" +
-       
+        "<th>plan</th>" +
         "</tr>"
     
     var sum=0
@@ -236,6 +236,7 @@ async function ListAllJob() {
         table += "<td><input type='button'  value='ویرایش'  onclick='CreateUpdateJob(" + ListObj[i].jobId + ")'/></td>"
         table += "<td><input type='button'  value='حذف' onclick='DeleteJob(" + ListObj[i].jobId + ")'/></td>"
         table += "<td><input type='button'  value='درصد' onclick='percentJob(" + ListObj[i].jobId + ")'/></td>"
+        table += "<td><input type='button'  value='Plan' onclick='CreatePlanModal(" + ListObj[i].jobId + ")'/></td>"
 
         table += "</tr>"
 
@@ -498,6 +499,30 @@ async function percentJob(jobId) {
 
     $("#MasterModal .modal-footer").empty();
     $("#MasterModal .modal-footer").append(modal_footer);
+
+    $("#MasterModal .BodyModal").empty();
+    $("#MasterModal .BodyModal").append(table);
+
+    $("#MasterModal").modal();
+}
+async function CreatePlanModal(jobId) {
+
+    var table = "<table>" +
+        "<tr><td><span>   تعداد روز  </span><input type='number' name='nDays' /></td></tr>" +
+        "</table>"
+    var modal_header = "<span>  برنامه ریزی  </span>"
+    $("#MasterModal .modal-header").empty();
+    $("#MasterModal .modal-header").append(modal_header);
+
+    //var modal_footer = "<table><tr>" +
+    //    "<td><input type='button' class='btn btn-success' value='ثبت درصد' onclick='CreaetUpdatePercentJobPost(" + jobId + ")'/> | " +
+    //    "<input type='button'  class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +
+    //    "</tr>"
+    //modal_footer += "</table>"
+
+
+    //$("#MasterModal .modal-footer").empty();
+    //$("#MasterModal .modal-footer").append(modal_footer);
 
     $("#MasterModal .BodyModal").empty();
     $("#MasterModal .BodyModal").append(table);
