@@ -10,3 +10,7 @@
 /*div table :hover{
  background-color:aqua;
 }*/
+
+.ListTagh .table th {
+    transform: rotate(300deg)
+}

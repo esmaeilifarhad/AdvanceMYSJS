@@ -101,6 +101,7 @@ async function Task() {
         "<div class='col-md-12'>" +
 
         "<div class='ListTagh'></div>" +
+    "<div class='ListTaghDetail'></div>" +
 
         "</div > " +
         "</div > " +

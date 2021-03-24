@@ -1111,7 +1111,7 @@ async function UpdateTask2(obj) {
     var IsCheck = obj.IsCheck
     var DateEnd = obj.DateEnd
     var Olaviat= obj.Olaviat
-    $.LoadingOverlay("show");
+
     var obj = {}
     obj.url = "/Task/UpdateTask"
     obj.dataType = "json"
@@ -1126,6 +1126,7 @@ async function UpdateTask2(obj) {
     var results = await Promise.all([
         service(obj)
     ]);
+    
     var ListObj = results[0]
     $.LoadingOverlay("hide");
     RefreshTask()
