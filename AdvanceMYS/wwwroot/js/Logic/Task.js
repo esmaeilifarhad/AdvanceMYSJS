@@ -1104,7 +1104,28 @@ async function removeTimeTask(taskId) {
 
 }
 
+async function DeleteTask(obj) {
+    debugger
+    $.LoadingOverlay("show");
+    var TaskId = obj.Id
 
+    var obj = {}
+    obj.url = "/Task/UpdateTask"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        TaskId: TaskId,
+        IsCheck: false,
+
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+
+    var ListObj = results[0]
+    $.LoadingOverlay("hide");
+    RefreshTask()
+}
 async function UpdateTask2(obj) {
     $.LoadingOverlay("show");
     var TaskId = obj.TaskId
@@ -1482,7 +1503,7 @@ function showTaskSeparate(ListObj) {
 
 //---------------
 async function ShowTypeOfTask(type) {
-    debugger
+    
     // Store
     if (type != undefined)
     localStorage.setItem("ShowTypeOfTask", type);

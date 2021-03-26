@@ -212,7 +212,7 @@ async function ListAllJob() {
 
        // sum += (ListObj[i].percentJobs.length > 0 ? ListObj[i].percentJobs[0].percentValue : 0)
         table += "<tr>"
-        table += "<td>" + ListObj[i].name + "</td>"
+        table += "<td>" + ListObj[i].name + ' ' + (ListObj[i].rate == null ? 0 : ListObj[i].rate) +"</td>"
         table += "<td>" + ListObj[i].category.categoryName + "</td>"
         
         if (ListObj[i].percentJobs.length > 0) {
@@ -333,7 +333,8 @@ async function CreateUpdateJob(JobId) {
         var table = "<table>" +
 
             "<tr><td>عنوان</td><td><input type='text' placeholde='عنوان' name='Dsc'  autocomplete='off' value=" + ListtObj.name + "  /></td></tr>" 
-        
+            table+= "<tr><td>Rate</td><td><input type='text'  name='Rate'  autocomplete='off' value=" + ListtObj.rate + "  /></td></tr>" 
+
         table += "<tr><td>فهرست</td><td><select> "
         for (var i = 0; i < ListtObj2.length; i++) {
             if (ListtObj.categoryId == ListtObj2[i].categoryId) {
@@ -422,7 +423,7 @@ async function CreaetUpdateJobPost(JobId) {
     
     var name = $("#MasterModal input[name='Dsc']").val()
 
-
+    var rate = $("#MasterModal input[name='Rate']").val()
 
     var categoryName = $("#MasterModal option:selected").text();
     var categoryId = $("#MasterModal option:selected").val();
@@ -433,7 +434,7 @@ async function CreaetUpdateJobPost(JobId) {
     obj.url = "/Category/CreateUpdateJobPost"
     obj.dataType = "json"
     obj.type = "POST"
-    obj.data = { Name: name, CategoryId: categoryId, JobId: JobId}
+    obj.data = { Name: name, CategoryId: categoryId, JobId: JobId,Rate:rate}
 
     var results = await Promise.all([
         service(obj)
@@ -443,7 +444,7 @@ async function CreaetUpdateJobPost(JobId) {
     showAlert(ListtObj, 2000);
 
     ListJobs(_CategoryId)
-
+    ListAllJob()
 }
 
 async function DeleteJob(JobId) {

@@ -12,5 +12,6 @@
 }*/
 
 .ListTagh .table th {
-    transform: rotate(300deg)
+    transform: rotate(300deg) ;
+    font-size: 15px;
 }

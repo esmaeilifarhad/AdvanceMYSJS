@@ -72,7 +72,7 @@ group by level
                 Where(q => q.LastStatus == false).
                 OrderBy(q => q.DateRefresh).
                 ThenBy(q => q.Time).
-                Take(1).
+                Take(1000).
                 ToList().
                 AsEnumerable().Where(
                     q => (q.DateRefresh != today) ||

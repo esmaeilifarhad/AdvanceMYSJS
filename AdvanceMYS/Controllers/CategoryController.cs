@@ -92,6 +92,7 @@ namespace AdvanceMYS.Controllers
             {
                 var old = _db.Jobs.SingleOrDefault(q => q.JobId == job.JobId);
                 old.Name = job.Name;
+                old.Rate = job.Rate;
                 old.CategoryId = job.CategoryId;
                 //old.UserId = UserId;
 

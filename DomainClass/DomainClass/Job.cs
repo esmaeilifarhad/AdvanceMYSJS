@@ -16,6 +16,7 @@ namespace DomainClass.DomainClass
         public int JobId { get; set; }
         public string Name { get; set; }
         public int? CategoryId { get; set; }
+        public float? Rate { get; set; }
         public bool? GridShow { get; set; }
         public bool Mohasebe { get; set; }
 

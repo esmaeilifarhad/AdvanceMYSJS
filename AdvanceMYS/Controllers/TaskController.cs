@@ -503,7 +503,7 @@ where
  [Date]=@date
 
 union All
-select 0 ,j.Name,SUM(SpendTimeMinute)/1200 rate,DayDate,DayDate,0,0,N'مطالعه'
+select 0 ,j.Name,SUM(SpendTimeMinute)/(select Value*60 from Setting where [Key]='StudyTimeScore') rate,DayDate,DayDate,0,0,N'مطالعه'
 from karkard k inner join Job j
 on k.JobId=j.JobId
 where DayDate=@date
@@ -543,7 +543,7 @@ on RoutineJob.RoutineJobId=RoutineJobHa.RoutineJobId
 --where 
 --UserId=@UserId
 union All
-select DayDate,SUM(SpendTimeMinute)/1200 rate
+select DayDate,SUM(SpendTimeMinute)/(select Value*60 from Setting where [Key]='StudyTimeScore') rate
 from karkard 
 group by DayDate
 
