@@ -1105,7 +1105,7 @@ async function removeTimeTask(taskId) {
 }
 
 async function DeleteTask(obj) {
-    debugger
+    
     $.LoadingOverlay("show");
     var TaskId = obj.Id
 
@@ -1463,8 +1463,9 @@ function showTaskSeparate(ListObj) {
     for (var groupName in types) {
 
         if (j % countCol == 0) {
-            table += "<div class='row'><div class='col-md-4' style='background-image: linear-gradient(to bottom, #5d92cc, transparent);'>"
-            table += "<p style='color: #a01313;font-weight: bolder;'>" + types[groupName][0].catTitle + "</p>"
+            
+            table += "<div class='row'><div class='col-md-4'  style='background-image: linear-gradient(to bottom, #5d92cc, transparent);'>"
+            table += "<p style='color: #a01313;font-weight: bolder;' >" + types[groupName][0].catTitle + "</p>"
             for (var i = 0; i < types[groupName].length; i++) {
                 table += "<p style='border:1px dotted black;padding:3px;font-size:10px;margin: 1px;'>"
                 table += "<input type='button' style='background-color:green' class='fa fa-sort-up pointer ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat + 1) + "})' />"
