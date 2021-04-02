@@ -862,7 +862,7 @@ async function CalenderListTagh(status) {
                 else {
                     //جمعه قرمز
                     if (i == 6) {
-                        table += "<span style='color:red;cursor:pointer'> " + k + "</span>"
+                        table += "<span style='color:red;cursor:pointer;" + (IsInTaghvim.length > 0 ? 'background-color:yellow;border-radius: 10px;spadding: 3px;':'')+"'> " + k + "</span>"
                     }
                     else {
                         table += "<span style='" + style + ";cursor:pointer'>" + k + "</span>"
