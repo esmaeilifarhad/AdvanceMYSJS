@@ -192,7 +192,7 @@ async function ListAllJob() {
         "<th>ویرایش</th>" +
         "<th>حذف</th>" +
         "<th>درصد</th>" +
-       
+        "<th>plan</th>" +
         "</tr>"
     
     var sum=0
@@ -212,7 +212,7 @@ async function ListAllJob() {
 
        // sum += (ListObj[i].percentJobs.length > 0 ? ListObj[i].percentJobs[0].percentValue : 0)
         table += "<tr>"
-        table += "<td>" + ListObj[i].name + "</td>"
+        table += "<td>" + ListObj[i].name + ' ' + (ListObj[i].rate == null ? 0 : ListObj[i].rate) +"</td>"
         table += "<td>" + ListObj[i].category.categoryName + "</td>"
         
         if (ListObj[i].percentJobs.length > 0) {
@@ -236,6 +236,7 @@ async function ListAllJob() {
         table += "<td><input type='button'  value='ویرایش'  onclick='CreateUpdateJob(" + ListObj[i].jobId + ")'/></td>"
         table += "<td><input type='button'  value='حذف' onclick='DeleteJob(" + ListObj[i].jobId + ")'/></td>"
         table += "<td><input type='button'  value='درصد' onclick='percentJob(" + ListObj[i].jobId + ")'/></td>"
+        table += "<td><input type='button'  value='Plan' onclick='CreatePlanModal(" + ListObj[i].jobId + ")'/></td>"
 
         table += "</tr>"
 
@@ -332,7 +333,8 @@ async function CreateUpdateJob(JobId) {
         var table = "<table>" +
 
             "<tr><td>عنوان</td><td><input type='text' placeholde='عنوان' name='Dsc'  autocomplete='off' value=" + ListtObj.name + "  /></td></tr>" 
-        
+            table+= "<tr><td>Rate</td><td><input type='text'  name='Rate'  autocomplete='off' value=" + ListtObj.rate + "  /></td></tr>" 
+
         table += "<tr><td>فهرست</td><td><select> "
         for (var i = 0; i < ListtObj2.length; i++) {
             if (ListtObj.categoryId == ListtObj2[i].categoryId) {
@@ -421,7 +423,7 @@ async function CreaetUpdateJobPost(JobId) {
     
     var name = $("#MasterModal input[name='Dsc']").val()
 
-
+    var rate = $("#MasterModal input[name='Rate']").val()
 
     var categoryName = $("#MasterModal option:selected").text();
     var categoryId = $("#MasterModal option:selected").val();
@@ -432,7 +434,7 @@ async function CreaetUpdateJobPost(JobId) {
     obj.url = "/Category/CreateUpdateJobPost"
     obj.dataType = "json"
     obj.type = "POST"
-    obj.data = { Name: name, CategoryId: categoryId, JobId: JobId}
+    obj.data = { Name: name, CategoryId: categoryId, JobId: JobId,Rate:rate}
 
     var results = await Promise.all([
         service(obj)
@@ -442,7 +444,7 @@ async function CreaetUpdateJobPost(JobId) {
     showAlert(ListtObj, 2000);
 
     ListJobs(_CategoryId)
-
+    ListAllJob()
 }
 
 async function DeleteJob(JobId) {
@@ -498,6 +500,30 @@ async function percentJob(jobId) {
 
     $("#MasterModal .modal-footer").empty();
     $("#MasterModal .modal-footer").append(modal_footer);
+
+    $("#MasterModal .BodyModal").empty();
+    $("#MasterModal .BodyModal").append(table);
+
+    $("#MasterModal").modal();
+}
+async function CreatePlanModal(jobId) {
+
+    var table = "<table>" +
+        "<tr><td><span>   تعداد روز  </span><input type='number' name='nDays' /></td></tr>" +
+        "</table>"
+    var modal_header = "<span>  برنامه ریزی  </span>"
+    $("#MasterModal .modal-header").empty();
+    $("#MasterModal .modal-header").append(modal_header);
+
+    //var modal_footer = "<table><tr>" +
+    //    "<td><input type='button' class='btn btn-success' value='ثبت درصد' onclick='CreaetUpdatePercentJobPost(" + jobId + ")'/> | " +
+    //    "<input type='button'  class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +
+    //    "</tr>"
+    //modal_footer += "</table>"
+
+
+    //$("#MasterModal .modal-footer").empty();
+    //$("#MasterModal .modal-footer").append(modal_footer);
 
     $("#MasterModal .BodyModal").empty();
     $("#MasterModal .BodyModal").append(table);

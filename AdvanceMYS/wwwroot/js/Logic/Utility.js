@@ -125,7 +125,13 @@ Pass you dates to this function like this:  showDays('1/1/2014','12/25/2014')
 //980809|13980809  =>1398/08/09  input parameter
 function formatDate(str) {
     
-   
+    const m = moment();
+    today = moment().format('jYYYY/jM/jD');//Today
+    var todayarray = today.split("/")
+    mounth = (parseInt(todayarray[1]) <= 9) ? "0" + parseInt(todayarray[1]) : parseInt(todayarray[1])
+    rooz = (parseInt(todayarray[2]) <= 9) ? "0" + parseInt(todayarray[2]) : parseInt(todayarray[2])
+    year = todayarray[0]
+
 
     if (str == undefined) {
         return "undefined"
@@ -134,7 +140,7 @@ function formatDate(str) {
     str = str.toString()
 
     if (str.length == 6) {
-        return "13" + str.slice(0, 2) + "/" + str.slice(2, 4) + "/" + str.slice(4, 6)
+        return year + "/" + str.slice(2, 4) + "/" + str.slice(4, 6)
     }
     if (str.length == 8) {
         return str.slice(0, 4) + "/" + str.slice(4, 6) + "/" + str.slice(6, 8)
@@ -289,12 +295,13 @@ function todayShamsy() {
     var todayarray = today.split("/")
     mounth = (parseInt(todayarray[1]) <= 9) ? "0" + parseInt(todayarray[1]) : parseInt(todayarray[1])
     rooz = (parseInt(todayarray[2]) <= 9) ? "0" + parseInt(todayarray[2]) : parseInt(todayarray[2])
-    year = todayarray[0].substring(2, 4)
-    today = "13" + year + "/" + mounth + "/" + rooz
+    year = todayarray[0]//.substring(2, 4)
+    today =  year + "/" + mounth + "/" + rooz
 
     return today;
 }
 function todayShamsy8char() {
+    
     const m = moment();
     today = moment().format('jYYYY/jM/jD');//Today
 
@@ -302,8 +309,8 @@ function todayShamsy8char() {
     var todayarray = today.split("/")
     mounth = (parseInt(todayarray[1]) <= 9) ? "0" + parseInt(todayarray[1]) : parseInt(todayarray[1])
     rooz = (parseInt(todayarray[2]) <= 9) ? "0" + parseInt(todayarray[2]) : parseInt(todayarray[2])
-    year = todayarray[0].substring(2, 4)
-    today = "13" + year + "" + mounth + "" + rooz
+    year = todayarray[0]//.substring(2, 4)
+    today =  year + "" + mounth + "" + rooz
     return today
 }
 function addDayReturnDate(nDays) {

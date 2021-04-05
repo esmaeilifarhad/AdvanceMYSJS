@@ -69,14 +69,15 @@ function Sport() {
 }
 async function Task() {
     $("#MasterPage").empty()
+    var typeOfTask = localStorage.getItem("ShowTypeOfTask");
     var table = "<div style='text-align:center'><div class='btn-group' >" +
         "<button type='button' onclick='Calender()' class='btn btn-warning' >تقویم</button >" +
         "<button type='button' onclick='UpdateToToday()' class='btn btn-info' >انتقال به امروز</button >" +
         "<div class='btn-group'>" +
         "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'> Sony</button>" +
-        "<div class='dropdown-menu'>" +
-        " <a class='dropdown-item' href='#'>Tablet</a>" +
-        " <a class='dropdown-item' href='#'>Smartphone</a>" +
+        "<div style='padding:5px'>" +
+        "<input "+(typeOfTask==1?'checked':'')+" name='rdbTypeShowTask' type='radio' value=1  onclick='ShowTypeOfTask(1)'/>&nbsp<lable>به تفکیک وظایف</lable></br>" +
+        "<input "+(typeOfTask == 2 ? 'checked' : '') +" name='rdbTypeShowTask' type='radio' value=2 onclick='ShowTypeOfTask(2)'/>&nbsp<lable >به ترتیب الویت</lable></br>" +
         "</div>" +
         "</div>" +
         "</div>" +
@@ -100,6 +101,7 @@ async function Task() {
         "<div class='col-md-12'>" +
 
         "<div class='ListTagh'></div>" +
+    "<div class='ListTaghDetail'></div>" +
 
         "</div > " +
         "</div > " +

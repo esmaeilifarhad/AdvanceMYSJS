@@ -38,7 +38,7 @@ namespace AdvanceMYS.Controllers
             var s = User;
         }
 
-
+       
         public IActionResult Index()
         {
             var res = _db.Tasks.ToList();
@@ -500,8 +500,16 @@ select   RoutineJob.RoutineJobId as taskId,Job,[Rate],[Date],[Date],[Order],0 as
 from [5069_ManageYourSelf].[5069_Esmaeili].RoutineJob inner join [5069_ManageYourSelf].[5069_Esmaeili].RoutineJobHa
 on RoutineJob.RoutineJobId=RoutineJobHa.RoutineJobId 
 where 
- UserId=@UserId
-and [Date]=@date
+ [Date]=@date
+
+union All
+select 0 ,j.Name,SUM(SpendTimeMinute)/(select Value*60 from Setting where [Key]='StudyTimeScore') rate,DayDate,DayDate,0,0,N'مطالعه'
+from karkard k inner join Job j
+on k.JobId=j.JobId
+where DayDate=@date
+group by j.Name,DayDate  
+
+
 ) as tbl
 order by Title,Rate desc
 ";
@@ -532,8 +540,14 @@ union All
 select  [Date],[Rate]
 from [5069_ManageYourSelf].[5069_Esmaeili].RoutineJob inner join [5069_ManageYourSelf].[5069_Esmaeili].RoutineJobHa
 on RoutineJob.RoutineJobId=RoutineJobHa.RoutineJobId 
-where 
-UserId=@UserId
+--where 
+--UserId=@UserId
+union All
+select DayDate,SUM(SpendTimeMinute)/(select Value*60 from Setting where [Key]='StudyTimeScore') rate
+from karkard 
+group by DayDate
+
+
 ) as tbl
 group by DateEnd
 order by DateEnd desc

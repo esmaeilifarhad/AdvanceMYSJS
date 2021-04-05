@@ -1,7 +1,7 @@
 ﻿//************************************Task*****************************************************
 async function TabShowListTask() {
 
-    ListTask();
+    ShowTypeOfTask()
     $(".ListTask").append(" <input type='text' placeholder='جستجو' onKeyup='ListTask(this)'/>")
 }
 async function ListTask(stringSerach) {
@@ -195,7 +195,7 @@ async function transferDate(str) {
         }
 
         if (count == i) {
-            ListTask();
+            ShowTypeOfTask()
 
             $.LoadingOverlay("hide");
             // resolve("finish")
@@ -755,7 +755,7 @@ async function Calender(status) {
 
 //نمایش تقویم تسک ها 
 async function CalenderListTagh(status) {
-
+    
     var today = todayShamsy()
     var splitdate = today.split('/');
     var year = ""
@@ -862,7 +862,7 @@ async function CalenderListTagh(status) {
                 else {
                     //جمعه قرمز
                     if (i == 6) {
-                        table += "<span style='color:red;cursor:pointer'> " + k + "</span>"
+                        table += "<span style='color:red;cursor:pointer;" + (IsInTaghvim.length > 0 ? 'background-color:yellow;border-radius: 10px;spadding: 3px;':'')+"'> " + k + "</span>"
                     }
                     else {
                         table += "<span style='" + style + ";cursor:pointer'>" + k + "</span>"
@@ -1104,14 +1104,35 @@ async function removeTimeTask(taskId) {
 
 }
 
+async function DeleteTask(obj) {
+    
+    $.LoadingOverlay("show");
+    var TaskId = obj.Id
 
+    var obj = {}
+    obj.url = "/Task/UpdateTask"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        TaskId: TaskId,
+        IsCheck: false,
+
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+
+    var ListObj = results[0]
+    $.LoadingOverlay("hide");
+    RefreshTask()
+}
 async function UpdateTask2(obj) {
     $.LoadingOverlay("show");
     var TaskId = obj.TaskId
     var IsCheck = obj.IsCheck
     var DateEnd = obj.DateEnd
     var Olaviat= obj.Olaviat
-    $.LoadingOverlay("show");
+
     var obj = {}
     obj.url = "/Task/UpdateTask"
     obj.dataType = "json"
@@ -1126,6 +1147,7 @@ async function UpdateTask2(obj) {
     var results = await Promise.all([
         service(obj)
     ]);
+    
     var ListObj = results[0]
     $.LoadingOverlay("hide");
     RefreshTask()
@@ -1392,7 +1414,7 @@ function RefreshTask() {
        
     }
     else {
-        ListTask();
+        ShowTypeOfTask()
     }
     ListTimingForListTask();
     ListTaskAnjamShode()
@@ -1441,8 +1463,9 @@ function showTaskSeparate(ListObj) {
     for (var groupName in types) {
 
         if (j % countCol == 0) {
-            table += "<div class='row'><div class='col-md-4' style='background-image: linear-gradient(to bottom, #5d92cc, transparent);'>"
-            table += "<p style='color: #a01313;font-weight: bolder;'>" + types[groupName][0].catTitle + "</p>"
+            
+            table += "<div class='row'><div class='col-md-4'  style='background-image: linear-gradient(to bottom, #5d92cc, transparent);'>"
+            table += "<p style='color: #a01313;font-weight: bolder;' >" + types[groupName][0].catTitle + "</p>"
             for (var i = 0; i < types[groupName].length; i++) {
                 table += "<p style='border:1px dotted black;padding:3px;font-size:10px;margin: 1px;'>"
                 table += "<input type='button' style='background-color:green' class='fa fa-sort-up pointer ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat + 1) + "})' />"
@@ -1477,6 +1500,35 @@ function showTaskSeparate(ListObj) {
 
 
     return table
+}
+
+//---------------
+async function ShowTypeOfTask(type) {
+    
+    // Store
+    if (type != undefined)
+    localStorage.setItem("ShowTypeOfTask", type);
+
+    if (type == undefined )
+    var type = localStorage.getItem("ShowTypeOfTask");
+
+    if (type == 1) {
+        
+
+        var today = todayShamsy8char()
+        //نمایش تسک ها بصورت جدا شده
+
+        var ListObj = await GetTaskByDate(today)
+        var body = showTaskSeparate(ListObj)
+        $(".ListTask").empty()
+        $(".ListTask").append(body)
+    }
+    else {
+        ListTask()
+    }
+   
+  
+
 }
 
 

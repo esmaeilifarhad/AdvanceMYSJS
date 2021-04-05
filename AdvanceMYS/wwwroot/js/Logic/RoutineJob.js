@@ -1,4 +1,5 @@
 ﻿function createForm() {
+    debugger
     var table = tableReturn()
     table += "<tr>"
     table += "<td>Title :  <input type='text' placeholder='عنوان' name='Job'/></td>"
@@ -64,7 +65,7 @@ async function listRoutineJob() {
  function showForm(id) {
     var table = createForm()
   
-
+     debugger
     var modal_footer = "<table><tr>" +
         "<td><input type='button' class='btn btn-success' value=" + (id > 0 ? 'ویرایش' : 'ایجاد') + " onclick='CreaetUpdateRoutinejobPost(" + id + ")'/> | " +
         "<input type='button'  class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +
@@ -187,10 +188,13 @@ async function showRepeatedTask(listObj) {
                x.routineJobId == listObj[i].routineJobId)
             if (IsExistInRoutineJobha == undefined) {
                 table += "<td><input type='checkbox' name='repeatedTask' onclick='DocheckRepeateTask(this," + listObj[i].routineJobId + ")' /> " + listObj[i].job + "</td>"
+                table += "<td><span class='fa fa-edit' style='cursor: pointer' onclick='showForm(" + listObj[i].routineJobId + ")'></span></td>"
             }
             else {
                 
                 table += "<td><input type='checkbox' name='repeatedTask' checked onclick='DocheckRepeateTask(this," + listObj[i].routineJobId + ")' /> " + listObj[i].job + "</td>"
+                table += "<td><span class='fa fa-edit' style='cursor: pointer' onclick='showForm(" + listObj[i].routineJobId + ")'></span></td>"
+
             }
             table += "</tr>"
         }

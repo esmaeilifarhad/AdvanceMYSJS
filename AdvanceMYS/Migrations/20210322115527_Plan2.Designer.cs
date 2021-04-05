@@ -4,14 +4,16 @@ using AdvanceMYS.Models.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdvanceMYS.Migrations
 {
     [DbContext(typeof(_Context))]
-    partial class _5069_ManageYourSelfContextModelSnapshot : ModelSnapshot
+    [Migration("20210322115527_Plan2")]
+    partial class Plan2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,9 +341,6 @@ namespace AdvanceMYS.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<float?>("Rate")
-                        .HasColumnType("real");
 
                     b.HasKey("JobId");
 
@@ -692,9 +691,6 @@ namespace AdvanceMYS.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
@@ -703,8 +699,6 @@ namespace AdvanceMYS.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PlaningId");
-
-                    b.HasIndex("JobId");
 
                     b.ToTable("Planing");
                 });
@@ -1307,17 +1301,6 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("Job");
                 });
 
-            modelBuilder.Entity("DomainClass.DomainClass.Planing", b =>
-                {
-                    b.HasOne("DomainClass.DomainClass.Job", "Job")
-                        .WithMany("Planing")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Job");
-                });
-
             modelBuilder.Entity("DomainClass.DomainClass.PlayerScore", b =>
                 {
                     b.HasOne("DomainClass.DomainClass.Player", "Player")
@@ -1493,8 +1476,6 @@ namespace AdvanceMYS.Migrations
                     b.Navigation("KarKards");
 
                     b.Navigation("PercentJobs");
-
-                    b.Navigation("Planing");
 
                     b.Navigation("Subjects");
                 });

@@ -81,6 +81,16 @@ group by level
                 ).ToList();
                 return Json(resDic);
             }
+            else if (level == 90) {
+                var today = Utility.ConvertDateToSqlFormat(Utility.shamsi_date());
+                var resDic = _db.DicTbls.Include(q => q.ExampleTbls).
+                OrderBy(q => q.DateRefresh).
+                ThenBy(q => q.Time).
+                Take(1).
+                ToList().
+                AsEnumerable().ToList();
+                return Json(resDic);
+            }
             else
             {
                 try
@@ -89,7 +99,7 @@ group by level
                     Where(q => q.Level == level && q.IsArchieve == false).
                     OrderBy(q => q.DateRefresh).
                     ThenBy(q => q.Time).
-                    Take(3).
+                    Take(1).
                     ToList();
                     return Json(resDic);
                 }
@@ -144,6 +154,7 @@ group by level
                 q.Eng.ToLower() == worlSplit.Trim() + "es" ||
                 q.Eng.ToLower() == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "es" ||
                  q.Eng.ToLower() == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ing" ||
+                 // q.Eng.Remove(q.Eng.Trim().Length - 1, 1).ToLower() + "ing" == worlSplit.Trim().ToLower() ||
                  q.Eng.ToLower() == worlSplit.Trim() + "ing" ||
                   q.Eng.ToLower() == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ion" ||
                 q.Eng.ToLower() == worlSplit.Trim() + "'s" 
@@ -277,16 +288,10 @@ where eng like '%" + str + "%'";
         {
 
             var oldWord = _db.DicTbls.FirstOrDefault(q => q.Eng == eng);
-            //var oldExamples = _db.ExampleTbls.Where(q => q.IdDicTbl == word.Id);
 
             List<DomainClass.DomainClass.ExampleTblVM> lstExample = new List<DomainClass.DomainClass.ExampleTblVM>();
 
-            //            string query = @"
-            //select [id]
-            //      ,[id_dic_tbl] as IdDicTbl
-            //      ,[example]
-            //      ,[GetFromExample] from [5069_ManageYourSelf].[5069_Esmaeili].[example_tbl]
-            //where example like '% " + eng + "%'";
+
 
           string  query = @"
 select ex.id
@@ -296,13 +301,14 @@ select ex.id
       ,[GetFromExample] from [5069_ManageYourSelf].[5069_Esmaeili].[example_tbl] ex
 	  inner join [5069_ManageYourSelf].[5069_Esmaeili].dic_tbl di
 	  on ex.id_dic_tbl=di.id
-where example like '% " + eng + "%'";
+where example like '%"+eng+ "%' or example like '%" + eng.Trim().Remove(eng.Trim().Length - 1, 1) + "%'";
 
             using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
             {
 
                 lstExample = DB.Query<DomainClass.DomainClass.ExampleTblVM>(query).ToList();
             }
+
 
             List<DomainClass.DomainClass.ExampleTbl> lst = new List<DomainClass.DomainClass.ExampleTbl>();
             foreach (var item in lstExample)
@@ -332,6 +338,7 @@ where example like '% " + eng + "%'";
             var str = item.Example.Replace(".", " ");
             str = str.Replace("*", " ");
             str = str.Replace(",", "");
+            str = str.Replace(";", "");
             str = str.Replace("\n", " ");
             str = str.Replace(")", " ");
             str = str.Replace("(", " ");
@@ -367,6 +374,8 @@ where example like '% " + eng + "%'";
                eng == worlSplit.Trim() + "." ||
             eng == worlSplit.Trim() + "es" ||
             eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "es" ||
+             eng.Trim().Remove(eng.Trim().Length - 1, 1) + "ies" == worlSplit.Trim() ||
+              eng.Trim().Remove(eng.Trim().Length - 1, 1) + "ing" == worlSplit.Trim() ||
              eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ing" ||
              eng == worlSplit.Trim() + "ing" ||
               eng == worlSplit.Trim().Remove(worlSplit.Trim().Length - 1, 1) + "ion" ||
@@ -383,6 +392,7 @@ where example like '% " + eng + "%'";
             }
             return false;
         }
+
 
         public IActionResult CreateUpdateExample(DomainClass.DomainClass.ExampleTbl exampleNew)
         {
