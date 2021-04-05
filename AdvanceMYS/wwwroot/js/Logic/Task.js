@@ -1055,7 +1055,7 @@ async function ListTaskTomarow(date) {
             "<td>" + ListObj[i].olaviat + "</td>" +
             "<td>" + ListObj[i].cat.title + "</td>" +
         "<td>" + ListObj[i].name + "</td>" +
-        "<td><span class='fa fa-edit pointer'  onclick='EditTask( " + ListObj[i].taskId +")' style ='display: inline;' ></span></td>" 
+        "<td><span class='fa fa-edit pointer'  onclick='EditTask( " + ListObj[i].taskId + ")' style ='display: inline;' ></span></td>" 
           
             
 
@@ -1328,6 +1328,7 @@ async function changeToAnjamShode() {
     })
 
 }
+
 //کلیک بر روی چک باکس و نمایش هر تسک بصورت جدا
 async function ListFilterTask() {
     var ids = []
@@ -1471,7 +1472,9 @@ function showTaskSeparate(ListObj) {
                 table += "<input type='button' style='background-color:green' class='fa fa-sort-up pointer ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat + 1) + "})' />"
                 table += "<input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat - 1) + "})' />" 
                 table += "<span style='color:green'>  " + types[groupName][i].olaviat+" _ </span>"
-                table += "<span>" + types[groupName][i].name + "<span><span class='fa fa-edit' style='cursor: pointer' onclick='EditTask(" + types[groupName][i].taskId+")'></span></p>"
+                table += "<span>" + types[groupName][i].name + "<span><span class='fa fa-edit' style='cursor: pointer' onclick='EditTask(" + types[groupName][i].taskId + ")'></span>"
+                table += "<span class='fa fa-remove pointer'  onclick=' DeleteTask({Id:" + types[groupName][i].taskId + "})'></span></p>" 
+
             }
             table += "</div>"
         }
@@ -1483,7 +1486,8 @@ function showTaskSeparate(ListObj) {
                 table += "<input type='button' style='background-color:green' class='fa fa-sort-up pointer ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat + 1) + "})' />"
                 table += "<input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat - 1) + "})' />" 
                 table += "<span style='color:green'>  " + types[groupName][i].olaviat +" _ </span>"
-                table += "<span>" + types[groupName][i].name + "<span><span class='fa fa-edit' style='cursor: pointer' onclick='EditTask(" + types[groupName][i].taskId + ")'></span></p>"
+                table += "<span>" + types[groupName][i].name + "<span><span class='fa fa-edit' style='cursor: pointer' onclick='EditTask(" + types[groupName][i].taskId + ")'></span>"
+                table += "&nbsp&nbsp<span class='fa fa-remove pointer'  onclick=' DeleteTask({Id:" + types[groupName][i].taskId + "})'></span></p>" 
             }
             table += "</div>"
         }
