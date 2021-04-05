@@ -165,7 +165,7 @@ async function showListWordLevel(ListObj) {
                 "<input onclick='CreateUpdateExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='ویرایش' /> | " +
                 "<input onclick='DeleteExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='حذف' /> | " +
                 "<a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + exampleForTranslate +"'>ترجمه</a> | " +
-                "<input class='btn btn-info' onclick='TranslateWordByWord(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='ترجمه لغات' />  " +
+                "<input class='btn btn-info' onclick='TranslateWordByWord(" + ListObj[i].exampleTbls[j].id + ",this)' type='button' value='ترجمه لغات' />  " +
                 "</td>"
             table += "</tr>"
         }
@@ -180,12 +180,14 @@ async function showListWordLevel(ListObj) {
    
 
 }
-function showHiddenExample(id, eng) {
+ async function showHiddenExample(id, eng) {
     
     makeSound(eng)
+
+ await  AddExamples(eng, id);
     
-    AddExamples(eng, id);
     //-----------
+    
     var res = $(".examples_" + id).attr("hidden");
     if (res == "hidden") {
         $(".examples_" + id).attr("hidden", false);
@@ -194,7 +196,7 @@ function showHiddenExample(id, eng) {
         $(".examples_" + id).attr("hidden", true);
     }
 
-
+    //-------------red
     var eng = eng.toLowerCase();
     $(".examples_" + id +" div").each(function () {
         
@@ -203,7 +205,7 @@ function showHiddenExample(id, eng) {
         ));
     });
 
-    
+    //--------------blue
     var eng = $("input[name='searchExample']").val()
     eng = eng.toLowerCase();
     if (eng.length < 1) return
@@ -218,7 +220,7 @@ function showHiddenExample(id, eng) {
 }
 
 async function AddExamples(eng, idWord) {
-    
+    $(".AddExample").empty()
     var obj = {}
     obj.url = "/Dictionary/AddExamples"
     obj.dataType = "json"
@@ -233,13 +235,14 @@ async function AddExamples(eng, idWord) {
 
     
     var newContent = ""
+    
     for (var i = 0; i < ListObj.length; i++) {
-        debugger
+        
         var exampleForTranslate = ListObj[i].example
         exampleForTranslate = exampleForTranslate.replace(/'/g, ',')
         
-        newContent += "<tr style='text-align: left; direction: ltr; white-space: pre;'>" +
-            "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].id + "'>" + ListObj[i].eng +" : <br>" +
+        newContent += "<tr hidden class='AddExample examples_" + idWord + "'>" +
+            "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + idWord/*ListObj[i].id*/ + "'>" + ListObj[i].eng +" : <br>" +
             ListObj[i].example +
                 "</div>" +
                 "<div class='AddExamples_" + ListObj[i].id + "'></div>" +
@@ -257,32 +260,11 @@ async function AddExamples(eng, idWord) {
     $(".englishword_" + idWord).after(newContent)
 
 
-    //------------------------------
     
-    /*
-    var eng = eng.toLowerCase();
-    $(".examples_" + idWord + " div").each(function () {
-
-        $(this).html($(this).html().replace(
-            new RegExp(eng, 'g'), '<span style="color:red">' + eng + '</span>'
-        ));
-    });
-
-
-    var eng = $("input[name='searchExample']").val()
-    eng = eng.toLowerCase();
-    if (eng.length < 1) return
-    $(".examples_" + idWord + " div").each(function () {
-
-        $(this).html($(this).html().replace(
-            new RegExp(eng, 'g'), '<span style="color:blue">' + eng + '</span>'
-        ));
-    });
-    */
     //-----------------------------
     return ListObj
 
-
+    
 }
 function ShowAndHiddenPersian(id, eng) {
     makeSound(eng)
@@ -340,7 +322,8 @@ async function FindExample(exampleId) {
     return ListObj
 
 }
-async function TranslateWordByWord(exampleId) {
+async function TranslateWordByWord(exampleId,thiss) {
+
     $.LoadingOverlay("show");
     var obj = {}
     obj.url = "/Dictionary/TranslateWordByWord"
@@ -358,10 +341,10 @@ async function TranslateWordByWord(exampleId) {
     var table = "<hr><br>"
     table += "<input onclick='CreateUpdateWord()' type='button' class='btn btn-warning' value='جدید'>"
     table += "<table>"
-    debugger
+    
     for (var i = 0; i < ListObj.length; i++) {
         table += "<tr>"
-        table += "<td>" + ListObj[i].eng + "</td> <td>" + ListObj[i].per + "</td>" +
+        table += "<td onclick='makeSound(\"" + ListObj[i].eng + "\")'>" + ListObj[i].eng + "</td> <td>" + ListObj[i].per + "</td>" +
             "<td>" + ListObj[i].level + "</td>" +
             "<td><input type='button' style='background-color:green' value='True' onclick='levelUpDown2({status:true,wordId:" + ListObj[i].id + ",exampleId:" + exampleId + "})'></td>" +
             "<td><input type='button' style='background-color:red' value='False' onclick='levelUpDown2({status:false,wordId:" + ListObj[i].id + ",exampleId:" + exampleId + "})'></td> " +
@@ -369,11 +352,30 @@ async function TranslateWordByWord(exampleId) {
             "<td><input type='button' style='background-color:gray' value='Sound'  onclick='makeSound(\"" + ListObj[i].eng + "\")'></td>" +
             "<td><a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + ListObj[i].eng + "'>ترجمه</a></td>" 
         table += "</tr>"
+
+
+
     }
     table += "</table>"
     $(".TranslateWordByWord_" + exampleId).empty()
     $(".TranslateWordByWord_" + exampleId).append(table)
     $.LoadingOverlay("hide");
+
+    //----------------
+    debugger
+
+  
+
+
+
+    //var eng = eng.toLowerCase();
+    //$(".examples_" + id + " div").each(function () {
+
+    //    $(this).html($(this).html().replace(
+    //        new RegExp(eng, 'g'), '<span style="color:red">' + eng + '</span>'
+    //    ));
+    //});
+
 }
 async function FindWord(wordId) {
 
@@ -843,7 +845,7 @@ async function CreateChartKarKard(thiss) {
 //LineChartKarKard
 async function DataLineChartKarKard(ndays) {
     var date = addDayReturnDate(ndays)
-    debugger
+    
     var obj = {}
     obj.url = "/Report/LineChartKarKard"
     obj.dataType = "json"
@@ -862,7 +864,7 @@ async function ReportLineChartKarKard(ndays) {
     
     var data = await DataLineChartKarKard(ndays)
     
-    debugger
+    
         var chart = new CanvasJS.Chart("ReportLineChartKarKard",
             {
 

@@ -63,7 +63,7 @@ SELECT case IsArchieve when 0 then N'فعال' else N'آرشیو' end  label,cou
         {
             List<DictionaryVM> lst = new List<DictionaryVM>();
             string query = @"
-select left(date_refresh,6) label,count(*) y from dic_tbl
+select left(date_refresh,6) label,count(*) y from [5069_ManageYourSelf].[5069_Esmaeili].dic_tbl
 group by left(date_refresh,6)
 order by left(date_refresh,6)
 ";
