@@ -1,4 +1,6 @@
 ﻿
+
+
 async function ListLevel() {
     $.LoadingOverlay("show");
     var obj = {}
@@ -49,14 +51,14 @@ async function showLevel(level) {
     table += "<td><input  onclick='ListWordLevel(" + 90 + ")' name='rdbLevel' type='radio' value='" + 90 + "' /> آخرین مرور  <span style='color:red' ></span></td>"
 
     table += "</tr>"
-    
-  
-    var CurrentValue=""
+
+
+    var CurrentValue = ""
     $("input[name='rdbLevel']").each(function () {
         var result = $(this).is(":checked")
         if (result == true) {
             CurrentValue = $(this).val()
-           
+
 
         }
     })
@@ -71,11 +73,11 @@ async function showLevel(level) {
         }
     })
 
-   
+
 
 }
 async function ListWordLevel(level) {
-    
+
     var obj = {}
     obj.url = "/Dictionary/ListWordLevel"
     obj.dataType = "json"
@@ -87,16 +89,16 @@ async function ListWordLevel(level) {
         service(obj)
     ]);
     var ListObj = results[0]
-   // return ListObj
+    // return ListObj
     showListWordLevel(ListObj)
     if (level == 80) {
         $(".countRamindForRevise").empty()
-        $(".countRamindForRevise").append(" - "+ListObj.length)
+        $(".countRamindForRevise").append(" - " + ListObj.length)
     }
 }
 async function showListWordLevel(ListObj) {
-    
-  //  var ListObj = await ListWordLevel(level)
+
+    //  var ListObj = await ListWordLevel(level)
 
     var styleWord = ""
     var table = "<input onclick='CreateUpdateWord()'  type='button' class='btn btn-warning' value='جدید' />"
@@ -115,16 +117,16 @@ async function showListWordLevel(ListObj) {
     for (var i = 0; i < ListObj.length; i++) {
         if (i % 2 == 0)
             styleWord = 'color:red;background-image: linear-gradient(45deg, black, transparent);'
-        table += "<tr class='englishword_" + ListObj[i].id +"' style='" + styleWord + "'>"
+        table += "<tr class='englishword_" + ListObj[i].id + "' style='" + styleWord + "'>"
         table += "<td onclick='makeSound(\"" + ListObj[i].eng + "\")'>" + ListObj[i].eng + "</td>" +
             "<td onclick='ShowAndHiddenPersian(" + ListObj[i].id + ",\"" + ListObj[i].eng + "\")'><span hidden class='per_" + ListObj[i].id + "' style='white-space: nowrap;'>" + ListObj[i].per + "</span></td>" +
 
 
-           
+
             "<td><input type='button' style='background-color:red' value='غلط' onclick='levelUpDown({status:false,wordId:" + ListObj[i].id + "})'/></td>" +
             "<td><input type='button' style='background-color:green' value='درست' onclick='levelUpDown({status:true,wordId:" + ListObj[i].id + "})'/></td>"
-      
-        
+
+
         if (ListObj[i].exampleTbls.length > 0) {
             table += "<td><input type='button' value='نمایش " + ListObj[i].exampleTbls.length + "' onclick='showHiddenExample(" + ListObj[i].id + ",\"" + ListObj[i].eng + "\")'/></td>"
         }
@@ -134,10 +136,10 @@ async function showListWordLevel(ListObj) {
 
         }
 
-        table +="<td><input type='button'  value='ویرایش' onclick='CreateUpdateWord(" + ListObj[i].id + ")'/></td>" 
+        table += "<td><input type='button'  value='ویرایش' onclick='CreateUpdateWord(" + ListObj[i].id + ")'/></td>"
 
 
-        table += "<td><span style='color:blue'>" + ListObj[i].level+"</span>/" + (ListObj[i].successCount + ListObj[i].unSuccessCount) + "</td>" +
+        table += "<td><span style='color:blue'>" + ListObj[i].level + "</span>/" + (ListObj[i].successCount + ListObj[i].unSuccessCount) + "</td>" +
 
             "<td>" + (ListObj[i].successCount - ListObj[i].unSuccessCount) + "</td>" +
             "<td>" + numberDaysTwoDate(todayShamsy8char(), ListObj[i].dateRefresh) + "</td>" +
@@ -146,34 +148,34 @@ async function showListWordLevel(ListObj) {
             "<td>" + ListObj[i].time + "</td>" +
             "<td>" +
             "<a target='_blank' href='https://www.oxfordlearnersdictionaries.com/definition/english/" + ListObj[i].eng + "'>Oxford</a> | " +
-            "<a target='_blank' href='https://www.ldoceonline.com/dictionary/" + ListObj[i].eng + "'>Longman</a>"+
+            "<a target='_blank' href='https://www.ldoceonline.com/dictionary/" + ListObj[i].eng + "'>Longman</a>" +
             "</td > " +
             "<td>" +
             "<a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + ListObj[i].eng + "'>google</a> | " +
             "<a target='_blank' href='https://abadis.ir/?lntype=entofa,entoen,abbr&word=" + ListObj[i].eng + "&from=ac'>abadis</a>" +
-            "</td > "+
-            "<td><input onclick='CreateUpdateExample(0,\"" + ListObj[i].eng + "\"," + ListObj[i].id + ")' type='button' value='مثال جدید'/></td>"+
+            "</td > " +
+            "<td><input onclick='CreateUpdateExample(0,\"" + ListObj[i].eng + "\"," + ListObj[i].id + ")' type='button' value='مثال جدید'/></td>" +
             "<td><input type='button'  value='حذف' onclick='DeleteWord(" + ListObj[i].id + ")'/></td>"
 
         table += "</tr>"
         // example
         for (var j = 0; j < ListObj[i].exampleTbls.length; j++) {
-           // ColorForWordInExampl(ListObj[i].exampleTbls[j].id)
-            
+            // ColorForWordInExampl(ListObj[i].exampleTbls[j].id)
+
             var exampleForTranslate = ListObj[i].exampleTbls[j].example
             exampleForTranslate = exampleForTranslate.replace(/'/g, ',')
-            
+
             table += "<tr hidden class='examples_" + ListObj[i].exampleTbls[j].idDicTbl + "'>"
             table += "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].exampleTbls[j].id + "'>" +
                 ListObj[i].exampleTbls[j].example +
                 "</div>" +
                 //"<div class='AddExamples_" + ListObj[i].exampleTbls[j].id + "'></div>" +
-                "<div class='TranslateWordByWord_" + ListObj[i].exampleTbls[j].id + "'></div>"+
+                "<div class='TranslateWordByWord_" + ListObj[i].exampleTbls[j].id + "'></div>" +
                 "</br > <input onclick='makeSoundExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='تلفظ' /> | " +
                 "<input onclick='CreateUpdateExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='ویرایش' /> | " +
                 "<input onclick='DeleteExample(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='حذف' /> | " +
-                "<a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + exampleForTranslate +"'>ترجمه</a> | " +
-                "<input class='btn btn-info' onclick='TranslateWordByWord(" + ListObj[i].exampleTbls[j].id + ",this)' type='button' value='ترجمه لغات' />  " +
+                "<a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + exampleForTranslate + "'>ترجمه</a> | " +
+                "<input class='btn btn-info' onclick='TranslateWordByWord(" + ListObj[i].exampleTbls[j].id + ")' type='button' value='ترجمه لغات' />  " +
                 "</td>"
             table += "</tr>"
         }
@@ -185,29 +187,15 @@ async function showListWordLevel(ListObj) {
     $(".showListWordLevel").empty()
     $(".showListWordLevel").append(table)
 
-   
+
 
 }
-<<<<<<< HEAD
- async function showHiddenExample(id, eng) {
-||||||| b39ec09
-function showHiddenExample(id, eng) {
-=======
 async function showHiddenExample(id, eng) {
->>>>>>> 94702aa7378a3624b6ba1d85d3d6d63ff6272441
-    
+
     makeSound(eng)
 
- await  AddExamples(eng, id);
-    
-<<<<<<< HEAD
-||||||| b39ec09
-    AddExamples(eng, id);
-=======
-   await AddExamples(eng, id);
->>>>>>> 94702aa7378a3624b6ba1d85d3d6d63ff6272441
+    await AddExamples(eng, id);
     //-----------
-    
     var res = $(".examples_" + id).attr("hidden");
     if (res == "hidden") {
         $(".examples_" + id).attr("hidden", false);
@@ -216,16 +204,16 @@ async function showHiddenExample(id, eng) {
         $(".examples_" + id).attr("hidden", true);
     }
 
-    //-------------red
+
     var eng = eng.toLowerCase();
-    $(".examples_" + id +" div").each(function () {
-        
+    $(".examples_" + id + " div").each(function () {
+
         $(this).html($(this).html().replace(
             new RegExp(eng, 'g'), '<span style="color:red">' + eng + '</span>'
         ));
     });
 
-    //--------------blue
+
     var eng = $("input[name='searchExample']").val()
     eng = eng.toLowerCase();
     if (eng.length < 1) return
@@ -235,7 +223,7 @@ async function showHiddenExample(id, eng) {
             new RegExp(eng, 'g'), '<span style="color:blue">' + eng + '</span>'
         ));
     });
-    
+
 
 }
 
@@ -253,73 +241,39 @@ async function AddExamples(eng, idWord) {
     ]);
     var ListObj = results[0]
 
-    
+
     var newContent = ""
-    
     for (var i = 0; i < ListObj.length; i++) {
-        
+
         var exampleForTranslate = ListObj[i].example
         exampleForTranslate = exampleForTranslate.replace(/'/g, ',')
-        
-<<<<<<< HEAD
-        newContent += "<tr hidden class='AddExample examples_" + idWord + "'>" +
-            "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + idWord/*ListObj[i].id*/ + "'>" + ListObj[i].eng +" : <br>" +
-||||||| b39ec09
-        newContent += "<tr style='text-align: left; direction: ltr; white-space: pre;'>" +
-            "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].id + "'>" + ListObj[i].eng +" : <br>" +
-=======
+
         newContent += "<tr hidden class='examples_" + idWord + "' style='text-align: left; direction: ltr; white-space: pre;'>" +
-            "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].id + "'>" + ListObj[i].eng +" : <br>" +
->>>>>>> 94702aa7378a3624b6ba1d85d3d6d63ff6272441
+            "<td colspan='16' style='text-align: left; direction: ltr;white-space: pre;'><div class='example_" + ListObj[i].id + "'>" + ListObj[i].eng + " : <br>" +
             ListObj[i].example +
-                "</div>" +
-                "<div class='AddExamples_" + ListObj[i].id + "'></div>" +
-                "<div class='TranslateWordByWord_" + ListObj[i].id + "'></div>"+
-                "</br > <input onclick='makeSoundExample(" + ListObj[i].id + ")' type='button' value='تلفظ' /> | " +
-        "<input onclick='CreateUpdateExample(" + ListObj[i].id + ")' type='button' value='ویرایش' /> | " +
+            "</div>" +
+            "<div class='AddExamples_" + ListObj[i].id + "'></div>" +
+            "<div class='TranslateWordByWord_" + ListObj[i].id + "'></div>" +
+            "</br > <input onclick='makeSoundExample(" + ListObj[i].id + ")' type='button' value='تلفظ' /> | " +
+            "<input onclick='CreateUpdateExample(" + ListObj[i].id + ")' type='button' value='ویرایش' /> | " +
             "<input onclick='DeleteExample(" + ListObj[i].id + ")' type='button' value='حذف' /> | " +
             "<a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + exampleForTranslate + "'>ترجمه</a> | " +
             "<input class='btn btn-info' onclick='TranslateWordByWord(" + ListObj[i].id + ")' type='button' value='ترجمه لغات' />  " +
-            "</td>"+
-        "</tr > "
+            "</td>" +
+            "</tr > "
     }
-   
+
     //$(".examples_" + idExample).empty()
     $(".englishword_" + idWord).after(newContent)
 
 
-    
-<<<<<<< HEAD
-    //-----------------------------
-||||||| b39ec09
-    /*
-    var eng = eng.toLowerCase();
-    $(".examples_" + idWord + " div").each(function () {
-
-        $(this).html($(this).html().replace(
-            new RegExp(eng, 'g'), '<span style="color:red">' + eng + '</span>'
-        ));
-    });
+    //------------------------------
 
 
-    var eng = $("input[name='searchExample']").val()
-    eng = eng.toLowerCase();
-    if (eng.length < 1) return
-    $(".examples_" + idWord + " div").each(function () {
 
-        $(this).html($(this).html().replace(
-            new RegExp(eng, 'g'), '<span style="color:blue">' + eng + '</span>'
-        ));
-    });
-    */
-    //-----------------------------
-=======
-
-    
->>>>>>> 94702aa7378a3624b6ba1d85d3d6d63ff6272441
     return ListObj
 
-    
+
 }
 function ShowAndHiddenPersian(id, eng) {
     makeSound(eng)
@@ -377,8 +331,7 @@ async function FindExample(exampleId) {
     return ListObj
 
 }
-async function TranslateWordByWord(exampleId,thiss) {
-
+async function TranslateWordByWord(exampleId) {
     $.LoadingOverlay("show");
     var obj = {}
     obj.url = "/Dictionary/TranslateWordByWord"
@@ -391,12 +344,12 @@ async function TranslateWordByWord(exampleId,thiss) {
         service(obj)
     ]);
     var ListObj = results[0]
-    
-   // return ListObj
+
+    // return ListObj
     var table = "<hr><br>"
     table += "<input onclick='CreateUpdateWord()' type='button' class='btn btn-warning' value='جدید'>"
     table += "<table>"
-    
+
     for (var i = 0; i < ListObj.length; i++) {
         table += "<tr>"
         table += "<td onclick='makeSound(\"" + ListObj[i].eng + "\")'>" + ListObj[i].eng + "</td> <td>" + ListObj[i].per + "</td>" +
@@ -407,46 +360,24 @@ async function TranslateWordByWord(exampleId,thiss) {
             "<td><input type='button' style='background-color:gray' value='Sound'  onclick='makeSound(\"" + ListObj[i].eng + "\")'></td>" +
             "<td><a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + ListObj[i].eng + "'>google</a> | " +
             "<a target='_blank' href='https://abadis.ir/?lntype=entofa,entoen,abbr&word=" + ListObj[i].eng + "&from=ac'>abadis</a>" +
-            "</td >" 
+            "</td >"
         table += "</tr>"
-
-
-
     }
     table += "</table>"
     $(".TranslateWordByWord_" + exampleId).empty()
     $(".TranslateWordByWord_" + exampleId).append(table)
     $.LoadingOverlay("hide");
-<<<<<<< HEAD
-
-    //----------------
-    debugger
-
-  
 
 
 
-    //var eng = eng.toLowerCase();
-    //$(".examples_" + id + " div").each(function () {
 
-    //    $(this).html($(this).html().replace(
-    //        new RegExp(eng, 'g'), '<span style="color:red">' + eng + '</span>'
-    //    ));
-    //});
-
-||||||| b39ec09
-=======
-
-
-   
-   
 
     for (var i = 0; i < ListObj.length; i++) {
-        $(".example_" + exampleId).html($(".example_" + exampleId).html().toLowerCase().replace(new RegExp(ListObj[i].eng.toLowerCase(), 'g'), "<span style='border-bottom: 1px solid red;'>" + ListObj[i].eng+"</span>"))
+        $(".example_" + exampleId).html($(".example_" + exampleId).html().toLowerCase().replace(new RegExp(ListObj[i].eng.toLowerCase(), 'g'), "<span style='border-bottom: 1px solid red;'>" + ListObj[i].eng + "</span>"))
     }
-  
 
-    
+
+
 }
 
 async function ColorForWordInExampl(exampleId) {
@@ -469,8 +400,7 @@ async function ColorForWordInExampl(exampleId) {
     }
 
 
-    
->>>>>>> 94702aa7378a3624b6ba1d85d3d6d63ff6272441
+
 }
 async function FindWord(wordId) {
 
@@ -538,13 +468,13 @@ async function CreaetUpdateExamplePost(exampleId, wordId) {
     obj.url = "/Dictionary/CreateUpdateExample"
     obj.dataType = "json"
     obj.type = "POST"
-    obj.data = { Id: exampleId, IdDicTbl: wordId, example: example}
+    obj.data = { Id: exampleId, IdDicTbl: wordId, example: example }
 
     var results = await Promise.all([
         service(obj)
     ]);
     var ListtObj = results[0]
-    
+
 
     showAlert(ListtObj, 2000);
 
@@ -601,7 +531,7 @@ async function levelUpDown2(objectWord) {
 
 }
 async function SearchOldWord(thiss) {
-    
+
     if (thiss.value.length < 3) return
     var word = (thiss.value).trim()
     var obj = {}
@@ -613,14 +543,14 @@ async function SearchOldWord(thiss) {
     }
     var results = await Promise.all([
         service(obj)
-        
+
     ]);
     var ListObj = results[0]
-    
+
     $("#SearchOldWord").empty()
-    var table=""
+    var table = ""
     for (var i = 0; i < ListObj.length; i++) {
-        table += "<p>" + ListObj[i].eng +' '+ ListObj[i].per+"</p>"
+        table += "<p>" + ListObj[i].eng + ' ' + ListObj[i].per + "</p>"
     }
     $("#SearchOldWord").append(table)
 }
@@ -705,13 +635,13 @@ async function CreaetUpdateWordPost(wordId) {
     var ListtObj = results[0]
 
 
-    
+
     $("#MasterModal").modal("toggle")
     var level = $("input[name='rdbLevel']:checked").val()
     showLevel(level)
     ListWordLevel(level)
     showAlert(ListtObj, 2000);
-  
+
 
 
 
@@ -729,8 +659,8 @@ async function SearchExample(thiss) {
             service(obj)
         ]);
         var ListObj = results[0]
-       
-        
+
+
         showListWordLevel(ListObj)
     }
 
@@ -765,14 +695,14 @@ async function DeleteExample(Id) {
         service(obj)
     ]);
     var ListtObj = results[0]
-    
+
 
     showAlert(ListtObj, 2000);
 
     var level = $("input[name='rdbLevel']:checked").val()
     showLevel(level)
     ListWordLevel(level)
-   // $("#MasterModal").modal("toggle")
+    // $("#MasterModal").modal("toggle")
 }
 async function DeleteWord(Id) {
     var obj = {}
@@ -797,490 +727,4 @@ async function DeleteWord(Id) {
 
 
 
-<<<<<<< HEAD
-//------------------chart
-async function ChartDicLevel() {
-    var obj = {}
-    obj.url = "/Report/ChartDicLevel"
-    obj.dataType = "json"
-    obj.type = "post"
-    //obj.data = {
-    //    TaskId: TaskId,
-    //    IsCheck: IsCheck,
-    //    DateEnd: DateEnd
-
-    //}
-    var results = await Promise.all([
-        service(obj)
-    ]);
-    var ListObj = results[0]
-
-    return ListObj
-}
-
-async function ChartDicLevelPie() {
-    var obj = {}
-    obj.url = "/Report/ChartDicLevelPie"
-    obj.dataType = "json"
-    obj.type = "post"
-    //obj.data = {
-    //    TaskId: TaskId,
-    //    IsCheck: IsCheck,
-    //    DateEnd: DateEnd
-
-    //}
-    var results = await Promise.all([
-        service(obj)
-    ]);
-    var ListObj = results[0]
-
-    return ListObj
-}
-
-
-
-
-async function CreateChart1() {
-    
-    var data2 = await ChartDicLevelPie()
-    var chart2 = new CanvasJS.Chart("chartContainer2",
-        {
-            theme: "light2",
-            title: {
-                text: "Dictionaty By Level"
-            },
-            data: [
-                {
-                    type: "pie",
-                    showInLegend: true,
-                    toolTipContent: "{y} - #percent %",
-                    yValueFormatString: "#,##0,,.## Million",
-                    legendText: "{indexLabel}",
-                    dataPoints: data2
-                    //dataPoints: [
-                    //    { y: 4181563, indexLabel: "PlayStation 3" },
-                    //    { y: 2175498, indexLabel: "Wii" },
-                    //    { y: 3125844, indexLabel: "Xbox 360" },
-                    //    { y: 1176121, indexLabel: "Nintendo DS" },
-                    //    { y: 1727161, indexLabel: "PSP" },
-                    //    { y: 4303364, indexLabel: "Nintendo 3DS" },
-                    //    { y: 1717786, indexLabel: "PS Vita" }
-                    //]
-                }
-            ]
-        });
-    chart2.render();
-}
-async function CreateChart2() {
-    var dataCreateChart2 = await ChartDicLevel()
-    
-    var chart = new CanvasJS.Chart("chartContainer1", {
-        title: {
-            text: "Dictionary By Level"
-        },
-       // data: dataCreateChart2
-        data: [
-            {
-                // Change type to "doughnut", "line", "splineArea", etc.
-                type: "column",
-                dataPoints: dataCreateChart2
-            }
-        ]
-    });
-    chart.render();
-}
-
-
-async function ChartKarKard(date) {
-    var obj = {}
-    obj.url = "/Report/ChartKarKard"
-    obj.dataType = "json"
-    obj.type = "post"
-    obj.data = {
-        Date: date
-
-    }
-    var results = await Promise.all([
-        service(obj)
-    ]);
-    var ListObj = results[0]
-
-    return ListObj
-}
-async function CreateChartKarKard(thiss) {
-    var today = todayShamsy()
-   
-    if (thiss == undefined)
-        var month = convertDateToslashless(today).substr(0, 6)
-    else
-        var month = thiss.value
-    
-    var data = await ChartKarKard(month)
-    
-    var chart = new CanvasJS.Chart("CreateChartKarKard",
-        {
-            theme: "light2",
-            title: {
-                text: "Dictionaty By Level"
-            },
-            data: [
-                {
-                    type: "pie",
-                    showInLegend: true,
-                    toolTipContent: "{y} - #percent %",
-                    yValueFormatString: "{label} - minute",
-                    legendText: "{indexLabel}",
-                    dataPoints: data
-
-                }
-            ]
-        });
-    chart.render();
-}
-
-//LineChartKarKard
-async function DataLineChartKarKard(ndays) {
-    var date = addDayReturnDate(ndays)
-    
-    var obj = {}
-    obj.url = "/Report/LineChartKarKard"
-    obj.dataType = "json"
-    obj.type = "post"
-    obj.data = {
-        date: date,
-    }
-    var results = await Promise.all([
-        service(obj)
-    ]);
-    var ListObj = results[0]
-
-    return ListObj
-}
-async function ReportLineChartKarKard(ndays) {
-    
-    var data = await DataLineChartKarKard(ndays)
-    
-    
-        var chart = new CanvasJS.Chart("ReportLineChartKarKard",
-            {
-
-                title: {
-                    text: "Earthquakes - per month"
-                },
-                data: [
-                    {
-                        type: "line",
-                        dataPoints:data
-                        //dataPoints: [
-                        //    { x: new Date(2012, 00, 1), y: 450 },
-                        //    { x: new Date(2012, 01, 1), y: 414 },
-                        //    { x: new Date(2012, 02, 1), y: 520 },
-                        //    { x: new Date(2012, 03, 1), y: 460 },
-                        //    { x: new Date(2012, 04, 1), y: 450 },
-                        //    { x: new Date(2012, 05, 1), y: 500 },
-                        //    { x: new Date(2012, 06, 1), y: 480 },
-                        //    { x: new Date(2012, 07, 1), y: 480 },
-                        //    { x: new Date(2012, 08, 1), y: 410 },
-                        //    { x: new Date(2012, 09, 1), y: 500 },
-                        //    { x: new Date(2012, 10, 1), y: 480 },
-                        //    { x: new Date(2012, 11, 1), y: 510 }
-                        //]
-                    }
-                ]
-            }
-        );
-
-        chart.render();
-  
-
-}
-
-//----------DicByDateMonthDateRefresh
-async function DataDicByDateMonthDateRefresh() {
-    var obj = {}
-    obj.url = "/Report/DicByDateMonthDateRefresh"
-    obj.dataType = "json"
-    obj.type = "post"
-    //obj.data = {
-    //    date: date,
-    //}
-    var results = await Promise.all([
-        service(obj)
-    ]);
-    var ListObj = results[0]
-
-    return ListObj
-}
-async function ReportDicByDateMonthDateRefresh() {
-
-    var data = await DataDicByDateMonthDateRefresh()
-
-
-    var chart = new CanvasJS.Chart("DicByDateMonthDateRefresh",
-        {
-
-            title: {
-                text: "DicByDateMonthDateRefresh"
-            },
-            data: [
-                {
-                    type: "line",
-                    dataPoints: data
-                }
-            ]
-        }
-    );
-
-    chart.render();
-
-
-}
-
-
-
-
-||||||| b39ec09
-//------------------chart
-async function ChartDicLevel() {
-    var obj = {}
-    obj.url = "/Report/ChartDicLevel"
-    obj.dataType = "json"
-    obj.type = "post"
-    //obj.data = {
-    //    TaskId: TaskId,
-    //    IsCheck: IsCheck,
-    //    DateEnd: DateEnd
-
-    //}
-    var results = await Promise.all([
-        service(obj)
-    ]);
-    var ListObj = results[0]
-
-    return ListObj
-}
-
-async function ChartDicLevelPie() {
-    var obj = {}
-    obj.url = "/Report/ChartDicLevelPie"
-    obj.dataType = "json"
-    obj.type = "post"
-    //obj.data = {
-    //    TaskId: TaskId,
-    //    IsCheck: IsCheck,
-    //    DateEnd: DateEnd
-
-    //}
-    var results = await Promise.all([
-        service(obj)
-    ]);
-    var ListObj = results[0]
-
-    return ListObj
-}
-
-
-
-
-async function CreateChart1() {
-    
-    var data2 = await ChartDicLevelPie()
-    var chart2 = new CanvasJS.Chart("chartContainer2",
-        {
-            theme: "light2",
-            title: {
-                text: "Dictionaty By Level"
-            },
-            data: [
-                {
-                    type: "pie",
-                    showInLegend: true,
-                    toolTipContent: "{y} - #percent %",
-                    yValueFormatString: "#,##0,,.## Million",
-                    legendText: "{indexLabel}",
-                    dataPoints: data2
-                    //dataPoints: [
-                    //    { y: 4181563, indexLabel: "PlayStation 3" },
-                    //    { y: 2175498, indexLabel: "Wii" },
-                    //    { y: 3125844, indexLabel: "Xbox 360" },
-                    //    { y: 1176121, indexLabel: "Nintendo DS" },
-                    //    { y: 1727161, indexLabel: "PSP" },
-                    //    { y: 4303364, indexLabel: "Nintendo 3DS" },
-                    //    { y: 1717786, indexLabel: "PS Vita" }
-                    //]
-                }
-            ]
-        });
-    chart2.render();
-}
-async function CreateChart2() {
-    var dataCreateChart2 = await ChartDicLevel()
-    
-    var chart = new CanvasJS.Chart("chartContainer1", {
-        title: {
-            text: "Dictionary By Level"
-        },
-       // data: dataCreateChart2
-        data: [
-            {
-                // Change type to "doughnut", "line", "splineArea", etc.
-                type: "column",
-                dataPoints: dataCreateChart2
-            }
-        ]
-    });
-    chart.render();
-}
-
-
-async function ChartKarKard(date) {
-    var obj = {}
-    obj.url = "/Report/ChartKarKard"
-    obj.dataType = "json"
-    obj.type = "post"
-    obj.data = {
-        Date: date
-
-    }
-    var results = await Promise.all([
-        service(obj)
-    ]);
-    var ListObj = results[0]
-
-    return ListObj
-}
-async function CreateChartKarKard(thiss) {
-    var today = todayShamsy()
-   
-    if (thiss == undefined)
-        var month = convertDateToslashless(today).substr(0, 6)
-    else
-        var month = thiss.value
-    
-    var data = await ChartKarKard(month)
-    
-    var chart = new CanvasJS.Chart("CreateChartKarKard",
-        {
-            theme: "light2",
-            title: {
-                text: "Dictionaty By Level"
-            },
-            data: [
-                {
-                    type: "pie",
-                    showInLegend: true,
-                    toolTipContent: "{y} - #percent %",
-                    yValueFormatString: "{label} - minute",
-                    legendText: "{indexLabel}",
-                    dataPoints: data
-
-                }
-            ]
-        });
-    chart.render();
-}
-
-//LineChartKarKard
-async function DataLineChartKarKard(ndays) {
-    var date = addDayReturnDate(ndays)
-    debugger
-    var obj = {}
-    obj.url = "/Report/LineChartKarKard"
-    obj.dataType = "json"
-    obj.type = "post"
-    obj.data = {
-        date: date,
-    }
-    var results = await Promise.all([
-        service(obj)
-    ]);
-    var ListObj = results[0]
-
-    return ListObj
-}
-async function ReportLineChartKarKard(ndays) {
-    
-    var data = await DataLineChartKarKard(ndays)
-    
-    debugger
-        var chart = new CanvasJS.Chart("ReportLineChartKarKard",
-            {
-
-                title: {
-                    text: "Earthquakes - per month"
-                },
-                data: [
-                    {
-                        type: "line",
-                        dataPoints:data
-                        //dataPoints: [
-                        //    { x: new Date(2012, 00, 1), y: 450 },
-                        //    { x: new Date(2012, 01, 1), y: 414 },
-                        //    { x: new Date(2012, 02, 1), y: 520 },
-                        //    { x: new Date(2012, 03, 1), y: 460 },
-                        //    { x: new Date(2012, 04, 1), y: 450 },
-                        //    { x: new Date(2012, 05, 1), y: 500 },
-                        //    { x: new Date(2012, 06, 1), y: 480 },
-                        //    { x: new Date(2012, 07, 1), y: 480 },
-                        //    { x: new Date(2012, 08, 1), y: 410 },
-                        //    { x: new Date(2012, 09, 1), y: 500 },
-                        //    { x: new Date(2012, 10, 1), y: 480 },
-                        //    { x: new Date(2012, 11, 1), y: 510 }
-                        //]
-                    }
-                ]
-            }
-        );
-
-        chart.render();
-  
-
-}
-
-//----------DicByDateMonthDateRefresh
-async function DataDicByDateMonthDateRefresh() {
-    var obj = {}
-    obj.url = "/Report/DicByDateMonthDateRefresh"
-    obj.dataType = "json"
-    obj.type = "post"
-    //obj.data = {
-    //    date: date,
-    //}
-    var results = await Promise.all([
-        service(obj)
-    ]);
-    var ListObj = results[0]
-
-    return ListObj
-}
-async function ReportDicByDateMonthDateRefresh() {
-
-    var data = await DataDicByDateMonthDateRefresh()
-
-
-    var chart = new CanvasJS.Chart("DicByDateMonthDateRefresh",
-        {
-
-            title: {
-                text: "DicByDateMonthDateRefresh"
-            },
-            data: [
-                {
-                    type: "line",
-                    dataPoints: data
-                }
-            ]
-        }
-    );
-
-    chart.render();
-
-
-}
-
-
-
-
-=======
->>>>>>> 94702aa7378a3624b6ba1d85d3d6d63ff6272441
 

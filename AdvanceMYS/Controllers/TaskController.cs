@@ -503,8 +503,8 @@ where
  [Date]=@date
 
 union All
-select 0 ,j.Name,SUM(SpendTimeMinute)/(select Value*60 from Setting where [Key]='StudyTimeScore') rate,DayDate,DayDate,0,0,N'مطالعه'
-from karkard k inner join Job j
+select 0 ,j.Name,SUM(SpendTimeMinute)/(select Value*60 from [5069_ManageYourSelf].[5069_Esmaeili].Setting where [Key]='StudyTimeScore') rate,DayDate,DayDate,0,0,N'مطالعه'
+from [5069_ManageYourSelf].[5069_Esmaeili].karkard k inner join [5069_ManageYourSelf].[5069_Esmaeili].Job j
 on k.JobId=j.JobId
 where DayDate=@date
 group by j.Name,DayDate  
@@ -543,8 +543,8 @@ on RoutineJob.RoutineJobId=RoutineJobHa.RoutineJobId
 --where 
 --UserId=@UserId
 union All
-select DayDate,SUM(SpendTimeMinute)/(select Value*60 from Setting where [Key]='StudyTimeScore') rate
-from karkard 
+select DayDate,SUM(SpendTimeMinute)/(select Value*60 from [5069_ManageYourSelf].[5069_Esmaeili].Setting where [Key]='StudyTimeScore') rate
+from [5069_ManageYourSelf].[5069_Esmaeili].karkard 
 group by DayDate
 
 

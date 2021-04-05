@@ -63,10 +63,11 @@
     } function la(k, m, u) { return k in m ? m[k] : u[k] } function Na(k, m, u) { if (w && ab) { var r = k.getContext("2d"); Oa = r.webkitBackingStorePixelRatio || r.mozBackingStorePixelRatio || r.msBackingStorePixelRatio || r.oBackingStorePixelRatio || r.backingStorePixelRatio || 1; ga = Sa / Oa; k.width = m * ga; k.height = u * ga; Sa !== Oa && (k.style.width = m + "px", k.style.height = u + "px", r.scale(ga, ga)) } else k.width = m, k.height = u } function jb(k) {
         if (!kb) {
             var m = !1, u = !1; "undefined" === typeof qa.Chart.creditHref ? (k.creditHref = Y("iuuqr;..b`ow`rkr/bnl."),
-                k.creditText = Y("B`ow`rKR/bnl")) : (m = k.updateOption("creditText"), u = k.updateOption("creditHref")); if (k.creditHref && k.creditText) {
-                    k._creditLink || (k._creditLink = document.createElement("a"), k._creditLink.setAttribute("class", "canvasjs-chart-credit"), k._creditLink.setAttribute("title", "JavaScript Charts"), k._creditLink.setAttribute("style", "outline:none;margin:0px;position:absolute;right:2px;top:" + (k.height - 14) + "px;color:dimgrey;text-decoration:none;font-size:11px;font-family: Calibri, Lucida Grande, Lucida Sans Unicode, Arial, sans-serif"),
-                        k._creditLink.setAttribute("tabIndex", -1), k._creditLink.setAttribute("target", "_blank")); if (0 === k.renderCount || m || u) k._creditLink.setAttribute("href", k.creditHref), k._creditLink.innerHTML = k.creditText; k._creditLink && k.creditHref && k.creditText ? (k._creditLink.parentElement || k._canvasJSContainer.appendChild(k._creditLink), k._creditLink.style.top = k.height - 14 + "px") : k._creditLink.parentElement && k._canvasJSContainer.removeChild(k._creditLink)
-                }
+                k.creditText = Y("B`ow`rKR/bnl")) : (m = k.updateOption("creditText"), u = k.updateOption("creditHref"));
+            //if (k.creditHref && k.creditText) {
+            //        k._creditLink || (k._creditLink = document.createElement("a"), k._creditLink.setAttribute("class", "canvasjs-chart-credit"), k._creditLink.setAttribute("title", "JavaScript Charts"), k._creditLink.setAttribute("style", "outline:none;margin:0px;position:absolute;right:2px;top:" + (k.height - 14) + "px;color:dimgrey;text-decoration:none;font-size:11px;font-family: Calibri, Lucida Grande, Lucida Sans Unicode, Arial, sans-serif"),
+            //            k._creditLink.setAttribute("tabIndex", -1), k._creditLink.setAttribute("target", "_blank")); if (0 === k.renderCount || m || u) k._creditLink.setAttribute("href", k.creditHref), k._creditLink.innerHTML = k.creditText; k._creditLink && k.creditHref && k.creditText ? (k._creditLink.parentElement || k._canvasJSContainer.appendChild(k._creditLink), k._creditLink.style.top = k.height - 14 + "px") : k._creditLink.parentElement && k._canvasJSContainer.removeChild(k._creditLink)
+            //    }
         }
     } function ta(k, m) {
         Ia && (this.canvasCount |= 0, window.console.log(++this.canvasCount));

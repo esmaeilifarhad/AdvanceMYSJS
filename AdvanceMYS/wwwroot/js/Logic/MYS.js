@@ -380,6 +380,8 @@ async function CalSpendTimejob() {
     
 
 }
+
+
 //نمایش اطلاعات تاریخ در هدر
 $(document).ready(function () {
 
@@ -420,5 +422,82 @@ async function CallAll() {
     CreateChartKarKard()
     ReportLineChartKarKard(-90)
     ReportDicByDateMonthDateRefresh()
+
+    SecondHandGold()
 }
 
+//طلا
+function SecondHandGold() {
+    
+        
+
+
+
+
+    $("#SecondHandGold").empty()
+    var bodyData = ""
+    //check mobile or web
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        bodyData += "<table style='/*display: inline-table;*/' class='table table-striped table-responsive'>"
+        // alert("mobile")
+    }
+    else {
+        bodyData += "<table  class='table table-striped'>"
+        // alert("web")
+    }
+    bodyData += "<tr><th>عنوان<th><th>قیمت شما</th></tr>"
+    bodyData += "<tr><td>هر گرم طلا امروز<td><td><input type='text' name='geram' onchange='setInLocalStorage(this,1)'/></td></tr>"
+    bodyData += "<tr><td>وزن<td><td><input type='text' name='weight' onchange='setInLocalStorage(this,2)'/></td></tr>"
+    bodyData += "<tr><td>درصد<td><td><input type='text' name='percent' onchange='setInLocalStorage(this,3)'/></td></tr>"
+    bodyData += "<tr><td>قیمت نهایی<td><td><span id='Result1'></span></td></tr>"
+    bodyData += "<tr><td>هر درصد چند تومن میشود<td><td><span id='PricePerPercent'></span></td></tr>"
+    bodyData += "<tr><td>سود فروشنده<td><td><span id='SellerProfit'></span></td></tr>"
+    bodyData+="</table>"
+
+    $("#SecondHandGold").append(bodyData)
+
+
+
+    
+    var PricePerGramOfGold = localStorage.getItem("PricePerGramOfGold");
+    var weightOfGold = localStorage.getItem("weightOfGold");
+    var PercentOfGold = localStorage.getItem("PercentOfGold");
+    // Store
+
+    $("input[name='geram']").val(SeparateThreeDigits(PricePerGramOfGold))
+    $("input[name='weight']").val(weightOfGold)
+    $("input[name='percent']").val(PercentOfGold)
+   
+    Cal() 
+    
+}
+function setInLocalStorage(thiss, type) {
+    
+    switch (type) {
+        case 1: localStorage.setItem("PricePerGramOfGold", removeComma(thiss.value)); break;
+        case 2: localStorage.setItem("weightOfGold", removeComma(thiss.value)); break;
+        case 3: localStorage.setItem("PercentOfGold", removeComma(thiss.value)); break;
+        default:
+    }
+    
+   
+    Cal() 
+}
+function Cal() {
+    var geram = $("input[name='geram']").val()
+    var weight = $("input[name='weight']").val()
+    var percent = $("input[name='percent']").val()
+
+    var res = Math.round((removeComma(geram) * weight)) + Math.round(((removeComma(geram) * weight) * (percent)) / 100)
+    $("#Result1").empty()
+    $("#Result1").append(SeparateThreeDigits(res))
+
+    $("#PricePerPercent").empty()
+    $("#PricePerPercent").append(SeparateThreeDigits(Math.round(((removeComma(geram) * weight) * (1)) / 100)))
+
+    $("#SellerProfit").empty()
+    $("#SellerProfit").append(SeparateThreeDigits(Math.round(((removeComma(geram) * weight) * (percent)) / 100)))
+    
+
+    
+}
