@@ -210,7 +210,7 @@ function BaseData() {
         "</div > " +
 
         "<div class='col-md-5'>" +
-
+    
         " <div class='ListAllJob'></div>" +
         "</div > " +
 

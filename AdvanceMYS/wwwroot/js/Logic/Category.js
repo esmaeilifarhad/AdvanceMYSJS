@@ -156,6 +156,7 @@ async function DeleteCategory(categoryId) {
 
 //--------------------------Job
 var _CategoryId;
+var _CalPerJobNeedMinute = []
 async function ListAllJob() {
     var obj = {}
     obj.url = "/Category/IndexJobAll"
@@ -208,6 +209,8 @@ async function ListAllJob() {
             var currentMonth = todayShamsy8char().substr(0, 4) + todayShamsy8char().substr(4, 2)
             var res = ListObj[i].percentJobs.filter(x => x.date == currentMonth)
             sum += (res.length == 0 ? 0 : res[0].percentValue)
+
+          
         }
 
        // sum += (ListObj[i].percentJobs.length > 0 ? ListObj[i].percentJobs[0].percentValue : 0)
@@ -229,7 +232,9 @@ async function ListAllJob() {
         //if (parseFloat(((100 * sumJob) / sumAll).toFixed(1)) > (ListObj[i].percentJobs.length > 0 ? ListObj[i].percentJobs[0].percentValue : 0)) {
         var percentValueFind = ListObj[i].percentJobs.find(x => x.date == todayShamsy8char().substr(0, 6))
         var percentValue = (percentValueFind == undefined ? 0 : ListObj[i].percentJobs.find(x => x.date == todayShamsy8char().substr(0, 6)).percentValue)
-        debugger
+
+        CalPerJobNeedMinute(sumAll, ListObj[i].name, sumJob, percentValue)
+
         if (parseFloat(((100 * sumJob) / sumAll).toFixed(1)) > (ListObj[i].percentJobs.length > 0 ? percentValue : 0)) {
             table += "<td style='color:green'>" + ((100 * sumJob) / sumAll).toFixed(1) + "</td>"
         }
@@ -256,7 +261,65 @@ async function ListAllJob() {
 
     $(".ListAllJob").empty()
     $(".ListAllJob").append(table)
+    
+    CalPerJobNeedMinute()
 
+}
+function CalPerJobNeedMinute(SumSecondReaded, nameJob, JobReaded, PercentValue) {
+    
+    if (SumSecondReaded == undefined) {
+        
+        var table = ""
+       
+        //برای هر درصد چقدر مطالعه لازم است
+        var onePercentNeedRead = _CalPerJobNeedMinute[0].SumSecondReaded / 100
+        table += "<p style='font-size:15px'> برای یک درصد چقدر مطالعه لازم است"+ " : " + minuteToTime(Math.floor(onePercentNeedRead / 60)) +"</p>"
+        //check mobile or web
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+             table += "<table class='table table-bordered table-striped table-responsive' id='SumKarkard' style='font-size:15px'>"
+            // alert("mobile")
+        }
+        else {
+            table += "<table class='table table-bordered table-striped' id='SumKarkard' style='font-size:15px'>"
+            // alert("web")
+        }
+
+       
+        for (var i = 0; i < _CalPerJobNeedMinute.length; i++) {
+
+            //چقدر باید مطالعه شود
+            var NeedPercentCompelete = _CalPerJobNeedMinute[i].PercentValue * (_CalPerJobNeedMinute[i].SumSecondReaded / 100)
+            //چقدر برای مطالعه کم دارد
+            var ReadLess = _CalPerJobNeedMinute[i].JobReaded - NeedPercentCompelete
+
+            var style=""
+            if (ReadLess < 0) {
+                ReadLess = ReadLess * (-1)
+                 style = "color:red;"
+            }
+            else {
+                 style = "color:green;"
+            }
+            var timeNeedToRead = minuteToTime(Math.floor(ReadLess / 60))
+            table += "<tr style=" + style+">"
+            table += "<td>" + _CalPerJobNeedMinute[i].nameJob + "</td><td>" + timeNeedToRead + "</td>"
+            table += "</tr>"
+
+        }
+        table += "</table>"
+        $(".CalListAllJob").empty()
+        $(".CalListAllJob").append(table)
+        _CalPerJobNeedMinute = []
+    }
+    else {
+        obj = {}
+        obj.SumSecondReaded = SumSecondReaded
+        obj.nameJob = nameJob
+        obj.JobReaded = JobReaded
+        obj.PercentValue = PercentValue
+        _CalPerJobNeedMinute.push(obj)
+    }
 }
 async function ListJobs(categoryId) {
     _CategoryId = categoryId
