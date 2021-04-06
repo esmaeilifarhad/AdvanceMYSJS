@@ -375,7 +375,12 @@ namespace AdvanceMYS.Controllers
             var res = _db.SaveChanges();
             return Json(res);
         }
-
+        public ActionResult DeleteTask(int TaskId) {
+          var old=  _db.Tasks.SingleOrDefault(q => q.TaskId == TaskId);
+            _db.Tasks.Remove(old);
+          var res=  _db.SaveChanges();
+            return Json(res);
+        }
         #endregion
         public ActionResult TimingTask(int TaskId)
         {

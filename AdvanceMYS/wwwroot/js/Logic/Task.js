@@ -89,7 +89,7 @@ function ShowListTask(ListTaskAnjamnashode) {
             "</br>" +
             "<span class='fa fa-remove pointer' onclick='removeTimeTask(" + ListTaskAnjamnashode[index].taskId + ")'></span></td>" +
             "<td><span class='fa fa-edit' style='cursor:pointer' onclick='EditTask(" + ListTaskAnjamnashode[index].taskId + ")'></span></td>" +
-            "<td><span class='fa fa-remove pointer'   Data_id=" + ListTaskAnjamnashode[index].taskId + " onclick=' DeleteTask({Id:" + ListTaskAnjamnashode[index].taskId + "})'></span></td>" +
+            "<td><span class='fa fa-remove pointer'   Data_id=" + ListTaskAnjamnashode[index].taskId + " onclick=' DeleteTask(" + ListTaskAnjamnashode[index].taskId + ")'></span></td>" +
             "</tr>"
     }
     table += "</table>"
@@ -1104,7 +1104,7 @@ async function removeTimeTask(taskId) {
 
 }
 
-async function DeleteTask(obj) {
+async function TaskIsCheckChange(obj) {
     
     $.LoadingOverlay("show");
     var TaskId = obj.Id
@@ -1126,6 +1126,27 @@ async function DeleteTask(obj) {
     $.LoadingOverlay("hide");
     RefreshTask()
 }
+
+async function DeleteTask(TaskId) {
+
+    $.LoadingOverlay("show");
+
+    var obj = {}
+    obj.url = "/Task/DeleteTask"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        TaskId: TaskId
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+
+    var ListObj = results[0]
+    $.LoadingOverlay("hide");
+    RefreshTask()
+}
+
 async function UpdateTask2(obj) {
     $.LoadingOverlay("show");
     var TaskId = obj.TaskId
@@ -1206,7 +1227,7 @@ async function ListTaskAnjamShode(date) {
                 "<td style='text-align: justify;padding: 5px;'>" + result.lstvmTask[index].name + "</td>" +
                 "<td>" + result.lstvmTask[index].rate + "</td>" +
                 "<td><input value='ویرایش' type='button' onclick=' EditTask(" + result.lstvmTask[index].taskId + ")'/></td>" +
-                "<td><input value='حذف' type='button' onclick='DeleteTask({Id:" + result.lstvmTask[index].taskId + "})'/></td>" +
+                "<td><input value='حذف' type='button' onclick='TaskIsCheckChange({Id:" + result.lstvmTask[index].taskId + "})'/></td>" +
 
                 "</tr>"
         }
@@ -1473,7 +1494,7 @@ function showTaskSeparate(ListObj) {
                 table += "<input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat - 1) + "})' />" 
                 table += "<span style='color:green'>  " + types[groupName][i].olaviat+" _ </span>"
                 table += "<span>" + types[groupName][i].name + "<span><span class='fa fa-edit' style='cursor: pointer' onclick='EditTask(" + types[groupName][i].taskId + ")'></span>"
-                table += "<span class='fa fa-remove pointer'  onclick=' DeleteTask({Id:" + types[groupName][i].taskId + "})'></span></p>" 
+                table += "<span class='fa fa-remove pointer'  onclick=' DeleteTask(" + types[groupName][i].taskId + ")'></span></p>" 
 
             }
             table += "</div>"
@@ -1487,7 +1508,7 @@ function showTaskSeparate(ListObj) {
                 table += "<input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat - 1) + "})' />" 
                 table += "<span style='color:green'>  " + types[groupName][i].olaviat +" _ </span>"
                 table += "<span>" + types[groupName][i].name + "<span><span class='fa fa-edit' style='cursor: pointer' onclick='EditTask(" + types[groupName][i].taskId + ")'></span>"
-                table += "&nbsp&nbsp<span class='fa fa-remove pointer'  onclick=' DeleteTask({Id:" + types[groupName][i].taskId + "})'></span></p>" 
+                table += "&nbsp&nbsp<span class='fa fa-remove pointer'  onclick=' DeleteTask(" + types[groupName][i].taskId + ")'></span></p>" 
             }
             table += "</div>"
         }

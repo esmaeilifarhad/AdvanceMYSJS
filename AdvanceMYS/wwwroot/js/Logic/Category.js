@@ -225,8 +225,12 @@ async function ListAllJob() {
         }
        
         table += "<td>" + minuteToTime(Math.floor(sumJob / 60)) + "</td>"
-
-        if (((100 * sumJob) / sumAll).toFixed(1) > (ListObj[i].percentJobs.length > 0 ? ListObj[i].percentJobs[0].percentValue : 0)) {
+        
+        //if (parseFloat(((100 * sumJob) / sumAll).toFixed(1)) > (ListObj[i].percentJobs.length > 0 ? ListObj[i].percentJobs[0].percentValue : 0)) {
+        var percentValueFind = ListObj[i].percentJobs.find(x => x.date == todayShamsy8char().substr(0, 6))
+        var percentValue = (percentValueFind == undefined ? 0 : ListObj[i].percentJobs.find(x => x.date == todayShamsy8char().substr(0, 6)).percentValue)
+        debugger
+        if (parseFloat(((100 * sumJob) / sumAll).toFixed(1)) > (ListObj[i].percentJobs.length > 0 ? percentValue : 0)) {
             table += "<td style='color:green'>" + ((100 * sumJob) / sumAll).toFixed(1) + "</td>"
         }
         else  {
