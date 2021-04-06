@@ -33,6 +33,7 @@ async function showListKarkard() {
     }
     
     for (var i = 0; i < ListObj.length; i++) {
+        if (ListObj[i].job == null) continue
         table += "<tr>"
         table += "<td>" + ListObj[i].job.name + "</td>"
         table += "<td>" + formatDate(ListObj[i].dayDate) + "</td>"
