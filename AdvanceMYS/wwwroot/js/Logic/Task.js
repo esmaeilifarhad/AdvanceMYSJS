@@ -1131,6 +1131,63 @@ async function DeleteTask(TaskId) {
 
     $.LoadingOverlay("show");
 
+
+    var objEditTask = {}
+    objEditTask.url = "/Task/EditTask"
+    objEditTask.dataType = "json"
+    objEditTask.type = "post"
+    objEditTask.data = { TaskId: TaskId }
+
+    var results = await Promise.all([
+        service(objEditTask)
+    ]);
+    var oldTask = results[0]
+    debugger
+    var modal_footer = "<table><tr>" +
+        "<td><input type='button' class='btn btn-success' value='حذف' onclick='DeleteTaskPost(" + TaskId+")'/> | " +
+        "<input type='button'  class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +
+        "</tr>"
+    modal_footer += "</table>"
+
+    var table = "<p>" + oldTask.task.name+"</p>"+"<hr/>"+"<p>آیا حذف انجام شود؟</p>"
+   
+    var modal_header = "<span>حذف تسک</span>"
+    $("#MasterModal .modal-header").empty();
+    $("#MasterModal .modal-header").append(modal_header);
+
+
+    $("#MasterModal .modal-footer").empty();
+    $("#MasterModal .modal-footer").append(modal_footer);
+
+    $("#MasterModal .BodyModal").empty();
+    $("#MasterModal .BodyModal").append(table);
+
+    $("#MasterModal").modal();
+
+    $.LoadingOverlay("hide");
+
+
+   
+
+    //var obj = {}
+    //obj.url = "/Task/DeleteTask"
+    //obj.dataType = "json"
+    //obj.type = "post"
+    //obj.data = {
+    //    TaskId: TaskId
+    //}
+    //var results = await Promise.all([
+    //    service(obj)
+    //]);
+
+    //var ListObj = results[0]
+    //$.LoadingOverlay("hide");
+    //RefreshTask()
+}
+
+async function DeleteTaskPost(TaskId) {
+
+    $.LoadingOverlay("show");
     var obj = {}
     obj.url = "/Task/DeleteTask"
     obj.dataType = "json"
@@ -1144,6 +1201,7 @@ async function DeleteTask(TaskId) {
 
     var ListObj = results[0]
     $.LoadingOverlay("hide");
+    $("#MasterModal").modal("toggle");
     RefreshTask()
 }
 
@@ -1494,7 +1552,7 @@ function showTaskSeparate(ListObj) {
                 table += "<input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat - 1) + "})' />" 
                 table += "<span style='color:green'>  " + types[groupName][i].olaviat+" _ </span>"
                 table += "<span>" + types[groupName][i].name + "<span><span class='fa fa-edit' style='cursor: pointer' onclick='EditTask(" + types[groupName][i].taskId + ")'></span>"
-                table += "<span class='fa fa-remove pointer'  onclick=' DeleteTask(" + types[groupName][i].taskId + ")'></span></p>" 
+                table += "&nbsp&nbsp&nbsp&nbsp<span class='fa fa-remove pointer'  onclick=' DeleteTask(" + types[groupName][i].taskId + ")'></span></p>" 
 
             }
             table += "</div>"
@@ -1508,7 +1566,7 @@ function showTaskSeparate(ListObj) {
                 table += "<input type='button' style='background-color:red' class='fa fa-sort-down pointer  ' onclick='UpdateTask2({TaskId:" + types[groupName][i].taskId + ",Olaviat:" + (types[groupName][i].olaviat - 1) + "})' />" 
                 table += "<span style='color:green'>  " + types[groupName][i].olaviat +" _ </span>"
                 table += "<span>" + types[groupName][i].name + "<span><span class='fa fa-edit' style='cursor: pointer' onclick='EditTask(" + types[groupName][i].taskId + ")'></span>"
-                table += "&nbsp&nbsp<span class='fa fa-remove pointer'  onclick=' DeleteTask(" + types[groupName][i].taskId + ")'></span></p>" 
+                table += "&nbsp&nbsp&nbsp&nbsp<span class='fa fa-remove pointer'  onclick=' DeleteTask(" + types[groupName][i].taskId + ")'></span></p>" 
             }
             table += "</div>"
         }

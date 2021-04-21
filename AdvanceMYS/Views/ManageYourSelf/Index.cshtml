@@ -6,7 +6,22 @@
 
 
 
-
+<style>
+    .jobsDiv li a {
+        padding: 0px 5px 0px 5px;
+        background-color:chocolate;
+        border-radius:5px;
+        margin:1px;
+    }
+</style>
+<style>
+    .nav-tabs .active {
+        color: white;
+        background-color: black;
+        border-radius: 5px;
+        padding: 0px 5px 0px 5px;
+    }
+</style>
 
 <div class="container-fluid">
     <div class="row">
@@ -14,14 +29,40 @@
             <div class="ListTagh" style="background-image: linear-gradient(45deg, #da95ce, transparent);font-size:11px"></div>
             <div class="ListTaghDetail" style="background-image: linear-gradient(45deg, #da95ce, transparent);font-size:14px"></div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-2">
             <div class="RepeatedTaskForCheck" style=" background-image: linear-gradient(45deg, #daab95, transparent);
         font-size: 14px"></div>
 
         </div>
-        <div class="col-lg-4">
-            <div class="CalListAllJob" style=" background-image: linear-gradient(45deg, #daea80, transparent);font-size: 10px"></div>
-            <div class="ListAllJob" style=" background-image: linear-gradient(45deg, #daab95, transparent);font-size: 10px"></div>
+        <div class="col-lg-6 jobsDiv">
+
+
+            <ul class="nav nav-tabs">
+                <li ><a data-toggle="tab" href="#home">Main</a></li>
+                <li ><a data-toggle="tab" href="#menu1">Percentage</a></li>
+                <li ><a data-toggle="tab" href="#menu2" onclick="PercentageJobMounthly()">درصد ماهانه</a></li>
+
+            </ul>
+
+            <div class="tab-content">
+                <div id="home" class="tab-pane fade in active">
+                    <div class="CalListAllJob" style=" background-image: linear-gradient(45deg, #daea80, transparent);font-size: 10px"></div>
+
+
+                </div>
+                <div id="menu1" class="tab-pane fade">
+                    <div class="ListAllJob" style=" background-image: linear-gradient(45deg, #daab95, transparent);font-size: 10px"></div>
+                </div>
+
+                <div id="menu2" class="tab-pane fade">
+                    <div class="PercentageJobMounthly" style=" background-image: linear-gradient(45deg, #daab95, transparent);font-size: 10px"></div>
+                </div>
+            </div>
+        
+
+
+          
+        
 
         </div>
     </div>
@@ -82,6 +123,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#home").css("opacity", "1");
+        // $("#home").addClass("active");
+        $('a[href="#home"]').addClass("active");
+      // 
+    });
+
+</script>
 
 
 

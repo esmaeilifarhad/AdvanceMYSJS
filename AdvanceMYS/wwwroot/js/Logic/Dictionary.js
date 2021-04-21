@@ -358,6 +358,7 @@ async function TranslateWordByWord(exampleId) {
             "<td><input type='button' style='background-color:red' value='False' onclick='levelUpDown2({status:false,wordId:" + ListObj[i].id + ",exampleId:" + exampleId + "})'></td> " +
             "<td><input type='button' style='background-color:blue' value='Edit' onclick='CreateUpdateWord(" + ListObj[i].id + ")'></td>" +
             "<td><input type='button' style='background-color:gray' value='Sound'  onclick='makeSound(\"" + ListObj[i].eng + "\")'></td>" +
+            "<td><input type='button' style='background-color:#f3c333' value='Delete'  onclick='DeleteWord(\"" + ListObj[i].id + "\")'></td>" +
             "<td><a target='_blank' href='https://translate.google.com/?hl=en&tab=wT#view=home&op=translate&sl=en&tl=fa&text=" + ListObj[i].eng + "'>google</a> | " +
             "<a target='_blank' href='https://abadis.ir/?lntype=entofa,entoen,abbr&word=" + ListObj[i].eng + "&from=ac'>abadis</a>" +
             "</td >"

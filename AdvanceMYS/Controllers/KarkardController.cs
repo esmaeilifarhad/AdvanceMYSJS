@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AdvanceMYS.Models.Domain;
 using AdvanceMYS.Models.Utility;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdvanceMYS.Controllers
@@ -131,5 +134,43 @@ namespace AdvanceMYS.Controllers
                 return Json("با موفقیت حذف انجام شد");
             return Json("خطا در حذف");
         }
+
+        public IActionResult PercentageJobMounthly(string date)
+        {
+            List<PercentageJobMounthlyVM> lst = new List<PercentageJobMounthlyVM>();
+            string query = @"
+declare @date nvarchar(250)
+declare @SumInmonth float
+set @date="+ date +@"
+
+select @SumInmonth=sum(SpendTimeMinute) 
+from [5069_Esmaeili].KarKard
+where JobId>0 and left(DayDate,6)=@date
+group by left(DayDate,6)
+
+
+select left(DayDate,6) date,
+(select Name from [5069_Esmaeili].Job where JobId=[5069_Esmaeili].KarKard.JobId) title,
+sum(SpendTimeMinute) time,
+round((sum(SpendTimeMinute)*100)/ @SumInmonth,2) [percent]
+from [5069_Esmaeili].KarKard
+where JobId>0 and left(DayDate,6)=@date
+group by left(DayDate,6),JobId
+";
+            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
+            {
+
+                lst = DB.Query<PercentageJobMounthlyVM>(query).ToList();
+            }
+
+            return Json(lst);
+        }
+
+    }
+    public class PercentageJobMounthlyVM {
+        public string title { get; set; }
+        public string time { get; set; }
+        public string date { get; set; }
+        public string percent { get; set; }
     }
 }
