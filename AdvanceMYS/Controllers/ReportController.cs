@@ -115,12 +115,93 @@ order by DayDate
 
             return Json(lst);
         }
+
+        public IActionResult LineChartKarKardSpecialMultiple(string date)
+        {
+            List<KarkardVM> lst = new List<KarkardVM>();
+            string query = @"
+If (select object_id('tempdb..#T_Mor')) is not null 
+ Drop Table #T_Mor 
+ Create Table #T_Mor(col1 nvarchar(10) ,col3 bigint) 
+
+ ----
+ declare @sumTime bigint
+ set @sumTime=0
+ ----------------------------------------------------------
+Declare mycursor cursor
+For 
+
+---<Master Select>
+select DayDate label,sum(SpendTimeMinute)/60 y 
+from [5069_ManageYourSelf].[5069_Esmaeili].karkard
+where left(DayDate,6)="+date+@"
+group by DayDate
+order by DayDate
+--</Master Select>
+Open mycursor
+---<Declare>
+Declare @DayDate nvarchar(8)
+Declare @y bigint
+--</Declare>
+Fetch next from mycursor Into @DayDate,@y 
+While @@fetch_status <>-1
+BEGIN
+---------------<Body>
+
+set @sumTime=@y +@sumTime
+
+insert into #T_Mor
+(col1,col3)
+select right(@DayDate,2) ,@sumTime
+
+--------------</Body>
+FETCH next from mycursor Into  @DayDate,@y 
+End
+Close mycursor
+DEALLOCATE mycursor
+--select * from #T_Mor
+
+DECLARE @NUMBER INT=0
+DECLARE @LastValue bigint=0
+-------------
+WHILE (@NUMBER <31)
+BEGIN
+SET @NUMBER +=1
+
+IF((select right(col1,2) from #T_Mor where col1=@NUMBER) is null)
+BEGIN
+insert into #T_Mor
+select case when @NUMBER<10 then  @NUMBER  else @NUMBER end,@LastValue
+END
+
+ELSE
+BEGIN
+select @LastValue=col3 from #T_Mor where col1=@NUMBER
+END
+
+END
+select cast(col1 as int) label,col3 y from #T_Mor order by CONVERT(int,col1)
+";
+            using (IDbConnection DB = new SqlConnection(Models.Connection.Connection._ConnectionString))
+            {
+
+                lst = DB.Query<KarkardVM>(query).ToList();
+            }
+
+            return Json(lst);
+        }
         #endregion
     }
     public class DictionaryVM
     {
         public int y { get; set; }
         public string label { get; set; }
+    }
+    public class KarkardVM
+    {
+        public string label { get; set; }
+       // public string col2 { get; set; }
+        public int y { get; set; }
     }
     /*
      select Left(DayDate,6) Mounth,sum(SpendTimeMinute)/(60*60) sumSpendTimeMinute

@@ -156,10 +156,13 @@ async function DataLineChartKarKard(ndays) {
 
     return ListObj
 }
+
+
+
 async function ReportLineChartKarKard(ndays) {
 
     var data = await DataLineChartKarKard(ndays)
-
+    
 
     var chart = new CanvasJS.Chart("ReportLineChartKarKard",
         {
@@ -195,6 +198,84 @@ async function ReportLineChartKarKard(ndays) {
 
 }
 
+async function LineChartKarKardSpecialMultiple(date) {
+    // var date = addDayReturnDate(ndays)
+
+    var obj = {}
+    obj.url = "/Report/LineChartKarKardSpecialMultiple"
+    obj.dataType = "json"
+    obj.type = "post"
+    obj.data = {
+        date: date,
+    }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    
+    return ListObj
+}
+
+async function ReportLineChartKarKardSpecialMultiple(date) {
+
+    var data1 = await LineChartKarKardSpecialMultiple(140002)
+    var data2 = await LineChartKarKardSpecialMultiple(140001)
+    var data3 = await LineChartKarKardSpecialMultiple(139912)
+    var data4 = await LineChartKarKardSpecialMultiple(139911)
+    var data5 = await LineChartKarKardSpecialMultiple(139910)
+
+
+    debugger
+    var chart = new CanvasJS.Chart("ReportLineChartKarKardSpecialMultiple", {
+            title: {
+                text: "Click on legend items to hide/unhide dataseries"
+            },
+            legend: {
+                cursor: "pointer",
+                itemclick: function (e) {
+                    //console.log("legend click: " + e.dataPointIndex);
+                    //console.log(e);
+                    if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                        e.dataSeries.visible = false;
+                    } else {
+                        e.dataSeries.visible = true;
+                    }
+
+                    e.chart.render();
+                }
+            },
+            data: [{
+                showInLegend: true,
+                type: "line",
+                dataPoints: data1
+            }, {
+                showInLegend: true,
+                type: "line",
+                dataPoints: data2
+            }, {
+                showInLegend: true,
+                type: "line",
+                dataPoints: data3
+                }
+                , {
+                    showInLegend: true,
+                    type: "line",
+                    dataPoints: data4
+                }
+                , {
+                    showInLegend: true,
+                    type: "line",
+                    dataPoints: data5
+                }
+            ]
+        });
+
+        chart.render();
+    
+
+
+
+}
 //----------DicByDateMonthDateRefresh
 async function DataDicByDateMonthDateRefresh() {
     var obj = {}

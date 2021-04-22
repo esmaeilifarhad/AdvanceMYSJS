@@ -422,7 +422,7 @@ async function CallAll() {
     CreateChartKarKard()
     ReportLineChartKarKard(-90)
     ReportDicByDateMonthDateRefresh()
-
+    ReportLineChartKarKardSpecialMultiple()
     SecondHandGold()
 }
 
