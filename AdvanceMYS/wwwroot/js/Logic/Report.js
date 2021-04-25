@@ -198,7 +198,7 @@ async function ReportLineChartKarKard(ndays) {
 
 }
 
-async function LineChartKarKardSpecialMultiple(date) {
+async function LineChartKarKardSpecialMultiple(date, jobId) {
     // var date = addDayReturnDate(ndays)
 
     var obj = {}
@@ -207,6 +207,7 @@ async function LineChartKarKardSpecialMultiple(date) {
     obj.type = "post"
     obj.data = {
         date: date,
+        jobId: jobId,
     }
     var results = await Promise.all([
         service(obj)
@@ -216,16 +217,40 @@ async function LineChartKarKardSpecialMultiple(date) {
     return ListObj
 }
 
-async function ReportLineChartKarKardSpecialMultiple(date) {
+async function ReportLineChartKarKardSpecialMultiple(jobId) {
+    const m = moment();
+    //var currentdate = m.jYear() + '' + m.jMonth() + 1
+    /*
+    m.add(2, 'jMonth')
+    var res1 =m.jMonth()
+    m.add(1, 'jMonth')
+    var res2 = m.jMonth()
+     m.add(-1, 'jMonth')
+    var res3 = m.jMonth()
+    */
 
-    var data1 = await LineChartKarKardSpecialMultiple(140002)
-    var data2 = await LineChartKarKardSpecialMultiple(140001)
-    var data3 = await LineChartKarKardSpecialMultiple(139912)
-    var data4 = await LineChartKarKardSpecialMultiple(139911)
-    var data5 = await LineChartKarKardSpecialMultiple(139910)
-
-
+    
+    var currentdate = (m.jYear()) + "" + ((m.jMonth() + 1) < 10 ? "0" + (m.jMonth() + 1) : m.jMonth() + 1) 
+    m.add(-1, 'jMonth')
+    var currentdate2 = (m.jYear()) + "" + ((m.jMonth() + 1) < 10 ? "0" + (m.jMonth() + 1) : m.jMonth() + 1) 
+    m.add(-1, 'jMonth')
+    var currentdate3 = (m.jYear()) + "" + ((m.jMonth() + 1) < 10 ? "0" + (m.jMonth() + 1) : m.jMonth() + 1) 
+    m.add(-1, 'jMonth')
+    var currentdate4 = (m.jYear()) + "" + ((m.jMonth() + 1) < 10 ? "0" + (m.jMonth() + 1) : m.jMonth() + 1) 
+    m.add(-1, 'jMonth')
+    var currentdate5 = (m.jYear()) + "" + ((m.jMonth() + 1) < 10 ? "0" + (m.jMonth() + 1) : m.jMonth() + 1) 
     debugger
+    
+    var data1 = await LineChartKarKardSpecialMultiple(currentdate, jobId)
+    var data2 = await LineChartKarKardSpecialMultiple(currentdate2, jobId)
+    var data3 = await LineChartKarKardSpecialMultiple(currentdate3, jobId)
+    var data4 = await LineChartKarKardSpecialMultiple(currentdate4, jobId)
+    var data5 = await LineChartKarKardSpecialMultiple(currentdate5, jobId)
+
+    //for (var i = 0; i < data5.length; i++) {
+    //    data5[i].y = data5[i].y/60
+    //}
+    
     var chart = new CanvasJS.Chart("ReportLineChartKarKardSpecialMultiple", {
             title: {
                 text: "Click on legend items to hide/unhide dataseries"
@@ -244,7 +269,8 @@ async function ReportLineChartKarKardSpecialMultiple(date) {
                     e.chart.render();
                 }
             },
-            data: [{
+        data: [
+            {
                 showInLegend: true,
                 type: "line",
                 dataPoints: data1
@@ -262,7 +288,8 @@ async function ReportLineChartKarKardSpecialMultiple(date) {
                     type: "line",
                     dataPoints: data4
                 }
-                , {
+            ,
+            {
                     showInLegend: true,
                     type: "line",
                     dataPoints: data5
@@ -272,7 +299,9 @@ async function ReportLineChartKarKardSpecialMultiple(date) {
 
         chart.render();
     
-
+    var table = '<p style="color:#4f81bc">' + currentdate + '</p><p style="color:#c0504e">' + currentdate2 + '</p><p style="color:#9bbb58">' + currentdate3 + '</p><p style="color:#8064a1">' + currentdate4 + '</p><p style="color:#23bfaa">' + currentdate5 +'</p>'
+    $(".DateYear").empty();
+    $(".DateYear").append(table);
 
 
 }

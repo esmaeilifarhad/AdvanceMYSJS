@@ -423,6 +423,7 @@ async function CallAll() {
     ReportLineChartKarKard(-90)
     ReportDicByDateMonthDateRefresh()
     ReportLineChartKarKardSpecialMultiple()
+    ListJobsInNotes2()
     SecondHandGold()
 }
 
@@ -500,4 +501,27 @@ function Cal() {
     
 
     
+}
+
+async function ListJobsInNotes2() {
+    var list = await GetJobData()
+    var res = showJobs2(list)
+    
+    $(".ListJob").empty()
+    $(".ListJob").append(res)
+
+}
+function showJobs2(list) {
+
+    var table = tableReturn()
+    table += "<tr>"
+    for (var i = 0; i < list.length; i++) {
+
+        table += "<td><input name='rdbJobs' type='radio' value=" + list[i].jobId + " onclick='ReportLineChartKarKardSpecialMultiple(this.value)' /><span>" + list[i].name + "</span></td>"
+
+
+    }
+    table += "</tr>"
+    table += "</table>"
+    return table
 }

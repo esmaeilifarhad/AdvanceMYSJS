@@ -381,7 +381,7 @@ async function PercentageJobMounthly() {
     for (var i = 0; i < ListObj.length; i++) {
         sumReaded += parseInt(ListObj[i].time)
     }
-    debugger
+    
     var table = "<input type='text' name='SelectDate' placeholder='140001'/><input type='button' value='click'  onclick='PercentageJobMounthly()' /></br>"
     table += "<p>تاریخ : " + (ListObj.length == 0 ? '...' : ListObj[0].date) + "</p>"
     table += "<p>مدت مطالعه : " + minuteToTime(Math.floor(sumReaded / 60))+ "</p>"

@@ -116,8 +116,18 @@ order by DayDate
             return Json(lst);
         }
 
-        public IActionResult LineChartKarKardSpecialMultiple(string date)
+        public IActionResult LineChartKarKardSpecialMultiple(string date,string jobId)
         {
+            string where = "";
+            if (jobId == null)
+            {
+
+            }
+            else
+            {
+                 where = " and jobId=" + jobId;
+            }
+           
             List<KarkardVM> lst = new List<KarkardVM>();
             string query = @"
 If (select object_id('tempdb..#T_Mor')) is not null 
@@ -132,9 +142,9 @@ Declare mycursor cursor
 For 
 
 ---<Master Select>
-select DayDate label,sum(SpendTimeMinute)/60 y 
+select DayDate label,sum(SpendTimeMinute)/(60) y 
 from [5069_ManageYourSelf].[5069_Esmaeili].karkard
-where left(DayDate,6)="+date+@"
+where left(DayDate,6)="+date+where+@"
 group by DayDate
 order by DayDate
 --</Master Select>
