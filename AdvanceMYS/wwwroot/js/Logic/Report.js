@@ -290,6 +290,59 @@ async function ReportDicByDateMonthDateRefresh() {
 
 }
 
+async function ReportAllJobKarkardAllMounth() {
+    var data = await queryKarkardByJob()
+    
+    var chart = new CanvasJS.Chart("ReportAllJobKarkardAllMounth",
+        {
+            title: {
+                text: "گزارش کارکرد سالانه"
+            },
+            data: [
+
+                {
+                    dataPoints: data
+                    //dataPoints: [
+                    //    { y: 297571, label: "Venezuela" },
+                    //    { y: 267017, label: "Saudi" },
+                    //    {  y: 175200, label: "Canada" },
+                    //    {  y: 154580, label: "Iran" },
+                    //    {  y: 116000, label: "Russia" },
+                    //    {  y: 97800, label: "UAE" },
+                    //    {  y: 20682, label: "US" },
+                    //    {  y: 20350, label: "China" }
+                    //]
+                }
+            ]
+        }
+        );
+
+        chart.render();
+    }
+
+
+async function queryKarkardByJob() {
+
+    $.LoadingOverlay("show");
+
+    var obj = {}
+    obj.url = "/Query/Select"
+    obj.dataType = "json"
+    obj.type = "post"
+    var query = "select (sum(SpendTimeMinute))/(60*60) y, (select name from[5069_ManageYourSelf].[5069_Esmaeili].Job where JobId = [5069_ManageYourSelf].[5069_Esmaeili].karkard.JobId) label "+
+   " from[5069_ManageYourSelf].[5069_Esmaeili].karkard "+
+   " where JobId is not null "+
+   " group by JobId "
+    obj.data = { query: query }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    $.LoadingOverlay("hide");
+    return ListObj
+
+}
+
 
 
 
