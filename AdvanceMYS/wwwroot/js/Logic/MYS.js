@@ -425,6 +425,7 @@ async function CallAll() {
     ReportLineChartKarKardSpecialMultiple()
     ListJobsInNotes2()
     SecondHandGold()
+
 }
 
 //طلا
@@ -525,3 +526,4 @@ function showJobs2(list) {
     table += "</table>"
     return table
 }
+

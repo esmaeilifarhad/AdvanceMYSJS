@@ -1142,7 +1142,7 @@ async function DeleteTask(TaskId) {
         service(objEditTask)
     ]);
     var oldTask = results[0]
-    debugger
+    
     var modal_footer = "<table><tr>" +
         "<td><input type='button' class='btn btn-success' value='حذف' onclick='DeleteTaskPost(" + TaskId+")'/> | " +
         "<input type='button'  class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +

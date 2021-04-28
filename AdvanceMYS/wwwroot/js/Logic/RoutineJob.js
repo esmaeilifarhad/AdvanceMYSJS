@@ -1,5 +1,5 @@
 ﻿function createForm() {
-    debugger
+    
     var table = tableReturn()
     table += "<tr>"
     table += "<td>Title :  <input type='text' placeholder='عنوان' name='Job'/></td>"
@@ -65,7 +65,7 @@ async function listRoutineJob() {
  function showForm(id) {
     var table = createForm()
   
-     debugger
+     
     var modal_footer = "<table><tr>" +
         "<td><input type='button' class='btn btn-success' value=" + (id > 0 ? 'ویرایش' : 'ایجاد') + " onclick='CreaetUpdateRoutinejobPost(" + id + ")'/> | " +
         "<input type='button'  class='btn btn-danger' value='بستن' onclick='closeModal()'/></td>" +

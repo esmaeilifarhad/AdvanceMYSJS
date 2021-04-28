@@ -283,11 +283,11 @@ function CalPerJobNeedMinute(SumSecondReaded, nameJob, JobReaded, PercentValue, 
         //check mobile or web
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 
-             table += "<table class='table table-bordered table-striped table-responsive' id='SumKarkard' style='font-size:15px'>"
+             table += "<table class='table table-bordered table-striped table-responsive'  style='font-size:15px'>"
             // alert("mobile")
         }
         else {
-            table += "<table class='table table-bordered table-striped' id='SumKarkard' style='font-size:15px'>"
+            table += "<table class='table table-bordered table-striped'  style='font-size:15px'>"
             // alert("web")
         }
 
@@ -349,15 +349,15 @@ function CalPerJobNeedMinute(SumSecondReaded, nameJob, JobReaded, PercentValue, 
     }
 }
 
-async function PercentageJobMounthly() {
-
-    var date = $("input[name='SelectDate']").val()
+async function PercentageJobMounthly(date) {
+    debugger
+    //var date = $("input[name='SelectDate']").val()
     if (date == undefined) {
         var currentDate = todayShamsy8char()
         date = currentDate.substr(0, 6)
     }
 
-    if (date.length != 6) return
+    //if (date.length != 6) return
     //var obj = {}
     //obj.url = "/Category/IndexJobAll"
     //obj.dataType = "json"
@@ -381,8 +381,26 @@ async function PercentageJobMounthly() {
     for (var i = 0; i < ListObj.length; i++) {
         sumReaded += parseInt(ListObj[i].time)
     }
+    var tableDateKarkard = await queryKarkard()
     
-    var table = "<input type='text' name='SelectDate' placeholder='140001'/><input type='button' value='click'  onclick='PercentageJobMounthly()' /></br>"
+    var tbl=""
+    //check mobile or web
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+        tbl += "<table class='table table-bordered table-striped table-responsive' id=''>"
+        // alert("mobile")
+    }
+    else {
+        tbl += "<table class='table table-bordered table-striped' id='' >"
+        // alert("web")
+    }
+    tbl += "<tr>"
+    for (var i = 0; i < tableDateKarkard.length; i++) {
+        tbl += "<td onclick='PercentageJobMounthly(" + tableDateKarkard[i].date+")'>" + tableDateKarkard[i].date+"</td>"
+    }
+    tbl += "</tr></table>"
+   var table=tbl
+     table += "<input type='text' name='SelectDate' placeholder='140001'/><input type='button' value='click'  onclick='PercentageJobMounthly()' /></br>"
     table += "<p>تاریخ : " + (ListObj.length == 0 ? '...' : ListObj[0].date) + "</p>"
     table += "<p>مدت مطالعه : " + minuteToTime(Math.floor(sumReaded / 60))+ "</p>"
     //check mobile or web
@@ -407,6 +425,26 @@ async function PercentageJobMounthly() {
     $(".PercentageJobMounthly").empty()
     $(".PercentageJobMounthly").append(table)
     $("input[name='SelectDate']").val(date)
+}
+async function queryKarkard() {
+
+    $.LoadingOverlay("show");
+
+    var obj = {}
+    obj.url = "/Query/Select"
+    obj.dataType = "json"
+    obj.type = "post"
+    var query = "select left(daydate,6) date " +
+        "from[5069_ManageYourSelf].[5069_Esmaeili].karkard " +
+        " group by left(daydate, 6)"
+    obj.data = { query: query }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    $.LoadingOverlay("hide");
+    return ListObj
+    
 }
 async function ListJobs(categoryId) {
     _CategoryId = categoryId
