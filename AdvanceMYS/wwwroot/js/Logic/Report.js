@@ -320,6 +320,46 @@ async function ReportAllJobKarkardAllMounth() {
         chart.render();
     }
 
+async function ReportSumDayOfWeek() {
+    var data = await querySumDayOfWeek()
+
+    var chart = new CanvasJS.Chart("ReportSumDayOfWeek",
+        {
+            title: {
+                text: "گزارش کارکرد روز هفته"
+            },
+            data: [
+
+                {
+                    dataPoints: data
+                }
+            ]
+        }
+    );
+
+    chart.render();
+}
+
+async function ReportSumSpecialDayOfWeek() {
+    var data = await querySumSpecialDayOfWeek(7)
+
+    var chart = new CanvasJS.Chart("ReportSumSpecialDayOfWeek",
+        {
+            title: {
+                text: "گزارش کارکرد روز هفته جاری"
+            },
+            data: [
+
+                {
+                    dataPoints: data
+                }
+            ]
+        }
+    );
+
+    chart.render();
+}
+
 
 async function queryKarkardByJob() {
 
@@ -333,6 +373,63 @@ async function queryKarkardByJob() {
    " from[5069_ManageYourSelf].[5069_Esmaeili].karkard "+
    " where JobId is not null "+
    " group by JobId "
+    obj.data = { query: query }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    $.LoadingOverlay("hide");
+    return ListObj
+
+}
+
+
+async function querySumDayOfWeek() {
+
+    $.LoadingOverlay("show");
+
+    var obj = {}
+    obj.url = "/Query/Select"
+    obj.dataType = "json"
+    obj.type = "post"
+    var query = "select "+ 
+"case "+
+    "when(DATEPART(weekday, dbo.ShamsitoMiladi(left(DayDate, 4) + '/' + SUBSTRING(DayDate, 5, 2) + '/' + right(DayDate, 2))) = 1) then N'یکشنبه'   "+
+    "when(DATEPART(weekday, dbo.ShamsitoMiladi(left(DayDate, 4) + '/' + SUBSTRING(DayDate, 5, 2) + '/' + right(DayDate, 2))) = 2) then N'دوشنبه'   "+
+    "when(DATEPART(weekday, dbo.ShamsitoMiladi(left(DayDate, 4) + '/' + SUBSTRING(DayDate, 5, 2) + '/' + right(DayDate, 2))) = 3) then N'سه شنبه'  "+
+    "when(DATEPART(weekday, dbo.ShamsitoMiladi(left(DayDate, 4) + '/' + SUBSTRING(DayDate, 5, 2) + '/' + right(DayDate, 2))) = 4) then N'چهارشنبه' "+
+    "when(DATEPART(weekday, dbo.ShamsitoMiladi(left(DayDate, 4) + '/' + SUBSTRING(DayDate, 5, 2) + '/' + right(DayDate, 2))) = 5) then N'پنجشنبه'  "+
+    "when(DATEPART(weekday, dbo.ShamsitoMiladi(left(DayDate, 4) + '/' + SUBSTRING(DayDate, 5, 2) + '/' + right(DayDate, 2))) = 6) then N'جمعه'     "+
+    "when(DATEPART(weekday, dbo.ShamsitoMiladi(left(DayDate, 4) + '/' + SUBSTRING(DayDate, 5, 2) + '/' + right(DayDate, 2))) = 7) then N'شنبه'     "+
+"else 'نامشخص' end as label,      "+
+"        SUM(SpendTimeMinute)/(60*60) as y "+
+"    from[5069_Esmaeili].KarKard   "+
+"    group by "+
+        "    DATEPART(weekday, dbo.ShamsitoMiladi(left(DayDate, 4) + '/' + SUBSTRING(DayDate, 5, 2) + '/' + right(DayDate, 2)))" +
+        " order by  SUM(SpendTimeMinute)/(60*60)"
+    obj.data = { query: query }
+    var results = await Promise.all([
+        service(obj)
+    ]);
+    var ListObj = results[0]
+    $.LoadingOverlay("hide");
+    return ListObj
+
+}
+
+
+async function querySumSpecialDayOfWeek(dayOftheWeek) {
+
+    $.LoadingOverlay("show");
+
+    var obj = {}
+    obj.url = "/Query/Select"
+    obj.dataType = "json"
+    obj.type = "post"
+    var query = "select DayDate label,SUM(SpendTimeMinute)/(60) y "+
+        " from[5069_Esmaeili].KarKard " +
+        " where DATEPART(weekday, dbo.ShamsitoMiladi(left(DayDate, 4) + '/' + SUBSTRING(DayDate, 5, 2) + '/' + right(DayDate, 2))) = " + dayOftheWeek + 
+        " group by DayDate"
     obj.data = { query: query }
     var results = await Promise.all([
         service(obj)

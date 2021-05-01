@@ -425,6 +425,8 @@ async function CallAll() {
     ReportLineChartKarKardSpecialMultiple()
     ListJobsInNotes2()
     SecondHandGold()
+    ReportSumDayOfWeek()
+    ReportSumSpecialDayOfWeek()
   //  ReportAllJobKarkardAllMounth();
 
 }
