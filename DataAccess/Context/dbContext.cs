@@ -1,4 +1,5 @@
-﻿using DomainClass.DomainClass;
+﻿
+using DomainClass.DomainClass;
 using Microsoft.EntityFrameworkCore;
 
 
